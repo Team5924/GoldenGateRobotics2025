@@ -1,4 +1,4 @@
-package frc.robot.util;
+package org.team5924.frc2025.util;
 
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
