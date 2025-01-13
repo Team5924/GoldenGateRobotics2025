@@ -1,0 +1,1 @@
+Team 5924 - Golden Gate Robotics, releases this code under the same license as [AdvantageKit](https://github.com/Mechanical-Advantage/AdvantageKit), which is released under the GNU General Public License v3.0. See the full license file [here](https://github.com/Team5924/GoldenGateRobotics2025/blob/main/AdvantageKit-License.md).
