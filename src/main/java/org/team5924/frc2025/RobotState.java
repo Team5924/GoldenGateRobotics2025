@@ -1,9 +1,8 @@
 package org.team5924.frc2025;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotState {
   private static RobotState instance;
