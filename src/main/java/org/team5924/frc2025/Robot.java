@@ -1,15 +1,18 @@
-// Copyright 2021-2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
+/*
+ * Robot.java
+ */
+
+ /* 
+  * Copyright (C) 2024-2025 Team 5924 - Golden Gate Robotics and/or its affiliates.
+  *
+  * This file, and the associated project, are offered under the GNU General
+  * Public License v3.0. A copy of this license can be found in LICENSE.md
+  * at the root of this project.
+  *
+  * If this file has been seperated from the original project, you should have
+  * received a copy of the GNU General Public License along with it.
+  * If you did not, see <https://www.gnu.org/licenses>.
+  */
 
 package org.team5924.frc2025;
 
