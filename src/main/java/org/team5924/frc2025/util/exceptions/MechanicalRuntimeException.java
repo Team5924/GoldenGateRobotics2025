@@ -17,7 +17,7 @@
 package org.team5924.frc2025.util.exceptions;
 
 /**
- * A {@code MechanicalRuntimeException} extends {@code} RuntimeException} and is thrown if the robot
+ * A {@code MechanicalRuntimeException} extends {@code RuntimeException} and is thrown if the robot
  * physically enters an error state. This can be used for minor errors or catastrophic errors.
  *
  * <p>{@code MechanicalRuntimeException} and its subclasses are <em>unchecked exceptions</em>. For
