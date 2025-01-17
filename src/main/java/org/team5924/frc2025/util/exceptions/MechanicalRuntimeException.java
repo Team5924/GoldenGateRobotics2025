@@ -22,7 +22,7 @@ package org.team5924.frc2025.util.exceptions;
  *
  * <p>{@code MechanicalRuntimeException} and its subclasses are <em>unchecked exceptions</em>. For
  * our purposes, this means that if the exception is not meant to be fatal, it should be handled
- * wihin a try/catch block.
+ * within a try/catch block.
  */
 public class MechanicalRuntimeException extends RuntimeException {
   private static final String DEFAULT_MSG =
