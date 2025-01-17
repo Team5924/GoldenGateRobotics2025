@@ -52,7 +52,7 @@ public class MechanicalRuntimeException extends RuntimeException {
    * format string parameters to format an error message. A newline character is automatically
    * added.
    *
-   * @param errorMessage Format string holding the error message.
+   * @param errorMessageFmtString Format string holding the error message.
    * @param robotStateFields Variadic list of arguments that hydrates the format string.
    */
   public MechanicalRuntimeException(String errorMessageFmtString, Object... robotStateFields) {
