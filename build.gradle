@@ -188,11 +188,13 @@ spotless {
             include "**/*.java"
             exclude "**/build/**", "**/build-*/**"
         }
+        importOrder()
         toggleOffOn()
-        googleJavaFormat()
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
+        googleJavaFormat()
+        formatAnnotations()
         licenseHeaderFile 'licenseHeaderFile'
     }
     groovyGradle {
