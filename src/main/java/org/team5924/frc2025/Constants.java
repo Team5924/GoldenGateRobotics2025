@@ -37,4 +37,8 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  /* ### Subsystems ### */
+  /* Rollers */
+  public static final double LOOP_PERIODIC_SECONDS = 0.02;
 }
