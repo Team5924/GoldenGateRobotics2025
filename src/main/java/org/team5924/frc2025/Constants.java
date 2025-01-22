@@ -38,6 +38,8 @@ public final class Constants {
     REPLAY
   }
 
+  public static final boolean TUNING_MODE = false;
+
   /* ### Subsystems ### */
   /* Rollers */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
