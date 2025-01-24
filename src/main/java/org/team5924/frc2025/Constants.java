@@ -41,6 +41,15 @@ public final class Constants {
   public static final boolean TUNING_MODE = false;
 
   /* ### Subsystems ### */
-  /* Rollers */
+  /* # Rollers # */
+  /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
+  /* Coral In-And-Out */
+  public static final int CORAL_IN_AND_OUT_CAN_ID = 25;
+  public static final String CORAL_IN_AND_OUT_BUS = "rio";
+  public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
+  public static final boolean CORAL_IN_AND_OUT_INVERT = false;
+  public static final boolean CORAL_IN_AND_OUT_BRAKE = false;
+  public static final double CORAL_IN_AND_OUT_REDUCTION = 18.0 / 12.0;
+  public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
 }
