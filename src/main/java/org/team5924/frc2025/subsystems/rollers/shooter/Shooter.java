@@ -1,5 +1,5 @@
 /*
- * GenericRollerSystem.java
+ * Shooter.java
  */
 
 /* 
@@ -14,7 +14,6 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-
 package org.team5924.frc2025.subsystems.rollers.shooter;
 
 import java.util.function.DoubleSupplier;
@@ -28,58 +27,60 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 @Getter
 @Setter
 public class Shooter extends GenericRollerSystem<Shooter.Goal> {
-    @RequiredArgsConstructor
-    @Getter
-    public enum Goal implements VoltageGoal {
-        EMPTY(() -> 0.0),
-        LOADING(new LoggedTunableNumber("CoralShooter/LoadingVoltage", 12.0)),
-        SHOOTING(new LoggedTunableNumber("CoralShooter/ShootinggVoltage", -12.0)),
-        HOLDING(new LoggedTunableNumber("CoralShooter/HoldingVoltage", 0.0));
-        private final DoubleSupplier voltageSupplier;
+  @RequiredArgsConstructor
+  @Getter
+  public enum Goal implements VoltageGoal {
+    EMPTY(() -> 0.0),
+    LOADING(new LoggedTunableNumber("CoralShooter/LoadingVoltage", 12.0)),
+    SHOOTING(new LoggedTunableNumber("CoralShooter/ShootinggVoltage", -12.0)),
+    HOLDING(new LoggedTunableNumber("CoralShooter/HoldingVoltage", 0.0));
+    private final DoubleSupplier voltageSupplier;
+  }
+
+  private Goal goal = Goal.EMPTY;
+
+  public Shooter(ShooterIO io) {
+    super("Shooter", io);
+  }
+
+  /**
+   * Sets the robot's goal.
+   *
+   * @param newGoal the robot's new goal
+   * @throws Exception if the state change fails
+   */
+  public void setGoal(Goal newGoal) throws Exception {
+    // Checking for exceptions to throw
+    switch (newGoal) { // example exceptions are shown below
+      case EMPTY:
+        break;
+
+      case HOLDING:
+        break;
+
+      case LOADING:
+        if (goal == Goal.HOLDING) throw new Exception("Cannot load while holding!");
+        break;
+
+      case SHOOTING:
+        if (goal == Goal.EMPTY) throw new Exception("Cannot shoot while shooter is empty!");
+        break;
+
+      default:
+        throw new Exception("Invalid state: " + newGoal.name());
     }
 
-    private Goal goal = Goal.EMPTY;
+    // If there are no exceptions thrown, newState will replace currentState
+    goal = newGoal;
+  }
 
-    public Shooter(ShooterIO io) {
-        super("Shooter", io);
-    }
-
-    /**
-     * Sets the robot's goal.
-     * @param newGoal the robot's new goal
-     * @throws Exception if the state change fails
-     */
-    public void setGoal(Goal newGoal) throws Exception {
-        // Checking for exceptions to throw
-        switch (newGoal) { // example exceptions are shown below
-        case EMPTY:
-            break;
-            
-        case HOLDING:
-            break;
-
-        case LOADING:
-            if (goal == Goal.HOLDING) throw new Exception("Cannot load while holding!");
-            break;
-
-        case SHOOTING:
-            if (goal == Goal.EMPTY) throw new Exception("Cannot shoot while shooter is empty!");
-            break;
-
-        default:
-            throw new Exception("Invalid state: " + newGoal.name());
-        }
-
-        // If there are no exceptions thrown, newState will replace currentState
-        goal = newGoal;
-    }
-
-    /**
-     * Gets the robot's goal
-     * @return the robot's goal
-     */
-    @Override
-    public Goal getGoal() {
-        return goal;
-    }
+  /**
+   * Gets the robot's goal
+   *
+   * @return the robot's goal
+   */
+  @Override
+  public Goal getGoal() {
+    return goal;
+  }
 }
