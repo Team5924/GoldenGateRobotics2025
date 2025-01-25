@@ -16,10 +16,9 @@
 
 package org.team5924.frc2025.subsystems.rollers.intake;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOSim;
-
-import edu.wpi.first.math.system.plant.DCMotor;
 
 public class CoralInAndOutIOSim extends GenericRollerSystemIOSim implements CoralInAndOutIO {
   private static final DCMotor motorModel = DCMotor.getKrakenX60Foc(1);

@@ -19,7 +19,8 @@ package org.team5924.frc2025.subsystems.rollers.intake;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOKrakenFOC;
 
-public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC implements CoralInAndOutIO {
+public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
+    implements CoralInAndOutIO {
   private static final int id = Constants.CORAL_IN_AND_OUT_CAN_ID;
   private static final String bus = Constants.CORAL_IN_AND_OUT_BUS;
   private static final int currentLimitAmps = Constants.CORAL_IN_AND_OUT_CURRENT_LIMIT;

@@ -16,6 +16,27 @@
 
 package org.team5924.frc2025.subsystems.rollers.intake;
 
+import au.grapplerobotics.interfaces.LaserCanInterface;
+import org.littletonrobotics.junction.AutoLog;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIO;
+import org.team5924.frc2025.util.LaserCAN_ROI;
 
-public interface CoralInAndOutIO extends GenericRollerSystemIO {}
+public interface CoralInAndOutIO extends GenericRollerSystemIO {
+
+  @AutoLog
+  abstract class CoralInAndOutIOInputs extends GenericRollerSystemIOInputs {
+    /* Intake LaserCAN */
+    public boolean intakeLCConnected = true;
+    public int intakeLCStatus = LaserCanInterface.LASERCAN_STATUS_VALID_MEASUREMENT;
+    public int intakeLCDistance = 0; // Distance in millimeters
+    public int intakeLCAmbientLight = 0; // Ambient light measurement
+    public boolean intakeLCIsLong = false; // Measurement taken with "long" mode
+    public int intakeLCBudget = 0; // Budget used for measurement in milliseconds
+    public LaserCAN_ROI intakeLCROI =
+        new LaserCAN_ROI(0, 0, 0, 0); // Region of interest for measurement
+
+    // Shooter LaserCAN
+    public boolean shooterLCConnected = true;
+    // LaserCan.Measurement shooterLCDistance = null;
+  }
+}
