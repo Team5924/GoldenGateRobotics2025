@@ -46,8 +46,9 @@ public class CoralHandoff extends GenericRollerSystem<CoralHandoff.Goal> {
 
   /**
    * Get if the robot has coral.
-   * 
-   * @return true if the robot has coral */
+   *
+   * @return true if the robot has coral
+   */
   public boolean hasCoral() {
     return true;
   }
@@ -81,7 +82,7 @@ public class CoralHandoff extends GenericRollerSystem<CoralHandoff.Goal> {
       default:
         throw new Exception("Invalid handoff state: " + newGoal.name());
     }
-    // TODO: replace example exceptions with real exceptions  
+    // TODO: replace example exceptions with real exceptions
 
     // If there are no exceptions thrown, newState will replace currentState
     goal = newGoal;

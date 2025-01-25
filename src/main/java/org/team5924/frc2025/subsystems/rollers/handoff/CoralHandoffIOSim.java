@@ -20,7 +20,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOSim;
 
-public class CoralHandoffIOSim extends GenericRollerSystemIOSim {
+public class CoralHandoffIOSim extends GenericRollerSystemIOSim implements CoralHandoffIO {
   private static final DCMotor motorModel = DCMotor.getKrakenX60Foc(1);
   private static final double reduction = Constants.CORAL_HANDOFF_REDUCTION;
   private static final double moi = Constants.CORAL_HANDOFF_SIM_MOI;

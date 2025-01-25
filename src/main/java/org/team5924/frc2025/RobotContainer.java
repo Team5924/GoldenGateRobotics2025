@@ -34,6 +34,10 @@ import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
 import org.team5924.frc2025.subsystems.drive.ModuleIO;
 import org.team5924.frc2025.subsystems.drive.ModuleIOSim;
 import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoff;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIO;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOKrakenFOC;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -44,6 +48,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final CoralHandoff coralHandoff;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -63,6 +68,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        coralHandoff = new CoralHandoff(new CoralHandoffIOKrakenFOC());
         break;
 
       case SIM:
@@ -74,6 +80,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        coralHandoff = new CoralHandoff(new CoralHandoffIOSim());
         break;
 
       default:
@@ -85,6 +92,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        coralHandoff = new CoralHandoff(new CoralHandoffIO() {});
         break;
     }
 
@@ -149,6 +157,8 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    // TODO: add controls for coral handoff
   }
 
   /**
