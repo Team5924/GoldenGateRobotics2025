@@ -46,8 +46,4 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.Goal> {
   public CoralInAndOut(CoralInAndOutIO io) {
     super("CoralInAndOut", io);
   }
-
-  public boolean hasCoral() {
-    return true;
-  }
 }

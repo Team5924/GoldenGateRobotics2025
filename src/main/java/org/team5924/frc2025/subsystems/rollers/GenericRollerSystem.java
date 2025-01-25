@@ -18,12 +18,14 @@ package org.team5924.frc2025.subsystems.rollers;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor
-public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageGoal> {
+public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageGoal>
+    extends SubsystemBase {
   public interface VoltageGoal {
     DoubleSupplier getVoltageSupplier();
   }

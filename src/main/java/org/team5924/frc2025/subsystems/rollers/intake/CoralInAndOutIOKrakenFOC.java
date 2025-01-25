@@ -20,6 +20,7 @@ import au.grapplerobotics.LaserCan;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOKrakenFOC;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
@@ -33,6 +34,12 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
   private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
   private static final LaserCan shooterLC = new LaserCan(Constants.CORAL_SHOOTER_LASER_CAN_ID);
 
+  private static final LoggedTunableNumber intakeDetectThreshold =
+      new LoggedTunableNumber("CoralInAndOutKrakenFOC/IntakeLaserCAN/DetectThreshold", 20);
+  
+  private static final LoggedTunableNumber shooterDetectThreshold =
+      new LoggedTunableNumber("CoralInAndOutKrakenFOC/ShooterLaserCAN/DetectThreshold", 20);
+
   public CoralInAndOutIOKrakenFOC() {
     super(id, bus, currentLimitAmps, invert, brake, reduction);
   }
@@ -41,5 +48,13 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     inputs.intakeLCMeasurement = LaserCAN_Measurement.fromLaserCAN(intakeLC.getMeasurement());
     inputs.shooterLCMeasurement = LaserCAN_Measurement.fromLaserCAN(shooterLC.getMeasurement());
     super.updateInputs(inputs);
+  }
+
+  public boolean isCoralInIntake() {
+    return intakeLC.getMeasurement().distance_mm < (int) Math.floor(intakeDetectThreshold.get());
+  }
+
+  public boolean isCoralInShooter() {
+    return shooterLC.getMeasurement().distance_mm < (int) Math.floor(shooterDetectThreshold.get());
   }
 }
