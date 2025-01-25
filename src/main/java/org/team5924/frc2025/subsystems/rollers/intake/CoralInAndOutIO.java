@@ -37,6 +37,12 @@ public interface CoralInAndOutIO extends GenericRollerSystemIO {
 
     // Shooter LaserCAN
     public boolean shooterLCConnected = true;
-    // LaserCan.Measurement shooterLCDistance = null;
+    public int shooterLCStatus = LaserCanInterface.LASERCAN_STATUS_VALID_MEASUREMENT;
+    public int shooterLCDistance = 0; // Distance in millimeters
+    public int shooterLCAmbientLight = 0; // Ambient light measurement
+    public boolean shooterLCIsLong = false; // Measurement taken with "long" mode
+    public int shooterLCBudget = 0; // Budget used for measurement in milliseconds
+    public LaserCAN_ROI shooterLCROI =
+        new LaserCAN_ROI(0, 0, 0, 0); // Region of interest for measurement
   }
 }
