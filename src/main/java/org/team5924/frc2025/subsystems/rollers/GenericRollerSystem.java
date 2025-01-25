@@ -30,13 +30,16 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageG
 
   public abstract G getGoal();
 
+  private G lastGoal;
+
   private final String name;
+
   private final GenericRollerSystemIO io;
   protected final GenericRollerSystemIOInputsAutoLogged inputs =
       new GenericRollerSystemIOInputsAutoLogged();
+
   private final Alert disconnected;
   protected final Timer stateTimer = new Timer();
-  private G lastGoal;
 
   public GenericRollerSystem(String name, GenericRollerSystemIO io) {
     this.name = name;
@@ -49,7 +52,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageG
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs(name, inputs);
-    disconnected.set(!inputs.connected);
+    disconnected.set(!inputs.motorConnected);
 
     if (getGoal() != lastGoal) {
       stateTimer.reset();

@@ -77,7 +77,7 @@ public abstract class GenericRollerSystemIOKrakenFOC implements GenericRollerSys
 
   @Override
   public void updateInputs(GenericRollerSystemIOInputs inputs) {
-    inputs.connected =
+    inputs.motorConnected =
         BaseStatusSignal.refreshAll(
                 position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius)
             .isOK();

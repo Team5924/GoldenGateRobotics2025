@@ -21,6 +21,10 @@ import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
 import java.nio.ByteBuffer;
 
+/**
+ * Wrapper class for {@code LaserCAN.Measurement}. Data is stored in a serializable struct for
+ * compatibility with AdvantageKit.
+ */
 public class LaserCAN_Measurement implements StructSerializable {
   public static class LaserCAN_MeasurementStruct implements Struct<LaserCAN_Measurement> {
     @Override
@@ -93,6 +97,13 @@ public class LaserCAN_Measurement implements StructSerializable {
     this(0, 0, 0, false, 0, new LaserCAN_ROI());
   }
 
+  /**
+   * Convert a {@code LaserCAN.Measurement} to a {@code LaserCAN_Measurement} in order to serialize
+   * it for use with AdvantageKit.
+   *
+   * @param measurement Measurement data from LaserCAN sensor.
+   * @return Measurement in serializable struct format.
+   */
   public static LaserCAN_Measurement fromLaserCAN(Measurement measurement) {
     return new LaserCAN_Measurement(
         measurement.status,

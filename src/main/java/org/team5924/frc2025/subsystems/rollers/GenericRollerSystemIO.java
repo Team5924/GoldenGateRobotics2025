@@ -23,7 +23,7 @@ public interface GenericRollerSystemIO {
   @AutoLog
   abstract class GenericRollerSystemIOInputs {
 
-    public boolean connected = true;
+    public boolean motorConnected = true;
     public double positionRads = 0.0;
     public double velocityRadsPerSec = 0.0;
     public double appliedVoltage = 0.0;
@@ -34,9 +34,9 @@ public interface GenericRollerSystemIO {
 
   default void updateInputs(GenericRollerSystemIOInputs inputs) {}
 
-  /** Run feeder at volts */
+  /** Run roller at volts */
   default void runVolts(double volts) {}
 
-  /** Stop feeder */
+  /** Stop roller */
   default void stop() {}
 }

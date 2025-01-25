@@ -52,4 +52,6 @@ public final class Constants {
   public static final boolean CORAL_IN_AND_OUT_BRAKE = false;
   public static final double CORAL_IN_AND_OUT_REDUCTION = 18.0 / 12.0;
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
+  public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
+  public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
 }

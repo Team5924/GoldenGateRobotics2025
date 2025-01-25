@@ -16,8 +16,10 @@
 
 package org.team5924.frc2025.subsystems.rollers.intake;
 
+import au.grapplerobotics.LaserCan;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOKrakenFOC;
+import org.team5924.frc2025.util.LaserCAN_Measurement;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
@@ -28,7 +30,16 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
   private static final boolean brake = Constants.CORAL_IN_AND_OUT_BRAKE;
   private static final double reduction = Constants.CORAL_IN_AND_OUT_REDUCTION;
 
+  private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
+  private static final LaserCan shooterLC = new LaserCan(Constants.CORAL_SHOOTER_LASER_CAN_ID);
+
   public CoralInAndOutIOKrakenFOC() {
     super(id, bus, currentLimitAmps, invert, brake, reduction);
+  }
+
+  public void updateInputs(CoralInAndOutIOInputs inputs) {
+    inputs.intakeLCMeasurement = LaserCAN_Measurement.fromLaserCAN(intakeLC.getMeasurement());
+    inputs.shooterLCMeasurement = LaserCAN_Measurement.fromLaserCAN(shooterLC.getMeasurement());
+    super.updateInputs(inputs);
   }
 }

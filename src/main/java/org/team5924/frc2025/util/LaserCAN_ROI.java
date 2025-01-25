@@ -21,6 +21,10 @@ import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
 import java.nio.ByteBuffer;
 
+/**
+ * Wrapper class for {@code LaserCANInterface.RegionOfInterest}. Data is stored in a serializable
+ * struct for compatibility with AdvantageKit.
+ */
 public class LaserCAN_ROI implements StructSerializable {
   public static class LaserCAN_ROIStruct implements Struct<LaserCAN_ROI> {
     @Override
@@ -83,6 +87,13 @@ public class LaserCAN_ROI implements StructSerializable {
     this(0, 0, 0, 0);
   }
 
+  /**
+   * Convert a {@code LaserCANInterface.RegionOfInterest} to a {@code LaserCAN_ROI} in order to
+   * serialize it for use with AdvantageKit.
+   *
+   * @param roi Region of interest data from {@code LaserCAN.Measurement}.
+   * @return Region of interest data in serializable struct format.
+   */
   public static LaserCAN_ROI fromLaserCAN(RegionOfInterest roi) {
     return new LaserCAN_ROI(roi.x, roi.y, roi.w, roi.h);
   }
