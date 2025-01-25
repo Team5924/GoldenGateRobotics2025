@@ -52,4 +52,13 @@ public final class Constants {
   public static final boolean CORAL_IN_AND_OUT_BRAKE = false;
   public static final double CORAL_IN_AND_OUT_REDUCTION = 18.0 / 12.0;
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
+  /* Coral Handoff */
+  public static final int CORAL_HANDOFF_CAN_ID = 100;
+  public static final String CORAL_HANDOFF_BUS = "rio";
+  public static final int CORAL_HANDOFF_CURRENT_LIMIT = 40;
+  public static final boolean CORAL_HANDOFF_INVERT = false;
+  public static final boolean CORAL_HANDOFF_BRAKE = false;
+  public static final double CORAL_HANDOFF_REDUCTION = 18.0 / 12.0;
+  public static final double CORAL_HANDOFF_SIM_MOI = 0.001;
+  // TODO: Fill out Coral Handoff Constants with real values - all need to be fixed
 }

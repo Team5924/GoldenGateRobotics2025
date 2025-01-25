@@ -1,5 +1,5 @@
 /*
- * Shooter.java
+ * CoralHandoff.java
  */
 
 /* 
@@ -14,7 +14,7 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.rollers.shooter;
+package org.team5924.frc2025.subsystems.rollers.handoff;
 
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
@@ -26,21 +26,30 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Getter
 @Setter
-public class Shooter extends GenericRollerSystem<Shooter.Goal> {
+public class CoralHandoff extends GenericRollerSystem<CoralHandoff.Goal> {
   @RequiredArgsConstructor
   @Getter
   public enum Goal implements VoltageGoal {
-    EMPTY(() -> 0.0),
-    LOADING(new LoggedTunableNumber("CoralShooter/LoadingVoltage", 12.0)),
-    SHOOTING(new LoggedTunableNumber("CoralShooter/ShootinggVoltage", -12.0)),
-    HOLDING(new LoggedTunableNumber("CoralShooter/HoldingVoltage", 0.0));
+    OUTPUT(new LoggedTunableNumber("CoralHandoff/OutputVoltage", 12.0)),
+    LOADING(new LoggedTunableNumber("CoralHandoff/LoadingVoltage", 12.0)),
+    HOLDING(new LoggedTunableNumber("CoralHandoff/HoldingVoltage", 0.0)),
+    EMPTY(new LoggedTunableNumber("CoralHandoff/EmptyVoltage", 0.0)),
+    REVERSE(new LoggedTunableNumber("CoralHandoff/ReverseVoltage", -12.0));
     private final DoubleSupplier voltageSupplier;
   }
 
   private Goal goal = Goal.EMPTY;
 
-  public Shooter(ShooterIO io) {
-    super("Shooter", io);
+  public CoralHandoff(CoralHandoffIO io) {
+    super("CoralHandoff", io);
+  }
+
+  /**
+   * Get if the robot has coral.
+   * 
+   * @return true if the robot has coral */
+  public boolean hasCoral() {
+    return true;
   }
 
   /**
@@ -52,23 +61,27 @@ public class Shooter extends GenericRollerSystem<Shooter.Goal> {
   public void setGoal(Goal newGoal) throws Exception {
     // Checking for exceptions to throw
     switch (newGoal) { // example exceptions are shown below
-      case EMPTY:
-        break;
-
-      case HOLDING:
+      case OUTPUT:
+        if (goal == Goal.EMPTY) throw new Exception("Cannot output while handoff is empty!");
         break;
 
       case LOADING:
         if (goal == Goal.HOLDING) throw new Exception("Cannot load while holding!");
         break;
 
-      case SHOOTING:
-        if (goal == Goal.EMPTY) throw new Exception("Cannot shoot while shooter is empty!");
+      case HOLDING:
+        break;
+
+      case EMPTY:
+        break;
+
+      case REVERSE:
         break;
 
       default:
-        throw new Exception("Invalid state: " + newGoal.name());
+        throw new Exception("Invalid handoff state: " + newGoal.name());
     }
+    // TODO: replace example exceptions with real exceptions  
 
     // If there are no exceptions thrown, newState will replace currentState
     goal = newGoal;

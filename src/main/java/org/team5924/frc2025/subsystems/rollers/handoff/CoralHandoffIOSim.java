@@ -1,5 +1,5 @@
 /*
- * ShooterIOSim.java
+ * CoralHandoffIOSim.java
  */
 
 /* 
@@ -14,17 +14,18 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.rollers.shooter;
+package org.team5924.frc2025.subsystems.rollers.handoff;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOSim;
 
-public class ShooterIOSim extends GenericRollerSystemIOSim {
+public class CoralHandoffIOSim extends GenericRollerSystemIOSim {
   private static final DCMotor motorModel = DCMotor.getKrakenX60Foc(1);
-  private static final double reduction = (18.0 / 12.0);
-  private static final double moi = 0.001;
+  private static final double reduction = Constants.CORAL_HANDOFF_REDUCTION;
+  private static final double moi = Constants.CORAL_HANDOFF_SIM_MOI;
 
-  public ShooterIOSim() {
+  public CoralHandoffIOSim() {
     super(motorModel, reduction, moi);
   }
 }

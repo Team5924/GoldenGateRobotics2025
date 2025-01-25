@@ -1,5 +1,5 @@
 /*
- * ShooterIO.java
+ * CoralHandoffIO.java
  */
 
 /* 
@@ -14,8 +14,8 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.rollers.shooter;
+package org.team5924.frc2025.subsystems.rollers.handoff;
 
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIO;
 
-public interface ShooterIO extends GenericRollerSystemIO {}
+public interface CoralHandoffIO extends GenericRollerSystemIO {}
