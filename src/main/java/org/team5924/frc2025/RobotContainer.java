@@ -157,6 +157,14 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    // Temporary Button Bindings
+    controller
+        .leftTrigger()
+        .onTrue(Commands.runOnce(() -> coralInAndOut.setGoal(CoralInAndOut.Goal.SHOOTING)));
+    controller
+        .rightTrigger()
+        .onTrue(Commands.runOnce(() -> coralInAndOut.setGoal(CoralInAndOut.Goal.LOADING)));
   }
 
   /**
