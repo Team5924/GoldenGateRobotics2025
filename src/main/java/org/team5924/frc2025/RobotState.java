@@ -16,12 +16,11 @@
 
 package org.team5924.frc2025;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
 import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 
 @Getter
 public class RobotState {
