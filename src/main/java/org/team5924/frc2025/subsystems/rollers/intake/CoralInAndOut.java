@@ -46,4 +46,10 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.Goal> {
   public CoralInAndOut(CoralInAndOutIO io) {
     super("CoralInAndOut", io);
   }
+
+  @Override
+  public void periodic() {
+    getIo().runVolts(goal.getVoltageSupplier().getAsDouble());
+    super.periodic();
+  }
 }

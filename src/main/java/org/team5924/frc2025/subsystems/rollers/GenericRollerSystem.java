@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,7 +37,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageG
 
   private final String name;
 
-  private final GenericRollerSystemIO io;
+  @Getter private final GenericRollerSystemIO io;
   protected final GenericRollerSystemIOInputsAutoLogged inputs =
       new GenericRollerSystemIOInputsAutoLogged();
 
@@ -51,6 +52,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageG
     stateTimer.start();
   }
 
+  @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs(name, inputs);

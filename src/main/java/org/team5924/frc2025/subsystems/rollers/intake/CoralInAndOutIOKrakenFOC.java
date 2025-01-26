@@ -36,7 +36,7 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
 
   private static final LoggedTunableNumber intakeDetectThreshold =
       new LoggedTunableNumber("CoralInAndOutKrakenFOC/IntakeLaserCAN/DetectThreshold", 20);
-  
+
   private static final LoggedTunableNumber shooterDetectThreshold =
       new LoggedTunableNumber("CoralInAndOutKrakenFOC/ShooterLaserCAN/DetectThreshold", 20);
 
