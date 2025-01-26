@@ -14,15 +14,18 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.rollers.intake;
+package org.team5924.frc2025.subsystems.rollers.CoralInAndOut;
 
 import java.util.function.DoubleSupplier;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+
+import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageGoal;
 import org.team5924.frc2025.util.LoggedTunableNumber;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Setter
 @Getter
@@ -51,5 +54,12 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.Goal> {
   public void periodic() {
     getIo().runVolts(goal.getVoltageSupplier().getAsDouble());
     super.periodic();
+  }
+
+  public void setGoal(Goal newGoal) {
+    if (this.goal != newGoal) {
+      this.goal = newGoal;
+      RobotState.getInstance().setCoralInAndOutGoal(newGoal);
+    }
   }
 }

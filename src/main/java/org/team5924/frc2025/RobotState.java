@@ -16,10 +16,14 @@
 
 package org.team5924.frc2025;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
-import org.littletonrobotics.junction.AutoLogOutput;
+import lombok.Setter;
 
+@Getter
 public class RobotState {
   private static RobotState instance;
 
@@ -29,11 +33,14 @@ public class RobotState {
   }
 
   // Pose Estimation Members
-  @Getter
   @AutoLogOutput(key = "RobotState/OdometryPose")
   private Pose2d odometryPose = new Pose2d();
 
-  @Getter
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   private Pose2d estimatedPose = new Pose2d();
+
+  /* ### Coral In and Out ### */
+  @Setter
+  @AutoLogOutput(key = "RobotState/CoralInAndOutState")
+  private CoralInAndOut.Goal coralInAndOutGoal = CoralInAndOut.Goal.EMPTY;
 }
