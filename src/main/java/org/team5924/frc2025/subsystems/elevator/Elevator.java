@@ -69,13 +69,13 @@ public class Elevator extends SubsystemBase {
 
     // State machine logic
     runStateMachine();
-  }
 
-  private void runStateMachine() {
     Logger.recordOutput("Elevator/CurrentState", state.toString());
     Logger.recordOutput("Elevator/GoalState", goalState.toString());
     Logger.recordOutput("Elevator/TargetHeight", goalState.height);
+  }
 
+  private void runStateMachine() {
     if (state == ElevatorState.MOVING && isAtSetpoint()) {
       state = goalState;
     }
