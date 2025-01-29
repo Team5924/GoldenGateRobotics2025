@@ -150,6 +150,11 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   }
 
   @Override
+  public void setVoltage(double volts) {
+    leftTalon.setControl(voltageControl.withOutput(volts));
+  }
+
+  @Override
   public void setPosition(double rads) {
     leftTalon.setControl(positionControl.withPosition(Radians.of(rads)));
   }

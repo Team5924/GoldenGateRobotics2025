@@ -43,7 +43,8 @@ public class Elevator extends SubsystemBase {
     L2(1.0),
     L3(1.5),
     L4(2),
-    MOVING(-1);
+    MOVING(-1),
+    MANUAL(-1);
 
     private final double height;
 
@@ -67,18 +68,9 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
 
-    // State machine logic
-    runStateMachine();
-
     Logger.recordOutput("Elevator/CurrentState", state.toString());
     Logger.recordOutput("Elevator/GoalState", goalState.toString());
     Logger.recordOutput("Elevator/TargetHeight", goalState.height);
-  }
-
-  private void runStateMachine() {
-    if (state == ElevatorState.MOVING && isAtSetpoint()) {
-      state = goalState;
-    }
   }
 
   private double getElevatorPositionMeters() {
@@ -89,17 +81,39 @@ public class Elevator extends SubsystemBase {
         / RATIO;
   }
 
-  private boolean isAtSetpoint() {
+  public ElevatorState getState() {
+    return state;
+  }
+
+  public ElevatorState getGoalState() {
+    return goalState;
+  }
+
+  public boolean isAtSetpoint() {
     return Math.abs(getElevatorPositionMeters() - this.goalState.height) < POSITION_TOLERANCE;
+  }
+
+  public void setVoltage(double voltage) {
+    io.setVoltage(voltage);
+  }
+
+  public void setState(ElevatorState state) {
+    this.state = state;
   }
 
   public void setGoalState(ElevatorState goalState) {
     this.goalState = goalState;
-    this.state = ElevatorState.MOVING;
-    if (goalState != ElevatorState.MOVING) {
-      io.setPosition(goalState.height);
-    } else {
-      DriverStation.reportError("Invalid goal ElevatorState!", null);
+    switch (goalState) {
+      case MANUAL:
+        this.state = ElevatorState.MANUAL;
+        break;
+      case MOVING:
+        DriverStation.reportError("Invalid goal ElevatorState!", null);
+        break;
+      default:
+        this.state = ElevatorState.MOVING;
+        io.setPosition(goalState.height);
+        break;
     }
   }
 }
