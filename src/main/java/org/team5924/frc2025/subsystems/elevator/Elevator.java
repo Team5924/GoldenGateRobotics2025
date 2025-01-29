@@ -16,6 +16,12 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -23,6 +29,8 @@ import org.littletonrobotics.junction.Logger;
 public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
   private static final double POSITION_TOLERANCE = 0.02;
+  private static final Distance SPROCKET_RADIUS = Inches.of(2);
+  private static final double RATIO = 3;
 
   /** Creates a new elevator. */
   private final ElevatorIO io;
@@ -74,7 +82,11 @@ public class Elevator extends SubsystemBase {
   }
 
   private double getElevatorPositionMeters() {
-    return -1;
+    return Radians.of(inputs.leftPositionRads).in(Rotations)
+        * 2
+        * Math.PI
+        * SPROCKET_RADIUS.in(Meters)
+        / RATIO;
   }
 
   private boolean isAtSetpoint() {
