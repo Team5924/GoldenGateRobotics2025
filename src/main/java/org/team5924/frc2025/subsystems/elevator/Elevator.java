@@ -16,17 +16,11 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
-  // Position setpoints in meters
-  private static final double INTAKE_HEIGHT = 0.0;
-  private static final double L1_HEIGHT = 0.5;
-  private static final double L2_HEIGHT = 1.0;
-  private static final double L3_HEIGHT = 1.5;
-  private static final double L4_HEIGHT = 2.0;
-
   // Tolerance for position control (in meters)
   private static final double POSITION_TOLERANCE = 0.02;
 
@@ -36,12 +30,18 @@ public class Elevator extends SubsystemBase {
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
   public enum ElevatorState {
-    INTAKE,
-    L1,
-    L2,
-    L3,
-    L4,
-    MOVING_TO_SETPOINT
+    INTAKE(0.0),
+    L1(0.5),
+    L2(1.0),
+    L3(1.5),
+    L4(2),
+    MOVING(-1);
+
+    private final double height;
+
+    ElevatorState(double height) {
+      this.height = height;
+    }
   }
 
   private ElevatorState goalState;
@@ -60,52 +60,34 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elevator", inputs);
 
     // State machine logic
-    updateState();
-    // Update motor output based on current state
-    updateMotorOutput();
+    runStateMachine();
   }
 
-  private void updateState() {
-    if (state != goalState && isAtPosition(getTargetHeight(goalState))) {
+  private void runStateMachine() {
+    Logger.recordOutput("Elevator/CurrentState", state.toString());
+    Logger.recordOutput("Elevator/GoalState", goalState.toString());
+    Logger.recordOutput("Elevator/TargetHeight", goalState.height);
+
+    if (state == ElevatorState.MOVING && isAtSetpoint()) {
       state = goalState;
-    } else if (state != goalState) {
-      state = ElevatorState.MOVING_TO_SETPOINT;
     }
   }
 
-  private void updateMotorOutput() {
-    double targetHeight = getTargetHeight(goalState);
-    // Use position control instead of voltage control
-    io.setPosition(targetHeight);
-
-    // Log the current state and goals
-    Logger.recordOutput("Elevator/CurrentState", state.toString());
-    Logger.recordOutput("Elevator/GoalState", goalState.toString());
-    Logger.recordOutput("Elevator/TargetHeight", targetHeight);
+  private double getElevatorPositionMeters() {
+    return -1;
   }
 
-  private double getTargetHeight(ElevatorState state) {
-    double height =
-        switch (state) {
-          case INTAKE -> INTAKE_HEIGHT;
-          case L1 -> L1_HEIGHT;
-          case L2 -> L2_HEIGHT;
-          case L3 -> L3_HEIGHT;
-          case L4 -> L4_HEIGHT;
-          case MOVING_TO_SETPOINT -> getTargetHeight(goalState);
-        };
-    return height;
-  }
-
-  private boolean isAtPosition(double targetHeight) {
-    return Math.abs(inputs.elevatorPositionMeters - targetHeight) < POSITION_TOLERANCE;
-  }
-
-  public boolean atGoalPosition() {
-    return isAtPosition(getTargetHeight(goalState));
+  private boolean isAtSetpoint() {
+    return Math.abs(getElevatorPositionMeters() - this.goalState.height) < POSITION_TOLERANCE;
   }
 
   public void setGoalState(ElevatorState goalState) {
     this.goalState = goalState;
+    this.state = ElevatorState.MOVING;
+    if (goalState != ElevatorState.MOVING) {
+      io.setPosition(goalState.height);
+    } else {
+      DriverStation.reportError("Invalid goal ElevatorState!", null);
+    }
   }
 }
