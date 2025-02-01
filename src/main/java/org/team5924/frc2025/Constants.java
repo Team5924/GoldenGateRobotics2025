@@ -37,4 +37,7 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static final int ALGAE_PIVOT_TALON_ID = 55;
+  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
 }
