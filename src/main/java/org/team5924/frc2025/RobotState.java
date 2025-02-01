@@ -9,20 +9,22 @@
  * Public License v3.0. A copy of this license can be found in LICENSE.md
  * at the root of this project.
  *
- * If this file has been seperated from the original project, you should have
+ * If this file has been separated from the original project, you should have
  * received a copy of the GNU General Public License along with it.
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
 package org.team5924.frc2025;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
+import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
 import lombok.Setter;
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.team5924.frc2025.subsystems.climber.Climber;
-import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
 
+@Getter
 public class RobotState {
   private static RobotState instance;
 
@@ -32,11 +34,9 @@ public class RobotState {
   }
 
   // Pose Estimation Members
-  @Getter
   @AutoLogOutput(key = "RobotState/OdometryPose")
   private Pose2d odometryPose = new Pose2d();
 
-  @Getter
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   private Pose2d estimatedPose = new Pose2d();
 
@@ -44,4 +44,8 @@ public class RobotState {
   @Setter
   @AutoLogOutput(key = "RobotState/IntakeState")
   private ClimberState climberState = ClimberState.STOW;
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/CoralState")
+  private CoralState coralInAndOutState = CoralState.EMPTY;
 }
