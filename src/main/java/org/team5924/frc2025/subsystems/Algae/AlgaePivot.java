@@ -43,7 +43,8 @@ public class AlgaePivot extends SubsystemBase {
     INTAKE_FLOOR(new LoggedTunableNumber("AlgaePivotIntakeFloorRads", 0.5)),
     NET(new LoggedTunableNumber("AlgaePivotIntakeNetRads", 1)),
     MANUAL(new LoggedTunableNumber("AlgaePivotManualRads", -1)),
-    MOVING(new LoggedTunableNumber("AlgaePivotMovingRads, -1" ));
+    MOVING(new LoggedTunableNumber("AlgaePivotMovingRads, -1" )),
+    HOLDING(new LoggedTunableNumber("AlgaePivotHoldingRads, -1"));
 
     private final LoggedTunableNumber rads;
 
