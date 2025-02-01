@@ -28,6 +28,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.DriveCommands;
 import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.subsystems.climber.Climber;
+import org.team5924.frc2025.subsystems.climber.ClimberIO;
+import org.team5924.frc2025.subsystems.climber.ClimberIOTalonFX;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
 import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
@@ -44,6 +47,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Climber climber;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -63,6 +67,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        climber = new Climber(new ClimberIOTalonFX());
         break;
 
       case SIM:
@@ -74,6 +79,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+            climber = new Climber(new ClimberIO() {});
         break;
 
       default:
@@ -85,6 +91,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        climber = new Climber(new ClimberIO() {});
         break;
     }
 

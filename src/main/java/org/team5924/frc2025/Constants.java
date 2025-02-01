@@ -37,4 +37,16 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  /* ### Subsystems ### */
+  /* Climber */
+  public static final double LOOP_PERIODIC_SECONDS = 0;
+  public static final int SHOOTER_CAN_ID = 0;
+  public static final String SHOOTER_BUS = "rio";
+  public static final int SHOOTER_CURRENT_LIMIT = 40;
+  public static final boolean SHOOTER_INVERT = false;
+  public static final boolean SHOOTER_BRAKE = true;
+  public static final double SHOOTER_REDUCTION = 18.0 / 12.0;
+  public static final double SHOOTER_SIM_MOI = 0.001;
+  // TODO: replace with real values
 }
