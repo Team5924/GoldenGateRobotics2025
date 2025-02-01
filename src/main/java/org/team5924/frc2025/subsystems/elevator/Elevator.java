@@ -81,7 +81,7 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/TargetHeight", goalState.heightMeters);
 
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
-    leftMotorDisconnected.set(!inputs.rightMotorConnected);
+    rightMotorDisconnected.set(!inputs.rightMotorConnected);
   }
 
   private double getElevatorPositionMeters() {
