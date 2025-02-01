@@ -41,5 +41,5 @@ public class RobotState {
   /* ### Coral In and Out ### */
   @Setter
   @AutoLogOutput(key = "RobotState/CoralInAndOutState")
-  private CoralInAndOut.Goal coralInAndOutGoal = CoralInAndOut.Goal.EMPTY;
+  private CoralInAndOut.State coralInAndOutGoal = CoralInAndOut.State.EMPTY;
 }

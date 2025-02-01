@@ -162,10 +162,10 @@ public class RobotContainer {
     // Coral In and Out
     operatorController
         .leftTrigger()
-        .onTrue(Commands.runOnce(() -> coralInAndOut.setGoal(CoralInAndOut.Goal.SHOOTING)));
+        .onTrue(Commands.runOnce(() -> coralInAndOut.setState(CoralInAndOut.State.SHOOTING)));
     operatorController
         .rightTrigger()
-        .onTrue(Commands.runOnce(() -> coralInAndOut.setGoal(CoralInAndOut.Goal.LOADING)));
+        .onTrue(Commands.runOnce(() -> coralInAndOut.setState(CoralInAndOut.State.LOADING)));
   }
 
   /**

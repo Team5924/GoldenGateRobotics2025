@@ -71,10 +71,10 @@ public class LaserCAN_ROI implements StructSerializable {
     }
   }
 
-  public int x;
-  public int y;
-  public int w;
-  public int h;
+  private int x;
+  private int y;
+  private int w;
+  private int h;
 
   public LaserCAN_ROI(int x, int y, int w, int h) {
     this.x = x;

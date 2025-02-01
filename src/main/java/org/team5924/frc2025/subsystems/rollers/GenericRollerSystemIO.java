@@ -23,12 +23,25 @@ public interface GenericRollerSystemIO {
   @AutoLog
   abstract class GenericRollerSystemIOInputs {
 
+    /** Whether the motor is detected and sending status signals. */
     public boolean motorConnected = true;
+
+    /** Current position of the motor in radians. */
     public double positionRads = 0.0;
+
+    /** Current velocity of the motor in radians per second. */
     public double velocityRadsPerSec = 0.0;
+
+    /** Voltage applied to the motor in volts. */
     public double appliedVoltage = 0.0;
+
+    /** Motor supply current in amps. */
     public double supplyCurrentAmps = 0.0;
+
+    /** Motor torque current in amps. */
     public double torqueCurrentAmps = 0.0;
+
+    /** Motor temperature in Celsius. */
     public double tempCelsius = 0.0;
   }
 

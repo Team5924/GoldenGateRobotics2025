@@ -91,6 +91,10 @@ public abstract class GenericRollerSystemIOKrakenFOC implements GenericRollerSys
 
   @Override
   public void runVolts(double volts) {
+    if (Math.abs(volts) > 12.0) {
+      throw new IllegalArgumentException("Voltage must be between -12.0 and 12.0");
+    }
+
     talon.setControl(voltageOut.withOutput(volts));
   }
 

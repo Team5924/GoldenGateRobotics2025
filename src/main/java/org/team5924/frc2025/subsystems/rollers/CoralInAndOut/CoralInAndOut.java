@@ -22,15 +22,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
-import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageGoal;
+import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Setter
 @Getter
-public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.Goal> {
+public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.State> {
   @RequiredArgsConstructor
   @Getter
-  public enum Goal implements VoltageGoal {
+  public enum State implements VoltageState {
     LOADING(new LoggedTunableNumber("CoralInAndOut/LoadingVoltage", 12.0)),
     SHOOTING(new LoggedTunableNumber("CoralInAndOut/ShootingVoltage", 12.0)),
     EMPTY(new LoggedTunableNumber("CoralInAndOut/EmptyVoltage", 0.0)),
@@ -42,7 +42,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.Goal> {
     private final DoubleSupplier voltageSupplier;
   }
 
-  private Goal goal = Goal.EMPTY;
+  private State state = State.EMPTY;
 
   public CoralInAndOut(CoralInAndOutIO io) {
     super("CoralInAndOut", io);
@@ -50,13 +50,13 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.Goal> {
 
   @Override
   public void periodic() {
-    getIo().runVolts(goal.getVoltageSupplier().getAsDouble());
+    getIo().runVolts(state.getVoltageSupplier().getAsDouble());
     super.periodic();
   }
 
-  public void setGoal(Goal newGoal) {
-    if (this.goal != newGoal) {
-      this.goal = newGoal;
+  public void setState(State newGoal) {
+    if (this.state != newGoal) {
+      this.state = newGoal;
       RobotState.getInstance().setCoralInAndOutGoal(newGoal);
     }
   }

@@ -25,15 +25,15 @@ import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor
-public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageGoal>
+public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageState>
     extends SubsystemBase {
-  public interface VoltageGoal {
+  public interface VoltageState {
     DoubleSupplier getVoltageSupplier();
   }
 
-  public abstract G getGoal();
+  public abstract G getState();
 
-  private G lastGoal;
+  private G lastState;
 
   private final String name;
 
@@ -58,12 +58,12 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageG
     Logger.processInputs(name, inputs);
     disconnected.set(!inputs.motorConnected);
 
-    if (getGoal() != lastGoal) {
+    if (getState() != lastState) {
       stateTimer.reset();
-      lastGoal = getGoal();
+      lastState = getState();
     }
 
-    io.runVolts(getGoal().getVoltageSupplier().getAsDouble());
-    Logger.recordOutput("Rollers/" + name + "Goal", getGoal().toString());
+    io.runVolts(getState().getVoltageSupplier().getAsDouble());
+    Logger.recordOutput("Rollers/" + name + "Goal", getState().toString());
   }
 }

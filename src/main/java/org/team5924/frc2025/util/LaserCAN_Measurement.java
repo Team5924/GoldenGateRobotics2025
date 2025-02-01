@@ -16,10 +16,13 @@
 
 package org.team5924.frc2025.util;
 
+import au.grapplerobotics.interfaces.LaserCanInterface;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
 import java.nio.ByteBuffer;
+import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
+import org.team5924.frc2025.util.exceptions.SensorRuntimeException.SensorErrorType;
 
 /**
  * Wrapper class for {@code LaserCAN.Measurement}. Data is stored in a serializable struct for
@@ -76,12 +79,12 @@ public class LaserCAN_Measurement implements StructSerializable {
     }
   }
 
-  public int status;
-  public float distance;
-  public int ambient;
-  public boolean isLong;
-  public int budget;
-  public LaserCAN_ROI roi;
+  private int status;
+  private float distance;
+  private int ambient;
+  private boolean isLong;
+  private int budget;
+  private LaserCAN_ROI roi;
 
   public LaserCAN_Measurement(
       int status, float distance, int ambient, boolean isLong, int budget, LaserCAN_ROI roi) {
@@ -105,6 +108,15 @@ public class LaserCAN_Measurement implements StructSerializable {
    * @return Measurement in serializable struct format.
    */
   public static LaserCAN_Measurement fromLaserCAN(Measurement measurement) {
+    if (measurement == null)
+      throw new SensorRuntimeException(
+          SensorErrorType.DISCONNECTED, "LaserCAN returned a null measurement.");
+
+    if (measurement.status != LaserCanInterface.LASERCAN_STATUS_VALID_MEASUREMENT)
+      throw new SensorRuntimeException(
+          SensorErrorType.INVALID_DATA,
+          "LaserCAN returned an invalid measurement. Code: " + measurement.status);
+
     return new LaserCAN_Measurement(
         measurement.status,
         measurement.distance_mm,

@@ -39,6 +39,7 @@ public final class Constants {
   }
 
   public static final boolean TUNING_MODE = false;
+  public static final boolean ALLOW_ASSERTS = true;
 
   /* ### Subsystems ### */
   /* # Rollers # */
@@ -49,7 +50,7 @@ public final class Constants {
   public static final String CORAL_IN_AND_OUT_BUS = "rio";
   public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
   public static final boolean CORAL_IN_AND_OUT_INVERT = false;
-  public static final boolean CORAL_IN_AND_OUT_BRAKE = false;
+  public static final boolean CORAL_IN_AND_OUT_BRAKE = true;
   public static final double CORAL_IN_AND_OUT_REDUCTION = 18.0 / 12.0;
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
