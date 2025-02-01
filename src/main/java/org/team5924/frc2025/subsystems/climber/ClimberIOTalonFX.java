@@ -9,7 +9,7 @@
  * Public License v3.0. A copy of this license can be found in LICENSE.md
  * at the root of this project.
  *
- * If this file has been seperated from the original project, you should have
+ * If this file has been separated from the original project, you should have
  * received a copy of the GNU General Public License along with it.
  * If you did not, see <https://www.gnu.org/licenses>.
  */
@@ -17,8 +17,6 @@
 package org.team5924.frc2025.subsystems.climber;
 
 import static edu.wpi.first.units.Units.Radians;
-
-import org.team5924.frc2025.Constants;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -34,6 +32,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import org.team5924.frc2025.Constants;
 
 /** Add your docs here. */
 public class ClimberIOTalonFX implements ClimberIO {
@@ -60,8 +59,11 @@ public class ClimberIOTalonFX implements ClimberIO {
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.Inverted =
-        Constants.SHOOTER_INVERT ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-    config.MotorOutput.NeutralMode = Constants.SHOOTER_BRAKE ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+        Constants.SHOOTER_INVERT
+            ? InvertedValue.Clockwise_Positive
+            : InvertedValue.CounterClockwise_Positive;
+    config.MotorOutput.NeutralMode =
+        Constants.SHOOTER_BRAKE ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     config.CurrentLimits.SupplyCurrentLimit = Constants.SHOOTER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     talon.getConfigurator().apply(config);
