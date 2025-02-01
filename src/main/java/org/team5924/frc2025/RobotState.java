@@ -20,7 +20,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
+import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 
 @Getter
 public class RobotState {
@@ -39,7 +39,8 @@ public class RobotState {
   private Pose2d estimatedPose = new Pose2d();
 
   /* ### Coral In and Out ### */
+  @Getter
   @Setter
-  @AutoLogOutput(key = "RobotState/CoralInAndOutState")
-  private CoralInAndOut.State coralInAndOutGoal = CoralInAndOut.State.EMPTY;
+  @AutoLogOutput(key = "RobotState/CoralState")
+  private CoralState coralInAndOutState = CoralState.EMPTY;
 }

@@ -28,9 +28,22 @@ import lombok.Getter;
  */
 public class SensorRuntimeException extends RuntimeException {
   public static enum SensorErrorType {
+    /** Indicates sensor is not connected or cannot be reached by robot controller. */
     DISCONNECTED,
+
+    /**
+     * Indicates sensor is returning data that is outside expected range, in an invalid format, or
+     * otherwise invalid.
+     */
     INVALID_DATA,
+
+    /**
+     * Indicates sensor is not configured correctly, or the robot controller is not configured to
+     * read the sensor.
+     */
     INVALID_CONFIG,
+
+    /** Indicates an unspescified or unknown error condition with the sensor. */
     UNKNOWN
   }
 
@@ -51,6 +64,7 @@ public class SensorRuntimeException extends RuntimeException {
    * Constructs a {@code SensorRuntimeException} with a simple string message. No additional
    * formatting is allowed.
    *
+   * @param errorType The type of error that occurred.
    * @param errorMessage String holding the error message.
    */
   public SensorRuntimeException(SensorErrorType errorType, String errorMessage) {
@@ -63,6 +77,7 @@ public class SensorRuntimeException extends RuntimeException {
    * format string parameters to format an error message. A newline character is automatically
    * added.
    *
+   * @param errorType The type of error that occurred.
    * @param errorMessageFmtString Format string holding the error message.
    * @param robotStateFields Variadic list of arguments that hydrates the format string.
    */

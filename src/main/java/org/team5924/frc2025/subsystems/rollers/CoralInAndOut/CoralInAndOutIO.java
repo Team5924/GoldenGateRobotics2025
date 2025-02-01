@@ -32,18 +32,4 @@ public interface CoralInAndOutIO extends GenericRollerSystemIO {
     public LaserCAN_Measurement shooterLCMeasurement = new LaserCAN_Measurement();
     public boolean shooterLCConnected = true;
   }
-
-  /**
-   * @return true if coral is detected by intake LaserCAN
-   */
-  public default boolean isCoralInIntake() {
-    return false;
-  }
-
-  /**
-   * @return true if coral is detected by shooter LaserCAN
-   */
-  public default boolean isCoralInShooter() {
-    return false;
-  }
 }

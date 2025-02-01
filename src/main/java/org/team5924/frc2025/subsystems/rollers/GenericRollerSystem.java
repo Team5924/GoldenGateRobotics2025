@@ -31,14 +31,14 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
     DoubleSupplier getVoltageSupplier();
   }
 
-  public abstract G getState();
+  public abstract G getGoalState();
 
   private G lastState;
 
   private final String name;
 
-  @Getter private final GenericRollerSystemIO io;
-  protected final GenericRollerSystemIOInputsAutoLogged inputs =
+  @Getter private final GenericRollerSystemIO genericIo;
+  protected final GenericRollerSystemIOInputsAutoLogged genericInputs =
       new GenericRollerSystemIOInputsAutoLogged();
 
   private final Alert disconnected;
@@ -46,7 +46,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
   public GenericRollerSystem(String name, GenericRollerSystemIO io) {
     this.name = name;
-    this.io = io;
+    this.genericIo = io;
 
     disconnected = new Alert(name + " motor disconnected!", Alert.AlertType.kWarning);
     stateTimer.start();
@@ -54,16 +54,16 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
   @Override
   public void periodic() {
-    io.updateInputs(inputs);
-    Logger.processInputs(name, inputs);
-    disconnected.set(!inputs.motorConnected);
+    genericIo.updateInputs(genericInputs);
+    Logger.processInputs(name, genericInputs);
+    disconnected.set(!genericInputs.motorConnected);
 
-    if (getState() != lastState) {
+    if (getGoalState() != lastState) {
       stateTimer.reset();
-      lastState = getState();
+      lastState = getGoalState();
     }
 
-    io.runVolts(getState().getVoltageSupplier().getAsDouble());
-    Logger.recordOutput("Rollers/" + name + "Goal", getState().toString());
+    genericIo.runVolts(getGoalState().getVoltageSupplier().getAsDouble());
+    Logger.recordOutput("Rollers/" + name + "Goal", getGoalState().toString());
   }
 }

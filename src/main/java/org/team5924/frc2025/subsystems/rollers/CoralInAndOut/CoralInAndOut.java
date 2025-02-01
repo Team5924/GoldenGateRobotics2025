@@ -27,10 +27,10 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Setter
 @Getter
-public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.State> {
+public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState> {
   @RequiredArgsConstructor
   @Getter
-  public enum State implements VoltageState {
+  public enum CoralState implements VoltageState {
     LOADING(new LoggedTunableNumber("CoralInAndOut/LoadingVoltage", 12.0)),
     SHOOTING(new LoggedTunableNumber("CoralInAndOut/ShootingVoltage", 12.0)),
     EMPTY(new LoggedTunableNumber("CoralInAndOut/EmptyVoltage", 0.0)),
@@ -42,7 +42,16 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.State> {
     private final DoubleSupplier voltageSupplier;
   }
 
-  private State state = State.EMPTY;
+  private CoralState goalState = CoralState.EMPTY;
+
+  protected final CoralInAndOutIOInputsAutoLogged coralInputs =
+      new CoralInAndOutIOInputsAutoLogged();
+
+  private static final LoggedTunableNumber intakeDetectThreshold =
+      new LoggedTunableNumber("CoralInAndOutKrakenFOC/IntakeLaserCAN/DetectThreshold", 20);
+
+  private static final LoggedTunableNumber shooterDetectThreshold =
+      new LoggedTunableNumber("CoralInAndOutKrakenFOC/ShooterLaserCAN/DetectThreshold", 20);
 
   public CoralInAndOut(CoralInAndOutIO io) {
     super("CoralInAndOut", io);
@@ -50,14 +59,33 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.State> {
 
   @Override
   public void periodic() {
-    getIo().runVolts(state.getVoltageSupplier().getAsDouble());
+    getGenericIo().runVolts(goalState.getVoltageSupplier().getAsDouble());
     super.periodic();
   }
 
-  public void setState(State newGoal) {
-    if (this.state != newGoal) {
-      this.state = newGoal;
-      RobotState.getInstance().setCoralInAndOutGoal(newGoal);
+  public void setGoalState(CoralState goalState) {
+    switch (goalState) {
+      case LOADING -> RobotState.getInstance().setCoralInAndOutState(CoralState.LOADING);
+      case SHOOTING -> RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING);
+      case EMPTY -> RobotState.getInstance().setCoralInAndOutState(CoralState.EMPTY);
+      case HOLDING -> RobotState.getInstance().setCoralInAndOutState(CoralState.HOLDING);
+      case SPIT_BACK -> RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
     }
+  }
+
+  /**
+   * @return true if coral is detected by intake LaserCAN
+   */
+  public boolean isCoralInIntake() {
+    return coralInputs.intakeLCMeasurement.getDistance()
+        < (int) Math.floor(intakeDetectThreshold.get());
+  }
+
+  /**
+   * @return true if coral is detected by shooter LaserCAN
+   */
+  public boolean isCoralInShooter() {
+    return coralInputs.shooterLCMeasurement.getDistance()
+        < (int) Math.floor(shooterDetectThreshold.get());
   }
 }

@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOKrakenFOC;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
-import org.team5924.frc2025.util.LoggedTunableNumber;
 import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
@@ -46,12 +45,6 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
       new Alert("Intake LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
   private static final Alert shooterLCInvalidMeasure =
       new Alert("Shooter LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
-
-  private static final LoggedTunableNumber intakeDetectThreshold =
-      new LoggedTunableNumber("CoralInAndOutKrakenFOC/IntakeLaserCAN/DetectThreshold", 20);
-
-  private static final LoggedTunableNumber shooterDetectThreshold =
-      new LoggedTunableNumber("CoralInAndOutKrakenFOC/ShooterLaserCAN/DetectThreshold", 20);
 
   public CoralInAndOutIOKrakenFOC() {
     super(id, bus, currentLimitAmps, invert, brake, reduction);
@@ -97,13 +90,5 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     }
 
     super.updateInputs(inputs);
-  }
-
-  public boolean isCoralInIntake() {
-    return intakeLC.getMeasurement().distance_mm < (int) Math.floor(intakeDetectThreshold.get());
-  }
-
-  public boolean isCoralInShooter() {
-    return shooterLC.getMeasurement().distance_mm < (int) Math.floor(shooterDetectThreshold.get());
   }
 }
