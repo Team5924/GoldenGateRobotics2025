@@ -37,4 +37,10 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+
+  public static final boolean TUNING_MODE = true;
+
+  public static final int ELEVATOR_LEFT_TALON_ID = 69;
+  public static final int ELEVATOR_RIGHT_TALON_ID = 420;
+  public static final double MOTOR_TO_ELEVATOR_REDUCTION = 3;
 }

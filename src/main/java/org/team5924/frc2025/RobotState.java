@@ -18,7 +18,9 @@ package org.team5924.frc2025;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
+import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 
 public class RobotState {
   private static RobotState instance;
@@ -36,4 +38,9 @@ public class RobotState {
   @Getter
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   private Pose2d estimatedPose = new Pose2d();
+
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/ElevatorState")
+  private ElevatorState elevatorState = ElevatorState.INTAKE;
 }
