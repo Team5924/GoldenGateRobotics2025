@@ -47,6 +47,6 @@ public class RobotState {
   /* ### Algae Pivot ### */
   @Getter
   @Setter
-  @AutoLogOutput(key = "RobotState/ElevatorState")
+  @AutoLogOutput(key = "RobotState/AlgaePivotState")
   private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
 }
