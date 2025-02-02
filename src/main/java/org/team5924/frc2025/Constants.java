@@ -9,7 +9,7 @@
  * Public License v3.0. A copy of this license can be found in LICENSE.md
  * at the root of this project.
  *
- * If this file has been seperated from the original project, you should have
+ * If this file has been separated from the original project, you should have
  * received a copy of the GNU General Public License along with it.
  * If you did not, see <https://www.gnu.org/licenses>.
  */
@@ -38,6 +38,23 @@ public final class Constants {
     REPLAY
   }
 
+  public static final boolean ALLOW_ASSERTS = true;
+
+  /* ### Subsystems ### */
+  /* # Rollers # */
+  /* General */
+  public static final double LOOP_PERIODIC_SECONDS = 0.02;
+  /* Coral In-And-Out */
+  public static final int CORAL_IN_AND_OUT_CAN_ID = 25;
+  public static final String CORAL_IN_AND_OUT_BUS = "rio";
+  public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
+  public static final boolean CORAL_IN_AND_OUT_INVERT = false;
+  public static final boolean CORAL_IN_AND_OUT_BRAKE = true;
+  public static final double CORAL_IN_AND_OUT_REDUCTION = 18.0 / 12.0;
+  public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
+  public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
+  public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
+  /* # Pivot # */
   public static final int ALGAE_PIVOT_TALON_ID = 55;
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
   public static final boolean TUNING_MODE = true;
