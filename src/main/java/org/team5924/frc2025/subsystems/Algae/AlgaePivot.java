@@ -74,7 +74,7 @@ public class AlgaePivot extends SubsystemBase {
     Logger.recordOutput("AlgaePivot/GoalState", goalState.toString());
     Logger.recordOutput("AlgaePivot/TargetRads", goalState.rads);
 
-    AlgaePivotMotorDisconnected.set(!inputs.leftMotorConnected);
+    AlgaePivotMotorDisconnected.set(!inputs.algaePivotMotorConnected);
 
     
   }
