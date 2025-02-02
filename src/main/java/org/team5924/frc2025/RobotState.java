@@ -19,7 +19,6 @@ package org.team5924.frc2025;
 import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.team5924.frc2025.subsystems.Algae.AlgaePivot.AlgaePivotState;
 

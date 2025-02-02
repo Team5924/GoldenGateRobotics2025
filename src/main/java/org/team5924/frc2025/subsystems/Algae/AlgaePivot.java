@@ -20,11 +20,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import lombok.Getter;
-
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
-
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
@@ -34,7 +29,8 @@ public class AlgaePivot extends SubsystemBase {
 
   private final AlgaePivotIO io;
 
-  private static final double POSITION_TOLERANCE = 0.02;
+  public LoggedTunableNumber AlgaePivotTolerance =
+      new LoggedTunableNumber("AlgaePivotToleranceRads", .02);
   private final AlgaePivotIOInputsAutoLogged inputs = new AlgaePivotIOInputsAutoLogged();
 
   public enum AlgaePivotState {
@@ -43,8 +39,8 @@ public class AlgaePivot extends SubsystemBase {
     INTAKE_FLOOR(new LoggedTunableNumber("AlgaePivotIntakeFloorRads", 0.5)),
     NET(new LoggedTunableNumber("AlgaePivotIntakeNetRads", 1)),
     MANUAL(new LoggedTunableNumber("AlgaePivotManualRads", -1)),
-    MOVING(new LoggedTunableNumber("AlgaePivotMovingRads, -1" )),
-    HOLDING(new LoggedTunableNumber("AlgaePivotHoldingRads, -1"));
+    MOVING(new LoggedTunableNumber("AlgaePivotMovingRads", -1)),
+    HOLDING(new LoggedTunableNumber("AlgaePivotHoldingRads", -1));
 
     private final LoggedTunableNumber rads;
 
@@ -74,19 +70,16 @@ public class AlgaePivot extends SubsystemBase {
     Logger.recordOutput("AlgaePivot/GoalState", goalState.toString());
     Logger.recordOutput("AlgaePivot/TargetRads", goalState.rads);
 
-    AlgaePivotMotorDisconnected.set(!inputs.leftMotorConnected);
-
-    
+    AlgaePivotMotorDisconnected.set(!inputs.algaePivotMotorConnected);
   }
 
-   private double getAlgaePivotPositionRads() {
-    return Radians.of(inputs.algaePivotPositionRads/Constants.MOTOR_TO_ALGAE_PIVOT_REDUCTION);
-        
+  private double getAlgaePivotPositionRads() {
+    return inputs.algaePivotPositionRads / Constants.MOTOR_TO_ALGAE_PIVOT_REDUCTION;
   }
 
   public boolean isAtSetpoint() {
     return Math.abs(getAlgaePivotPositionRads() - this.goalState.rads.getAsDouble())
-        < POSITION_TOLERANCE;
+        < AlgaePivotTolerance.getAsDouble();
   }
 
   public void setVoltage(double voltage) {
@@ -108,6 +101,4 @@ public class AlgaePivot extends SubsystemBase {
         break;
     }
   }
-
-  
 }

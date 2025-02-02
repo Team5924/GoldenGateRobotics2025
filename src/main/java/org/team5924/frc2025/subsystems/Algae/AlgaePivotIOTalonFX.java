@@ -37,6 +37,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 /** Add your docs here. */
 public class AlgaePivotIOTalonFX implements AlgaePivotIO {
@@ -65,11 +66,16 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
     talonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     talonConfig.Feedback.SensorToMechanismRatio = Constants.MOTOR_TO_ALGAE_PIVOT_REDUCTION;
 
+    LoggedTunableNumber AlgaePivotMotorkP = new LoggedTunableNumber("AlgaePivotMotorkP", 0);
+    LoggedTunableNumber AlgaePivotMotorkI = new LoggedTunableNumber("AlgaePivotMotorkI", 0);
+    LoggedTunableNumber AlgaePivotMotorkD = new LoggedTunableNumber("AlgaePivotMotorkD", 0);
+    LoggedTunableNumber AlgaePivotMotorkS = new LoggedTunableNumber("AlgaePivotMotorkS", 0);
+
     final Slot0Configs controllerConfig = new Slot0Configs();
-    controllerConfig.kP = 0;
-    controllerConfig.kI = 0;
-    controllerConfig.kD = 0;
-    controllerConfig.kS = 0;
+    controllerConfig.kP = AlgaePivotMotorkP.getAsDouble();
+    controllerConfig.kI = AlgaePivotMotorkI.getAsDouble();
+    controllerConfig.kD = AlgaePivotMotorkD.getAsDouble();
+    controllerConfig.kS = AlgaePivotMotorkS.getAsDouble();
 
     algaePivotTalon.getConfigurator().apply(talonConfig, 1.0);
     algaePivotTalon.getConfigurator().apply(controllerConfig, 1.0);
