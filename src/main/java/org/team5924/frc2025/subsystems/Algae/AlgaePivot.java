@@ -62,7 +62,7 @@ public class AlgaePivot extends SubsystemBase {
     this.io = io;
     this.goalState = AlgaePivotState.INTAKE_FLOOR;
     this.AlgaePivotMotorDisconnected =
-        new Alert("Left elevator motor disconnected!", Alert.AlertType.kWarning);
+        new Alert("Algae pivot motor disconnected!", Alert.AlertType.kWarning);
   }
 
   @Override
