@@ -16,23 +16,45 @@
 
 package org.team5924.frc2025.subsystems.climber;
 
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
+@Setter
+@Getter
 public class Climber extends SubsystemBase {
+
+  public interface VoltageState {
+    DoubleSupplier getVoltageSupplier();
+  }
+
   @RequiredArgsConstructor
   @Getter
-  public enum ClimberState {
-    CLIMB,
-    STOW,
-    READY_TO_CLIMB,
-    MOVING
+  public enum ClimberState implements VoltageState {
+    // Finished climbing?
+    CLIMB(new LoggedTunableNumber("CoralInAndOut/ClimbingVoltage", 0.0)),
+    // Tucked in
+    STOW(new LoggedTunableNumber("CoralInAndOut/StowVoltage", 0.0)),
+    // Ready to climb
+    READY_TO_CLIMB(new LoggedTunableNumber("CoralInAndOut/ReadyToClimbVoltage", 0.0)),
+    // Climber is moving down
+    MOVING(new LoggedTunableNumber("CoralInAndOut/MovingVoltage", -12.0));
+
+    private final DoubleSupplier voltageSupplier;
   }
 
   private ClimberState goalState = ClimberState.STOW;
+  private ClimberState lastState;
+
+  private final Alert disconnected;
+  protected final Timer stateTimer = new Timer();
 
   @Getter private final ClimberIO io;
 
@@ -40,15 +62,35 @@ public class Climber extends SubsystemBase {
 
   public Climber(ClimberIO io) {
     this.io = io;
+
+    disconnected = new Alert("Climber disconnected!", Alert.AlertType.kWarning);
+    stateTimer.start();
   }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
+
+    disconnected.set(!inputs.motorConnected);
+
+    if (getGoalState() != lastState) {
+      stateTimer.reset();
+      lastState = getGoalState();
+      System.out.println("New goal state: " + getGoalState().name());
+    }
+
+    io.runVolts(goalState.getVoltageSupplier().getAsDouble());
+    Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
+  /**
+   * Sets the goal state of the climber.
+   *
+   * @param goalState the new goal state
+   */
   public void setGoalState(ClimberState goalState) {
+    this.goalState = goalState;
     switch (goalState) {
       case CLIMB -> RobotState.getInstance().setClimberState(ClimberState.CLIMB);
       case STOW -> RobotState.getInstance().setClimberState(ClimberState.STOW);

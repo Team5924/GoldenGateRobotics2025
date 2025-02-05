@@ -36,4 +36,6 @@ public interface ClimberIO {
   public default void runVolts(double volts) {}
 
   public default void setAngle(double rads) {}
+
+  default void stop() {}
 }

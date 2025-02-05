@@ -39,11 +39,12 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   private Pose2d estimatedPose = new Pose2d();
 
-  /* ### Coral In and Out ### */
+  /* ### Climber ### */
   @Setter
-  @AutoLogOutput(key = "RobotState/IntakeState")
+  @AutoLogOutput(key = "RobotState/ClimberState")
   private ClimberState climberState = ClimberState.STOW;
 
+  /* ### Coral In and Out ### */
   @Getter
   @Setter
   @AutoLogOutput(key = "RobotState/CoralState")

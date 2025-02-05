@@ -30,6 +30,7 @@ import org.team5924.frc2025.commands.DriveCommands;
 import org.team5924.frc2025.generated.TunerConstants;
 import org.team5924.frc2025.subsystems.climber.Climber;
 import org.team5924.frc2025.subsystems.climber.ClimberIO;
+import org.team5924.frc2025.subsystems.climber.ClimberIOSim;
 import org.team5924.frc2025.subsystems.climber.ClimberIOTalonFX;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
@@ -86,7 +87,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        climber = new Climber(new ClimberIO() {});
+        climber = new Climber(new ClimberIOSim());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         break;
 
@@ -175,6 +176,17 @@ public class RobotContainer {
         .rightTrigger()
         .onTrue(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+
+    // Climber
+    driveController
+        .pov(180)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.MOVING)));
+
+    driveController
+        .pov(-1)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.STOW)));
+
+    System.out.println("Is the driver controller connected? " + driveController.isConnected());
   }
 
   /**

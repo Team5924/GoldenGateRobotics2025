@@ -45,6 +45,15 @@ public final class Constants {
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Climber */
+  public static final int CLIMBER_CAN_ID = 0;
+  public static final String CLIMBER_BUS = "rio";
+  public static final int CLIMBER_CURRENT_LIMIT = 40;
+  public static final boolean CLIMBER_INVERT = false;
+  public static final boolean CLIMBER_BRAKE = true;
+  public static final double CLIMBER_REDUCTION = 18.0 / 12.0;
+  public static final double CLIMBER_SIM_MOI = 0.001;
+
+  /* SHOOTER */
   public static final int SHOOTER_CAN_ID = 0;
   public static final String SHOOTER_BUS = "rio";
   public static final int SHOOTER_CURRENT_LIMIT = 40;
