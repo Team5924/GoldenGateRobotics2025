@@ -58,4 +58,5 @@ public final class Constants {
   public static final int ALGAE_PIVOT_TALON_ID = 55;
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
   public static final boolean TUNING_MODE = true;
+  public static final int ALGAE_PIVOT_CANCODER_ID = 45;
 }

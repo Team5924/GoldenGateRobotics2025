@@ -24,13 +24,23 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration.*;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+
+import au.grapplerobotics.CanBridge;
+import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -42,7 +52,10 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 /** Add your docs here. */
 public class AlgaePivotIOTalonFX implements AlgaePivotIO {
   private final TalonFX algaePivotTalon;
+  private final CANcoder algaePivotCANcoder;
 
+  private final StatusSignal<Angle> algaePivotCANcoderAbsolutePositionRotations;
+  private final StatusSignal<Angle> algaePivotCANcoderRelativePositionRotations;
   private final StatusSignal<Angle> algaePivotPosition;
   private final StatusSignal<AngularVelocity> algaePivotVelocity;
   private final StatusSignal<Voltage> algaePivotAppliedVolts;
@@ -55,8 +68,25 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
   private final PositionVoltage positionControl =
       new PositionVoltage(0).withUpdateFreqHz(0.0).withEnableFOC(true);
 
+  LoggedTunableNumber AlgaePivotMotorkP = new LoggedTunableNumber("AlgaePivotMotorkP", 0);
+  LoggedTunableNumber AlgaePivotMotorkI = new LoggedTunableNumber("AlgaePivotMotorkI", 0);
+  LoggedTunableNumber AlgaePivotMotorkD = new LoggedTunableNumber("AlgaePivotMotorkD", 0);
+  LoggedTunableNumber AlgaePivotMotorkS = new LoggedTunableNumber("AlgaePivotMotorkS", 0);
+  LoggedTunableNumber algaePivotCANcoderMagnetOffsetRads = new LoggedTunableNumber("AlgaePivotCANcoderOffsetRads", 0);
+
+  
+
   public AlgaePivotIOTalonFX() {
     algaePivotTalon = new TalonFX(Constants.ALGAE_PIVOT_TALON_ID);
+    algaePivotCANcoder = new CANcoder(Constants.ALGAE_PIVOT_CANCODER_ID);
+
+    CANcoderConfiguration algaePivotCANcoderConfiguration = new CANcoderConfiguration();
+    algaePivotCANcoderConfiguration.MagnetSensor.AbsoluteSensorRange =
+        AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    algaePivotCANcoderConfiguration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    algaePivotCANcoderConfiguration.MagnetSensor.MagnetOffset =
+        Units.radiansToRotations(algaePivotCANcoderMagnetOffsetRads.getAsDouble());
+    algaePivotCANcoderConfiguration.getConfigurator().apply(algaePivotCANcoderConfiguration, 1.0);
 
     // General config
     final TalonFXConfiguration talonConfig = new TalonFXConfiguration();
@@ -66,11 +96,6 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
     talonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     talonConfig.Feedback.SensorToMechanismRatio = Constants.MOTOR_TO_ALGAE_PIVOT_REDUCTION;
 
-    LoggedTunableNumber AlgaePivotMotorkP = new LoggedTunableNumber("AlgaePivotMotorkP", 0);
-    LoggedTunableNumber AlgaePivotMotorkI = new LoggedTunableNumber("AlgaePivotMotorkI", 0);
-    LoggedTunableNumber AlgaePivotMotorkD = new LoggedTunableNumber("AlgaePivotMotorkD", 0);
-    LoggedTunableNumber AlgaePivotMotorkS = new LoggedTunableNumber("AlgaePivotMotorkS", 0);
-
     final Slot0Configs controllerConfig = new Slot0Configs();
     controllerConfig.kP = AlgaePivotMotorkP.getAsDouble();
     controllerConfig.kI = AlgaePivotMotorkI.getAsDouble();
@@ -79,6 +104,10 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
 
     algaePivotTalon.getConfigurator().apply(talonConfig, 1.0);
     algaePivotTalon.getConfigurator().apply(controllerConfig, 1.0);
+
+    algaePivotCANcoderAbsolutePositionRotations = algaePivotCANcoder.getAbsolutePosition();
+    algaePivotCANcoderRelativePositionRotations = algaePivotCANcoder.getPosition();
+    
 
     algaePivotPosition = algaePivotTalon.getPosition();
     algaePivotVelocity = algaePivotTalon.getVelocity();
@@ -95,7 +124,16 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
         algaePivotSupplyCurrent,
         algaePivotTorqueCurrent,
         algaePivotTempCelsius);
+
+        BaseStatusSignal.setUpdateFrequencyForAll(
+          500, 
+          algaePivotCANcoderAbsolutePositionRotations, 
+          algaePivotCANcoderRelativePositionRotations);
+
   }
+
+    
+
 
   @Override
   public void updateInputs(AlgaePivotIOInputs inputs) {
@@ -115,6 +153,12 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
     inputs.algaePivotSupplyCurrentAmps = algaePivotSupplyCurrent.getValue().in(Amps);
     inputs.algaePivotTorqueCurrentAmps = algaePivotTorqueCurrent.getValue().in(Amps);
     inputs.algaePivotTempCelsius = algaePivotTempCelsius.getValue().in(Celsius);
+    inputs.algaePivotCANcoderAbsolutePositionRads =
+        Units.rotationsToRadians(algaePivotCANcoderAbsolutePositionRotations.getValueAsDouble())
+            - algaePivotCANcoderMagnetOffsetRads.getAsDouble();
+    inputs.algaePivotCANcoderRelativePositionRads =
+        Units.rotationsToRadians(algaePivotCANcoderRelativePositionRotations.getValueAsDouble())
+            - algaePivotCANcoderMagnetOffsetRads.getAsDouble();
   }
 
   @Override

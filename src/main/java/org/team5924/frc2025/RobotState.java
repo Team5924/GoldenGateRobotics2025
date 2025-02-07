@@ -44,7 +44,7 @@ public class RobotState {
   @Setter
   @AutoLogOutput(key = "RobotState/CoralState")
   private CoralState coralInAndOutState = CoralState.EMPTY;
-  
+
   /* ### Algae Pivot ### */
   @Getter
   @Setter
