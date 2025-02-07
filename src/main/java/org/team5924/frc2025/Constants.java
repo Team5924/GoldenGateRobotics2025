@@ -38,7 +38,6 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = false;
   public static final boolean ALLOW_ASSERTS = true;
 
   /* ### Subsystems ### */
@@ -55,4 +54,9 @@ public final class Constants {
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
+  /* # Pivot # */
+  public static final int ALGAE_PIVOT_TALON_ID = 55;
+  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
+  public static final boolean TUNING_MODE = true;
+  public static final int ALGAE_PIVOT_CANCODER_ID = 45;
 }
