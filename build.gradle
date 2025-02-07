@@ -186,7 +186,7 @@ spotless {
     java {
         target fileTree(".") {
             include "**/*.java"
-            exclude "**/build/**", "**/build-*/**"
+            exclude "**/build/**", "**/build-*/**", "src/main/java/org/team5924/frc2025/subsystems/vision/MegatagPoseEstimate.java", "src/main/java/com/team254/lib/**", "src/main/java/org/team5924/frc2025/subsystems/vision/FiducialObservation.java"
         }
         importOrder()
         toggleOffOn()
@@ -196,6 +196,7 @@ spotless {
         googleJavaFormat()
         formatAnnotations()
         licenseHeaderFile 'licenseHeaderFile'
+        toggleOffOn()
     }
     groovyGradle {
         target fileTree(".") {
