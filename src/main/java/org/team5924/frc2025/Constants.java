@@ -16,6 +16,8 @@
 
 package org.team5924.frc2025;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -40,6 +42,11 @@ public final class Constants {
 
   public static final boolean TUNING_MODE = false;
   public static final boolean ALLOW_ASSERTS = true;
+
+  /* April Tag Layout (snippet here borrowed from Team 254) */
+  public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  public static final double kFieldWidthMeters = kAprilTagLayout.getFieldWidth(); // distance between field walls, 8.211m
+  public static final double kFieldLengthMeters = kAprilTagLayout.getFieldLength();
 
   /* ### Subsystems ### */
   /* # Rollers # */
