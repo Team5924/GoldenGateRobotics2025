@@ -178,15 +178,26 @@ public class RobotContainer {
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
 
     // Climber
+
+    // Dpad Down
     driveController
         .pov(180)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.MOVING)));
+        .onTrue(
+            Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.MOVING))
+                .finallyDo(() -> climber.setVoltageMultiplier(-1)));
 
+    // Dpad Up
     driveController
-        .pov(-1)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.STOW)));
+        .pov(0)
+        .onTrue(
+            Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.MOVING))
+                .finallyDo(() -> climber.setVoltageMultiplier(1)));
 
-    System.out.println("Is the driver controller connected? " + driveController.isConnected());
+    // No Dpad Up or Dpad Down
+    driveController
+        .pov(180)
+        .or(driveController.pov(0))
+        .onFalse(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.STOW)));
   }
 
   /**

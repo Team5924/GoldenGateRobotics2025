@@ -18,6 +18,7 @@ package org.team5924.frc2025.subsystems.climber;
 
 import static edu.wpi.first.units.Units.Radians;
 
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -32,7 +33,12 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.util.LaserCAN_Measurement;
+import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
 /** Add your docs here. */
 public class ClimberIOTalonFX implements ClimberIO {
@@ -51,6 +57,13 @@ public class ClimberIOTalonFX implements ClimberIO {
       new PositionVoltage(0).withUpdateFreqHz(0.0).withEnableFOC(true);
 
   private final double reduction;
+
+  private static final LaserCan laserCan = new LaserCan(Constants.CLIMBER_LASER_CAN_ID);
+
+  private static final Alert laserCanDisconnectAlert =
+      new Alert("Climber LaserCAN disconnected.", AlertType.kWarning);
+  private static final Alert laserCanInvalidMeasure =
+      new Alert("Climber LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
   public ClimberIOTalonFX() {
     reduction = Constants.SHOOTER_REDUCTION;
@@ -84,6 +97,25 @@ public class ClimberIOTalonFX implements ClimberIO {
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
+    try {
+      inputs.laserCanMeasurement = LaserCAN_Measurement.fromLaserCAN(laserCan.getMeasurement());
+      inputs.laserCanConnected = true;
+      laserCanDisconnectAlert.set(false);
+      laserCanInvalidMeasure.set(false);
+    } catch (SensorRuntimeException e) {
+      switch (e.getErrorType()) {
+        case DISCONNECTED -> {
+          inputs.laserCanConnected = false;
+          laserCanDisconnectAlert.set(true);
+        }
+        case INVALID_DATA -> laserCanInvalidMeasure.set(true);
+        default -> {
+          if (Constants.ALLOW_ASSERTS) throw e;
+          else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
+        }
+      }
+    }
+
     inputs.motorConnected =
         BaseStatusSignal.refreshAll(
                 position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius)
@@ -103,6 +135,14 @@ public class ClimberIOTalonFX implements ClimberIO {
 
   @Override
   public void setAngle(double rads) {
+    if (rads < Constants.CLIMBER_MIN_RADS || rads > Constants.CLIMBER_MAX_RADS) {
+      Logger.recordOutput(
+          "Climber/InvalidAngle",
+          "Cannot set climber angle to "
+              + rads
+              + " rads.  This value extends past the climber angle boundary.");
+    }
+    rads = Math.min(Constants.CLIMBER_MIN_RADS, Math.max(rads, Constants.CLIMBER_MAX_RADS));
     talon.setControl(positionOut.withPosition(Radians.of(rads)));
   }
 }

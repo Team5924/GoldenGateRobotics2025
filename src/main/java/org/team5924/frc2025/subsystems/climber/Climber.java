@@ -39,16 +39,22 @@ public class Climber extends SubsystemBase {
   @Getter
   public enum ClimberState implements VoltageState {
     // Finished climbing?
-    CLIMB(new LoggedTunableNumber("CoralInAndOut/ClimbingVoltage", 0.0)),
+    CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 0.0)),
+
     // Tucked in
-    STOW(new LoggedTunableNumber("CoralInAndOut/StowVoltage", 0.0)),
+    STOW(new LoggedTunableNumber("Climber/StowVoltage", 0.0)),
+
     // Ready to climb
-    READY_TO_CLIMB(new LoggedTunableNumber("CoralInAndOut/ReadyToClimbVoltage", 0.0)),
+    READY_TO_CLIMB(new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0)),
+
     // Climber is moving down
-    MOVING(new LoggedTunableNumber("CoralInAndOut/MovingVoltage", -12.0));
+    MOVING(new LoggedTunableNumber("Climber/MovingVoltage", 12.0));
 
     private final DoubleSupplier voltageSupplier;
   }
+
+  // 1 = up, -1 = down
+  private double voltageMultiplier = 1;
 
   private ClimberState goalState = ClimberState.STOW;
   private ClimberState lastState;
@@ -59,6 +65,9 @@ public class Climber extends SubsystemBase {
   @Getter private final ClimberIO io;
 
   private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
+
+  private static final LoggedTunableNumber laserCanDetectThreshold =
+      new LoggedTunableNumber("ClimberIOTalonFX/LaserCAN/DetectThreshold", 20);
 
   public Climber(ClimberIO io) {
     this.io = io;
@@ -77,10 +86,9 @@ public class Climber extends SubsystemBase {
     if (getGoalState() != lastState) {
       stateTimer.reset();
       lastState = getGoalState();
-      System.out.println("New goal state: " + getGoalState().name());
     }
 
-    io.runVolts(goalState.getVoltageSupplier().getAsDouble());
+    io.runVolts(goalState.getVoltageSupplier().getAsDouble() * voltageMultiplier);
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
@@ -97,6 +105,14 @@ public class Climber extends SubsystemBase {
       case READY_TO_CLIMB -> RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
       case MOVING -> RobotState.getInstance().setClimberState(ClimberState.MOVING);
     }
+  }
+
+  /**
+   * @return true if cage is detected by climber LaserCAN
+   */
+  public boolean isCageInClimber() {
+    return inputs.laserCanMeasurement.getDistance()
+        < (int) Math.floor(laserCanDetectThreshold.get());
   }
 
   public void runVolts(double volts) {

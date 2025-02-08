@@ -17,11 +17,11 @@
 package org.team5924.frc2025.subsystems.climber;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.team5924.frc2025.util.LaserCAN_Measurement;
 
 public interface ClimberIO {
   @AutoLog
   public static class ClimberIOInputs {
-
     public boolean motorConnected = true;
     public double positionRads = 0.0;
     public double velocityRadsPerSec = 0.0;
@@ -29,6 +29,10 @@ public interface ClimberIO {
     public double supplyCurrentAmps = 0.0;
     public double torqueCurrentAmps = 0.0;
     public double tempCelsius = 0.0;
+
+    // Climber LaserCAN
+    public LaserCAN_Measurement laserCanMeasurement = new LaserCAN_Measurement();
+    public boolean laserCanConnected = true;
   }
 
   public default void updateInputs(ClimberIOInputs inputs) {}
