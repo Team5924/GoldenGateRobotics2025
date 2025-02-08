@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.team5924.frc2025.subsystems.algae.AlgaePivot.AlgaePivotState;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 
 @Getter
@@ -38,6 +39,11 @@ public class RobotState {
 
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   private Pose2d estimatedPose = new Pose2d();
+
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/ElevatorState")
+  private ElevatorState elevatorState = ElevatorState.INTAKE;
 
   /* ### Coral In and Out ### */
   @Getter
