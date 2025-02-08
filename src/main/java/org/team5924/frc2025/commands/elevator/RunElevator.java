@@ -49,6 +49,7 @@ public class RunElevator extends Command {
         break;
       case MANUAL:
         elevator.setVoltage(-joystickY.getAsDouble() * 10);
+        break;
       default:
         break;
     }
