@@ -40,8 +40,8 @@ public final class Constants {
 
   public static final boolean TUNING_MODE = true;
 
-  public static final int ELEVATOR_LEFT_TALON_ID = 69;
-  public static final int ELEVATOR_RIGHT_TALON_ID = 420;
+  public static final int ELEVATOR_LEFT_TALON_ID = 30;
+  public static final int ELEVATOR_RIGHT_TALON_ID = 31;
   public static final double MOTOR_TO_ELEVATOR_REDUCTION = 3;
 
   public static final boolean ALLOW_ASSERTS = true;
@@ -51,7 +51,7 @@ public final class Constants {
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Coral In-And-Out */
-  public static final int CORAL_IN_AND_OUT_CAN_ID = 25;
+  public static final int CORAL_IN_AND_OUT_CAN_ID = 33;
   public static final String CORAL_IN_AND_OUT_BUS = "rio";
   public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
   public static final boolean CORAL_IN_AND_OUT_INVERT = false;
