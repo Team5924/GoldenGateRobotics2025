@@ -35,7 +35,6 @@ import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANdi;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
-import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -195,7 +194,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     bothHardwareLimitSwitchConfigsOn.ForwardLimitEnable = true;
     bothHardwareLimitSwitchConfigsOn.ForwardLimitSource = ForwardLimitSourceValue.RemoteCANdiS1;
     bothHardwareLimitSwitchConfigsOn.ForwardLimitRemoteSensorID = elevatorCANdi.getDeviceID();
-    //bothHardwareLimitSwitchConfigsOn.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
+    // bothHardwareLimitSwitchConfigsOn.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
     bothHardwareLimitSwitchConfigsOn.ReverseLimitEnable = true;
     bothHardwareLimitSwitchConfigsOn.ReverseLimitSource = ReverseLimitSourceValue.RemoteCANdiS2;
     bothHardwareLimitSwitchConfigsOn.ReverseLimitRemoteSensorID = elevatorCANdi.getDeviceID();
