@@ -27,18 +27,16 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANdi;
-import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -90,9 +88,15 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     final TalonFXConfiguration talonConfig = new TalonFXConfiguration();
     talonConfig.CurrentLimits.SupplyCurrentLimit = 60.0;
     talonConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    talonConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    talonConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // TODO: previously InvertedValue.CounterClockwise_Positive, test if correct direction
     talonConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     talonConfig.Feedback.SensorToMechanismRatio = Constants.MOTOR_TO_ELEVATOR_REDUCTION;
+
+    // TODO: test talon soft limits
+    // talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    // talonConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 100000;
+    // talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    // talonConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
 
     final Slot0Configs controllerConfig = new Slot0Configs();
     controllerConfig.kP = 0;
@@ -135,6 +139,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         rightSupplyCurrent,
         rightTorqueCurrent,
         rightTempCelsius);
+
+    leftTalon.setPosition(0);
+    rightTalon.setPosition(0);
   }
 
   @Override
@@ -190,7 +197,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void setSoftStopOn() {
-    HardwareLimitSwitchConfigs bothHardwareLimitSwitchConfigsOn = new HardwareLimitSwitchConfigs();
+    HardwareLimitSwitchConfigs bothHardwareLimitSwitchConfigsOn = new
+    HardwareLimitSwitchConfigs();
     bothHardwareLimitSwitchConfigsOn.ForwardLimitEnable = true;
     bothHardwareLimitSwitchConfigsOn.ForwardLimitSource = ForwardLimitSourceValue.RemoteCANdiS1;
     bothHardwareLimitSwitchConfigsOn.ForwardLimitRemoteSensorID = elevatorCANdi.getDeviceID();
@@ -202,22 +210,40 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     leftTalon
         .getConfigurator()
         .apply(
-            new TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOn));
+            new
+    TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOn));
     leftTalon
         .getConfigurator()
         .apply(
-            new TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOn));
+            new
+    TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOn));
+
+    // SoftwareLimitSwitchConfigs bothSoftwareLimitSwitchConfigsOn = new SoftwareLimitSwitchConfigs();
+    // bothSoftwareLimitSwitchConfigsOn.ForwardSoftLimitEnable = true;
+    // bothSoftwareLimitSwitchConfigsOn.ForwardSoftLimitThreshold = 4.3;
+    // bothSoftwareLimitSwitchConfigsOn.ReverseSoftLimitEnable = true;
+    // bothSoftwareLimitSwitchConfigsOn.ReverseSoftLimitThreshold = 0;
+    // leftTalon
+    //     .getConfigurator()
+    //     .apply(
+    //         new TalonFXConfiguration().withSoftwareLimitSwitch(bothSoftwareLimitSwitchConfigsOn));
+    // rightTalon.getConfigurator().apply(new
+    // TalonFXConfiguration().withSoftwareLimitSwitch(bothSoftwareLimitSwitchConfigsOn));
   }
 
   @Override
   public void setVoltage(double volts) {
     leftTalon.setControl(voltageControl.withOutput(volts));
-    rightTalon.setControl(new StrictFollower(leftTalon.getDeviceID()));
+    rightTalon.setControl(voltageControl.withOutput(-volts));
+    // TODO: check for flipped follower
+    // rightTalon.setControl(new StrictFollower(leftTalon.getDeviceID()));
   }
 
   @Override
   public void setPosition(double rads) {
     leftTalon.setControl(positionControl.withPosition(Radians.of(rads)));
-    rightTalon.setControl(new StrictFollower(leftTalon.getDeviceID()));
+    rightTalon.setControl(positionControl.withPosition(Radians.of(-rads)));
+    // TODO: check for flipped follower
+    // rightTalon.setControl(new StrictFollower(leftTalon.getDeviceID()));
   }
 }

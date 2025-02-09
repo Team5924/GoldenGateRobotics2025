@@ -42,6 +42,7 @@ public class RunElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // TODO: figure out bug with this switch/elevator state. It doesnt do anything when run (and default is set to manual).
     // switch (RobotState.getInstance().getElevatorState()) {
     //   case MOVING:
     //     if (elevator.isAtSetpoint()) {
