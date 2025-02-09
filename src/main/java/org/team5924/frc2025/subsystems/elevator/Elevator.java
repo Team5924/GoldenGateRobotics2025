@@ -101,6 +101,14 @@ public class Elevator extends SubsystemBase {
     io.setVoltage(voltage);
   }
 
+  public void setSoftStopOn() {
+    io.setSoftStopOn();
+  }
+
+  public void setSoftStopOff() {
+    io.setSoftStopOff();
+  }
+
   public void setGoalState(ElevatorState goalState) {
     this.goalState = goalState;
     switch (goalState) {

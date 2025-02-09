@@ -44,4 +44,8 @@ public interface ElevatorIO {
   public default void setVoltage(double volts) {}
 
   public default void setPosition(double rads) {}
+
+  public default void setSoftStopOn() {}
+
+  public default void setSoftStopOff() {}
 }

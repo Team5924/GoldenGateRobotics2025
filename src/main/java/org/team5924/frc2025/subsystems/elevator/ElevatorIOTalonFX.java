@@ -24,14 +24,22 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANdiConfiguration;
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreCANdi;
+import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -43,6 +51,7 @@ import org.team5924.frc2025.Constants;
 public class ElevatorIOTalonFX implements ElevatorIO {
   private final TalonFX leftTalon;
   private final TalonFX rightTalon;
+  private final CoreCANdi elevatorCANdi;
 
   private final StatusSignal<Angle> leftPosition;
   private final StatusSignal<AngularVelocity> leftVelocity;
@@ -65,6 +74,18 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   public ElevatorIOTalonFX() {
     leftTalon = new TalonFX(Constants.ELEVATOR_LEFT_TALON_ID);
     rightTalon = new TalonFX(Constants.ELEVATOR_RIGHT_TALON_ID);
+    // Constants used in CANdi construction
+    final int kCANdiId = 0;
+    final String kCANdiCANbus = "rioBus";
+
+    // Construct the CANdi
+    elevatorCANdi = new CANdi(kCANdiId, kCANdiCANbus);
+
+    // Configure the CANdi for basic use
+    CANdiConfiguration configs = new CANdiConfiguration();
+
+    // Write these configs to the CANdi
+    elevatorCANdi.getConfigurator().apply(configs);
 
     // General config
     final TalonFXConfiguration talonConfig = new TalonFXConfiguration();
@@ -79,6 +100,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     controllerConfig.kI = 0;
     controllerConfig.kD = 0;
     controllerConfig.kS = 0;
+    controllerConfig.kG = .25;
+    controllerConfig.GravityType = GravityTypeValue.Elevator_Static;
 
     leftTalon.getConfigurator().apply(talonConfig, 1.0);
     rightTalon.getConfigurator().apply(talonConfig, 1.0);
@@ -149,6 +172,42 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     inputs.rightSupplyCurrentAmps = rightSupplyCurrent.getValue().in(Amps);
     inputs.rightTorqueCurrentAmps = rightTorqueCurrent.getValue().in(Amps);
     inputs.rightTempCelsius = rightTempCelsius.getValue().in(Celsius);
+  }
+
+  @Override
+  public void setSoftStopOff() {
+    HardwareLimitSwitchConfigs bothHardwareLimitSwitchConfigsOff = new HardwareLimitSwitchConfigs();
+    bothHardwareLimitSwitchConfigsOff.ForwardLimitEnable = false;
+    bothHardwareLimitSwitchConfigsOff.ReverseLimitEnable = false;
+    leftTalon
+        .getConfigurator()
+        .apply(
+            new TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOff));
+    rightTalon
+        .getConfigurator()
+        .apply(
+            new TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOff));
+  }
+
+  @Override
+  public void setSoftStopOn() {
+    HardwareLimitSwitchConfigs bothHardwareLimitSwitchConfigsOn = new HardwareLimitSwitchConfigs();
+    bothHardwareLimitSwitchConfigsOn.ForwardLimitEnable = true;
+    bothHardwareLimitSwitchConfigsOn.ForwardLimitSource = ForwardLimitSourceValue.RemoteCANdiS1;
+    bothHardwareLimitSwitchConfigsOn.ForwardLimitRemoteSensorID = elevatorCANdi.getDeviceID();
+    //bothHardwareLimitSwitchConfigsOn.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
+    bothHardwareLimitSwitchConfigsOn.ReverseLimitEnable = true;
+    bothHardwareLimitSwitchConfigsOn.ReverseLimitSource = ReverseLimitSourceValue.RemoteCANdiS2;
+    bothHardwareLimitSwitchConfigsOn.ReverseLimitRemoteSensorID = elevatorCANdi.getDeviceID();
+    // bothHardwareLimitSwitchConfigsOn.ReverseLimitType = ReverseLimitTypeValue.NormallyOpen;
+    leftTalon
+        .getConfigurator()
+        .apply(
+            new TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOn));
+    leftTalon
+        .getConfigurator()
+        .apply(
+            new TalonFXConfiguration().withHardwareLimitSwitch(bothHardwareLimitSwitchConfigsOn));
   }
 
   @Override
