@@ -134,13 +134,14 @@ public class ClimberIOTalonFX implements ClimberIO {
   }
 
   @Override
-  public void setAngle(double rads) {
+  public void setAngle(double rads) throws IllegalArgumentException {
     if (rads < Constants.CLIMBER_MIN_RADS || rads > Constants.CLIMBER_MAX_RADS) {
-      Logger.recordOutput(
-          "Climber/InvalidAngle",
+      String message =
           "Cannot set climber angle to "
               + rads
-              + " rads.  This value extends past the climber angle boundary.");
+              + " rads.  This value extends past the climber angle boundary.";
+      Logger.recordOutput("Climber/InvalidAngle", message);
+      throw new IllegalArgumentException(message);
     }
     rads = Math.min(Constants.CLIMBER_MIN_RADS, Math.max(rads, Constants.CLIMBER_MAX_RADS));
     talon.setControl(positionOut.withPosition(Radians.of(rads)));

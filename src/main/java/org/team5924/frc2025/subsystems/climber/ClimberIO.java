@@ -17,6 +17,7 @@
 package org.team5924.frc2025.subsystems.climber;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
 
 public interface ClimberIO {
@@ -35,11 +36,29 @@ public interface ClimberIO {
     public boolean laserCanConnected = true;
   }
 
+  /**
+   * Updates the inputs object with the latest data from hardware
+   *
+   * @param inputs Inputs to update
+   */
   public default void updateInputs(ClimberIOInputs inputs) {}
 
+  /**
+   * Runs the motor at the specified voltage
+   *
+   * @param volts Voltage to apply
+   */
   public default void runVolts(double volts) {}
 
+  /**
+   * Sets the target angle for the climber
+   *
+   * @param rads Target angle in radians, must be between {@link Constants}.CLIMBER_MIN_RADS and
+   *     {@link Constants}.CLIMBER_MAX_RADS
+   * @throws IllegalArgumentException if value does not fall in range
+   */
   public default void setAngle(double rads) {}
 
+  /** stops the motor */
   default void stop() {}
 }
