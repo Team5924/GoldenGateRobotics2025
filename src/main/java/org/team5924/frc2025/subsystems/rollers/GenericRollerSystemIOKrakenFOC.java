@@ -9,7 +9,7 @@
  * Public License v3.0. A copy of this license can be found in LICENSE.md
  * at the root of this project.
  *
- * If this file has been seperated from the original project, you should have
+ * If this file has been separated from the original project, you should have
  * received a copy of the GNU General Public License along with it.
  * If you did not, see <https://www.gnu.org/licenses>.
  */
@@ -77,7 +77,7 @@ public abstract class GenericRollerSystemIOKrakenFOC implements GenericRollerSys
 
   @Override
   public void updateInputs(GenericRollerSystemIOInputs inputs) {
-    inputs.connected =
+    inputs.motorConnected =
         BaseStatusSignal.refreshAll(
                 position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius)
             .isOK();
@@ -91,6 +91,10 @@ public abstract class GenericRollerSystemIOKrakenFOC implements GenericRollerSys
 
   @Override
   public void runVolts(double volts) {
+    if (Math.abs(volts) > 12.0) {
+      throw new IllegalArgumentException("Voltage must be between -12.0 and 12.0");
+    }
+
     talon.setControl(voltageOut.withOutput(volts));
   }
 
