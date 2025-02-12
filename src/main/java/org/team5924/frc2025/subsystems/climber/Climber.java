@@ -39,7 +39,7 @@ public class Climber extends SubsystemBase {
   @RequiredArgsConstructor
   @Getter
   public enum ClimberState implements VoltageState {
-    // In the process of climbing, not moving
+    // In the process of climbing, but not currently moving
     CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 0.0)),
 
     // Tucked in
@@ -68,7 +68,7 @@ public class Climber extends SubsystemBase {
   private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
 
   private static final LoggedTunableNumber laserCanDetectThreshold =
-      new LoggedTunableNumber("ClimberIOTalonFX/LaserCAN/DetectThreshold", 20);
+      new LoggedTunableNumber("Climber/LaserCAN/DetectThreshold", 20);
 
   public Climber(ClimberIO io) {
     this.io = io;
@@ -79,7 +79,6 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println("Current climber goal state: " + getGoalState().name());
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
 
@@ -126,11 +125,15 @@ public class Climber extends SubsystemBase {
     }
   }
 
-  /** Sets the goal state of the climber when Dpad Up or Dpad Down is not pressed. */
+  /**
+   * Sets the goal state of the climber when it isn't moving (neither Dpad Up nor Dpad Down is
+   * pressed).
+   */
   public void setGoalStateToNotMoving() {
     switch (getGoalState()) {
-      case MOVING -> setGoalState(ClimberState.CLIMB); // the climber stopped moving
-      default -> {} // the climber was not moving in the first place; don't need a state change here
+      case MOVING ->
+          setGoalState(ClimberState.CLIMB); // the climber stopped moving, return to climb state
+      default -> {} // the climber was not moving in the first place, don't need a state change here
     }
   }
 
