@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025.subsystems.climber;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,7 +39,7 @@ public class Climber extends SubsystemBase {
   @RequiredArgsConstructor
   @Getter
   public enum ClimberState implements VoltageState {
-    // Finished climbing?
+    // In the process of climbing, not moving
     CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 0.0)),
 
     // Tucked in
@@ -47,7 +48,7 @@ public class Climber extends SubsystemBase {
     // Ready to climb
     READY_TO_CLIMB(new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0)),
 
-    // Climber is moving down
+    // Climber is moving down/up depending on voltage multiplier
     MOVING(new LoggedTunableNumber("Climber/MovingVoltage", 12.0));
 
     private final DoubleSupplier voltageSupplier;
@@ -78,10 +79,17 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println("Current climber goal state: " + getGoalState().name());
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
 
     disconnected.set(!inputs.motorConnected);
+
+    if (getGoalState() == ClimberState.STOW && isCageInClimber()) {
+      setGoalState(
+          ClimberState.READY_TO_CLIMB); // if the cage is within range and the robot's state is
+      // STOW, then set the robot's state to READY_TO_CLIMB
+    }
 
     if (getGoalState() != lastState) {
       stateTimer.reset();
@@ -98,6 +106,17 @@ public class Climber extends SubsystemBase {
    * @param goalState the new goal state
    */
   public void setGoalState(ClimberState goalState) {
+    // Validate state transitions
+    if (getGoalState() == ClimberState.STOW
+        && (goalState == ClimberState.CLIMB || goalState == ClimberState.MOVING)) {
+      Logger.recordOutput(
+          "Climber/InvalidTransition",
+          "Cannot transition from STOW to "
+              + goalState.name()
+              + "; robot needs to be READY_TO_CLIMB before performing any climbing action");
+      return;
+    }
+
     this.goalState = goalState;
     switch (goalState) {
       case CLIMB -> RobotState.getInstance().setClimberState(ClimberState.CLIMB);
@@ -107,12 +126,21 @@ public class Climber extends SubsystemBase {
     }
   }
 
+  /** Sets the goal state of the climber when Dpad Up or Dpad Down is not pressed. */
+  public void setGoalStateToNotMoving() {
+    switch (getGoalState()) {
+      case MOVING -> setGoalState(ClimberState.CLIMB); // the climber stopped moving
+      default -> {} // the climber was not moving in the first place; don't need a state change here
+    }
+  }
+
   /**
    * @return true if cage is detected by climber LaserCAN
    */
   public boolean isCageInClimber() {
-    return inputs.laserCanMeasurement.getDistance()
-        < (int) Math.floor(laserCanDetectThreshold.get());
+    return inputs.laserCanMeasurement.getStatus() == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT
+        && inputs.laserCanMeasurement.getDistance()
+            < (int) Math.floor(laserCanDetectThreshold.get());
   }
 
   public void runVolts(double volts) {

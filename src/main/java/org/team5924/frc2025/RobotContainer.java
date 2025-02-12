@@ -197,7 +197,7 @@ public class RobotContainer {
     driveController
         .pov(180)
         .or(driveController.pov(0))
-        .onFalse(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.STOW)));
+        .onFalse(Commands.runOnce(() -> climber.setGoalStateToNotMoving()));
   }
 
   /**
