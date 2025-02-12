@@ -178,6 +178,9 @@ public class RobotContainer {
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
 
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
+    operatorController
+        .a()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
   }
 
   /**

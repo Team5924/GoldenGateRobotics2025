@@ -18,6 +18,7 @@ package org.team5924.frc2025.commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
+import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -36,25 +37,26 @@ public class RunElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // elevator.setSoftStopOn();
+    elevator.setSoftStopOn();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // TODO: figure out bug with this switch/elevator state. It doesnt do anything when run (and default is set to manual).
-    // switch (RobotState.getInstance().getElevatorState()) {
-    //   case MOVING:
-    //     if (elevator.isAtSetpoint()) {
-    //       RobotState.getInstance().setElevatorState(elevator.getGoalState());
-    //     }
-    //     break;
-    //   case MANUAL:
-    //     elevator.setVoltage(-joystickY.getAsDouble() * 10);
-    //     break;
-    //   default:
-    //     break;
-    // }
+    // TODO: figure out bug with this switch/elevator state. It doesnt do anything when run (and
+    // default is set to manual).
+    switch (RobotState.getInstance().getElevatorState()) {
+      case MOVING:
+        if (!elevator.isAtSetpoint()) {
+          RobotState.getInstance().setElevatorState(elevator.getGoalState());
+        }
+        break;
+      case MANUAL:
+        elevator.setVoltage(-joystickY.getAsDouble() * 10);
+        break;
+      default:
+        break;
+    }
     elevator.setVoltage(-joystickY.getAsDouble() * 5);
   }
 

@@ -37,6 +37,9 @@ public interface ElevatorIO {
     public double rightSupplyCurrentAmps = 0.0;
     public double rightTorqueCurrentAmps = 0.0;
     public double rightTempCelsius = 0.0;
+
+    public boolean minSoftStop = false;
+    public boolean maxSoftStop = false;
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
