@@ -16,12 +16,10 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,7 +33,6 @@ public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
   private static final LoggedTunableNumber POSITION_TOLERANCE =
       new LoggedTunableNumber("Elevator/PositionTolerance", 0.02);
-  private static final Distance SPROCKET_RADIUS = Inches.of(2);
 
   /** Creates a new elevator. */
   private final ElevatorIO io;
@@ -44,12 +41,12 @@ public class Elevator extends SubsystemBase {
 
   public enum ElevatorState {
     INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
-    L1(new LoggedTunableNumber("Elevator/L1Height", 0)),
+    L1(new LoggedTunableNumber("Elevator/L1Height", 1)),
     L2(new LoggedTunableNumber("Elevator/L2Height", 0.5)),
     L3(new LoggedTunableNumber("Elevator/L3Height", 1)),
     L4(new LoggedTunableNumber("Elevator/L4Height", 1.5)),
-    MOVING(new LoggedTunableNumber("Elevator/MovingHeight", -1)),
-    MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", -1));
+    MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),
+    MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0));
 
     private final LoggedTunableNumber heightMeters;
 
@@ -84,15 +81,31 @@ public class Elevator extends SubsystemBase {
 
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
+
+    io.setHeight(goalState.heightMeters.getAsDouble());
   }
 
   private double getElevatorPositionMeters() {
     return Radians.of(inputs.leftPositionRads).in(Rotations)
         * 2
         * Math.PI
-        * SPROCKET_RADIUS.in(Meters)
+        * Constants.SPROCKET_RADIUS.in(Meters)
         / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
   }
+
+  // public double rotationsToMeters(double rotations) {
+  //   return rotations
+  //       * 2
+  //       * Math.PI
+  //       * SPROCKET_RADIUS.in(Meters)
+  //       / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
+  // }
+
+  // public static double metersToRotations(double height) {
+  //   return height
+  //       * Constants.MOTOR_TO_ELEVATOR_REDUCTION
+  //       / (2 * Math.PI * SPROCKET_RADIUS.in(Meters));
+  // }
 
   public boolean isAtSetpoint() {
     return Math.abs(getElevatorPositionMeters() - this.goalState.heightMeters.getAsDouble())
