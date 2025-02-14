@@ -180,7 +180,10 @@ public class RobotContainer {
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
     operatorController
         .a()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+        .whileTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+    operatorController
+        .a()
+        .whileFalse(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
   }
 
   /**

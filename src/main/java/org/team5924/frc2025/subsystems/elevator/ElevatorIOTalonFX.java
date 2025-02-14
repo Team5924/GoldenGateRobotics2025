@@ -16,10 +16,13 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
-import org.littletonrobotics.junction.Logger;
-import org.team5924.frc2025.Constants;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 import static org.team5924.frc2025.Constants.ELEVATOR_LEFT_INVERSION;
-import org.team5924.frc2025.util.LoggedTunableNumber;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -46,19 +49,15 @@ import com.ctre.phoenix6.hardware.core.CoreCANdi;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.S1CloseStateValue;
 import com.ctre.phoenix6.signals.S2CloseStateValue;
-
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Celsius;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
+import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 /** Add your docs here. */
 public class ElevatorIOTalonFX implements ElevatorIO {
@@ -91,10 +90,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.51);
 
   LoggedTunableNumber motionAcceleration =
-      new LoggedTunableNumber("Elevator/MotionAcceleration", 10.0);
+      new LoggedTunableNumber("Elevator/MotionAcceleration", 3);
   LoggedTunableNumber motionCruiseVelocity =
-      new LoggedTunableNumber("Elevator/MotionCruiseVelocity", 20.0);
-  LoggedTunableNumber motionJerk = new LoggedTunableNumber("Elevator/MotionJerk", 100);
+      new LoggedTunableNumber("Elevator/MotionCruiseVelocity", 4);
+  LoggedTunableNumber motionJerk = new LoggedTunableNumber("Elevator/MotionJerk", 10);
 
   /* Status Signals */
   private final StatusSignal<Angle> leftPosition;
@@ -149,8 +148,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     /* Motor Config Create */
     currentLimitsConfigs = new CurrentLimitsConfigs();
-    currentLimitsConfigs.SupplyCurrentLimit = 60.0;
-    currentLimitsConfigs.StatorCurrentLimit = 60.0;
+    currentLimitsConfigs.SupplyCurrentLimit = 100;
+    currentLimitsConfigs.StatorCurrentLimit = 100;
 
     leaderMotorConfigs = new MotorOutputConfigs();
     leaderMotorConfigs.Inverted = ELEVATOR_LEFT_INVERSION;
