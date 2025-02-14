@@ -51,7 +51,7 @@ public final class Constants {
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Coral In-And-Out */
-  public static final int CORAL_IN_AND_OUT_CAN_ID = 25;
+  public static final int CORAL_IN_AND_OUT_CAN_ID = 33;
   public static final String CORAL_IN_AND_OUT_BUS = "rio";
   public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
   public static final boolean CORAL_IN_AND_OUT_INVERT = false;
@@ -65,7 +65,7 @@ public final class Constants {
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
   /* Coral Handoff */
-  public static final int CORAL_HANDOFF_CAN_ID = 100;
+  public static final int CORAL_HANDOFF_CAN_ID = 32;
   public static final String CORAL_HANDOFF_BUS = "rio";
   public static final int CORAL_HANDOFF_CURRENT_LIMIT = 40;
   public static final boolean CORAL_HANDOFF_INVERT = false;

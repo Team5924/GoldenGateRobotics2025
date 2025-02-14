@@ -35,14 +35,14 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         new LoggedTunableNumber("CoralInAndOut/IaSMotor/NoCoralVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/NoCoralVoltage", 0.0)),
     INTAKING(
-        new LoggedTunableNumber("CoralInAndOut/IaSMotor/IntakingVoltage", 12.0),
+        new LoggedTunableNumber("CoralInAndOut/IaSMotor/IntakingVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/IntakingVoltage", 12.0)),
     STORED_CORAL(
         new LoggedTunableNumber("CoralInAndOut/IaSMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
     SHOOTING(
         new LoggedTunableNumber("CoralInAndOut/IaSMotor/ShootingVoltage", 12.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 12.0)),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
         new LoggedTunableNumber("CoralInAndOut/IaSMotor/SpitBackVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", -12.0));
@@ -76,6 +76,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   }
 
   public void setGoalState(CoralState goalState) {
+    this.goalState = goalState;
     switch (goalState) {
       case NO_CORAL -> RobotState.getInstance().setCoralInAndOutState(CoralState.NO_CORAL);
       case INTAKING -> RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);

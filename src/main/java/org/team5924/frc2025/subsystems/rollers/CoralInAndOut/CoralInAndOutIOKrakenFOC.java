@@ -19,19 +19,26 @@ package org.team5924.frc2025.subsystems.rollers.CoralInAndOut;
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOKrakenFOC;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
 import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
   private static final int id = Constants.CORAL_IN_AND_OUT_CAN_ID;
+  private static final int handoffId = Constants.CORAL_HANDOFF_CAN_ID;
   private static final String bus = Constants.CORAL_IN_AND_OUT_BUS;
   private static final int currentLimitAmps = Constants.CORAL_IN_AND_OUT_CURRENT_LIMIT;
   private static final boolean invert = Constants.CORAL_IN_AND_OUT_INVERT;
   private static final boolean brake = Constants.CORAL_IN_AND_OUT_BRAKE;
   private static final double reduction = Constants.CORAL_IN_AND_OUT_REDUCTION;
+
+  private final TalonFX handOffTalon;
 
   private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
   private static final LaserCan shooterLC = new LaserCan(Constants.CORAL_SHOOTER_LASER_CAN_ID);
@@ -48,6 +55,7 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
 
   public CoralInAndOutIOKrakenFOC() {
     super(id, bus, currentLimitAmps, invert, brake, reduction);
+    handOffTalon = new TalonFX(handoffId);
   }
 
   public void updateInputs(CoralInAndOutIOInputs inputs) {
@@ -90,5 +98,12 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     }
 
     super.updateInputs(inputs);
+
+  }
+  @Override
+  public void runVolts(double volts, double handoffVolts) {
+      // TODO Auto-generated method stub
+      super.runVolts(volts);
+
   }
 }

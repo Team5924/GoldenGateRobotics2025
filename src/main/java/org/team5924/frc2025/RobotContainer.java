@@ -38,10 +38,11 @@ import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoff;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIO;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOKrakenFOC;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOSim;
+
+// import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoff;
+// import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIO;
+// import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOKrakenFOC;
+// import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,7 +54,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final CoralInAndOut coralInAndOut;
-  private final CoralHandoff coralHandoff;
+  //   private final CoralHandoff coralHandoff;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -75,7 +76,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
-        coralHandoff = new CoralHandoff(new CoralHandoffIOKrakenFOC());
+        // coralHandoff = new CoralHandoff(new CoralHandoffIOKrakenFOC());
         break;
 
       case SIM:
@@ -88,7 +89,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
-        coralHandoff = new CoralHandoff(new CoralHandoffIOSim());
+        // coralHandoff = new CoralHandoff(new CoralHandoffIOSim());
         break;
 
       default:
@@ -101,7 +102,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
-        coralHandoff = new CoralHandoff(new CoralHandoffIO() {});
+        // coralHandoff = new CoralHandoff(new CoralHandoffIO() {});
         break;
     }
 
@@ -176,7 +177,14 @@ public class RobotContainer {
         .rightTrigger()
         .onTrue(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
-
+    operatorController
+        .leftTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    operatorController
+        .rightTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
     // TODO: add controls for coral handoff
   }
 
