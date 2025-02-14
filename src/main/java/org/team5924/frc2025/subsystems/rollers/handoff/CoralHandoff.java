@@ -9,7 +9,7 @@
  * Public License v3.0. A copy of this license can be found in LICENSE.md
  * at the root of this project.
  *
- * If this file has been seperated from the original project, you should have
+ * If this file has been separated from the original project, you should have
  * received a copy of the GNU General Public License along with it.
  * If you did not, see <https://www.gnu.org/licenses>.
  */
@@ -21,7 +21,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
-import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageGoal;
+import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Getter
@@ -29,7 +29,7 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 public class CoralHandoff extends GenericRollerSystem<CoralHandoff.Goal> {
   @RequiredArgsConstructor
   @Getter
-  public enum Goal implements VoltageGoal {
+  public enum Goal implements VoltageState {
     OUTPUT(new LoggedTunableNumber("CoralHandoff/OutputVoltage", 12.0)),
     LOADING(new LoggedTunableNumber("CoralHandoff/LoadingVoltage", 12.0)),
     HOLDING(new LoggedTunableNumber("CoralHandoff/HoldingVoltage", 0.0)),
@@ -94,7 +94,7 @@ public class CoralHandoff extends GenericRollerSystem<CoralHandoff.Goal> {
    * @return the robot's goal
    */
   @Override
-  public Goal getGoal() {
+  public Goal getGoalState() {
     return goal;
   }
 }

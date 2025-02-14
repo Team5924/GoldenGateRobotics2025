@@ -34,14 +34,14 @@ import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
 import org.team5924.frc2025.subsystems.drive.ModuleIO;
 import org.team5924.frc2025.subsystems.drive.ModuleIOSim;
 import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoff;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIO;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOKrakenFOC;
-import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOSim;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoff;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIO;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOKrakenFOC;
+import org.team5924.frc2025.subsystems.rollers.handoff.CoralHandoffIOSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -175,7 +175,7 @@ public class RobotContainer {
     operatorController
         .rightTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
 
     // TODO: add controls for coral handoff
   }

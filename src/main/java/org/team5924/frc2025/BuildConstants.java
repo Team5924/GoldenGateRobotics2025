@@ -9,7 +9,7 @@
  * Public License v3.0. A copy of this license can be found in LICENSE.md
  * at the root of this project.
  *
- * If this file has been seperated from the original project, you should have
+ * If this file has been separated from the original project, you should have
  * received a copy of the GNU General Public License along with it.
  * If you did not, see <https://www.gnu.org/licenses>.
  */
@@ -21,12 +21,12 @@ public final class BuildConstants {
   public static final String MAVEN_GROUP = "";
   public static final String MAVEN_NAME = "GoldenGateRobotics2025";
   public static final String VERSION = "unspecified";
-  public static final int GIT_REVISION = 17;
-  public static final String GIT_SHA = "03d47ff853b230ec71b28860c578462118f5f129";
-  public static final String GIT_DATE = "2025-01-24 20:09:05 EST";
-  public static final String GIT_BRANCH = "coral-handoff";
-  public static final String BUILD_DATE = "2025-01-25 17:03:55 EST";
-  public static final long BUILD_UNIX_TIME = 1737842635616L;
+  public static final int GIT_REVISION = 62;
+  public static final String GIT_SHA = "27cb8357327347fb8484775f7c8c7486b675e7b8";
+  public static final String GIT_DATE = "2025-02-13 18:23:25 EST";
+  public static final String GIT_BRANCH = "integrate-coral-handoff";
+  public static final String BUILD_DATE = "2025-02-13 22:39:27 EST";
+  public static final long BUILD_UNIX_TIME = 1739504367934L;
   public static final int DIRTY = 1;
 
   private BuildConstants() {}

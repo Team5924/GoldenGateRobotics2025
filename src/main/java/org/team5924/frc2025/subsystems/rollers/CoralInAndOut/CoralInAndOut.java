@@ -31,18 +31,27 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   @RequiredArgsConstructor
   @Getter
   public enum CoralState implements VoltageState {
-    LOADING(new LoggedTunableNumber("CoralInAndOut/LoadingVoltage", 12.0)),
-    SHOOTING(new LoggedTunableNumber("CoralInAndOut/ShootingVoltage", 12.0)),
-    EMPTY(new LoggedTunableNumber("CoralInAndOut/EmptyVoltage", 0.0)),
-
-    // Used for L1 Scoring
-    HOLDING(new LoggedTunableNumber("CoralInAndOut/HoldingVoltage", 0.0)),
-    SPIT_BACK(new LoggedTunableNumber("CoralInAndOut/SpitBackVoltage", -12.0));
+    NO_CORAL(
+        new LoggedTunableNumber("CoralInAndOut/IaSMotor/NoCoralVoltage", 0.0),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/NoCoralVoltage", 0.0)),
+    INTAKING(
+        new LoggedTunableNumber("CoralInAndOut/IaSMotor/IntakingVoltage", 12.0),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/IntakingVoltage", 12.0)),
+    STORED_CORAL(
+        new LoggedTunableNumber("CoralInAndOut/IaSMotor/StoredVoltage", 0.0),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
+    SHOOTING(
+        new LoggedTunableNumber("CoralInAndOut/IaSMotor/ShootingVoltage", 12.0),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 12.0)),
+    SPIT_BACK(
+        new LoggedTunableNumber("CoralInAndOut/IaSMotor/SpitBackVoltage", -12.0),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", -12.0));
 
     private final DoubleSupplier voltageSupplier;
+    private final DoubleSupplier handoffVoltage;
   }
 
-  private CoralState goalState = CoralState.EMPTY;
+  private CoralState goalState = CoralState.NO_CORAL;
 
   protected final CoralInAndOutIOInputsAutoLogged coralInputs =
       new CoralInAndOutIOInputsAutoLogged();
@@ -59,16 +68,19 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
 
   @Override
   public void periodic() {
-    getGenericIo().runVolts(goalState.getVoltageSupplier().getAsDouble());
+    ((CoralInAndOutIO) io)
+        .runVolts(
+            goalState.getVoltageSupplier().getAsDouble(),
+            goalState.getHandoffVoltage().getAsDouble());
     super.periodic();
   }
 
   public void setGoalState(CoralState goalState) {
     switch (goalState) {
-      case LOADING -> RobotState.getInstance().setCoralInAndOutState(CoralState.LOADING);
+      case NO_CORAL -> RobotState.getInstance().setCoralInAndOutState(CoralState.NO_CORAL);
+      case INTAKING -> RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);
+      case STORED_CORAL -> RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL);
       case SHOOTING -> RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING);
-      case EMPTY -> RobotState.getInstance().setCoralInAndOutState(CoralState.EMPTY);
-      case HOLDING -> RobotState.getInstance().setCoralInAndOutState(CoralState.HOLDING);
       case SPIT_BACK -> RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
     }
   }
