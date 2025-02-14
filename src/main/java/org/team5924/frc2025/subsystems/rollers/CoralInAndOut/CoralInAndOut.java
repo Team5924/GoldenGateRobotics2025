@@ -32,19 +32,19 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   @Getter
   public enum CoralState implements VoltageState {
     NO_CORAL(
-        new LoggedTunableNumber("CoralInAndOut/IaSMotor/NoCoralVoltage", 0.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/NoCoralVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/NoCoralVoltage", 0.0)),
     INTAKING(
-        new LoggedTunableNumber("CoralInAndOut/IaSMotor/IntakingVoltage", -12.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/IntakingVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/IntakingVoltage", 12.0)),
     STORED_CORAL(
-        new LoggedTunableNumber("CoralInAndOut/IaSMotor/StoredVoltage", 0.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
     SHOOTING(
-        new LoggedTunableNumber("CoralInAndOut/IaSMotor/ShootingVoltage", 12.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
-        new LoggedTunableNumber("CoralInAndOut/IaSMotor/SpitBackVoltage", -12.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", -12.0));
 
     private final DoubleSupplier voltageSupplier;
