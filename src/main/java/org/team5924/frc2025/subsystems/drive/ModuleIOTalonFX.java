@@ -16,6 +16,9 @@
 
 package org.team5924.frc2025.subsystems.drive;
 
+import java.util.Queue;
+
+import org.team5924.frc2025.generated.TunerConstants;
 import static org.team5924.frc2025.util.PhoenixUtil.tryUntilOk;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -36,6 +39,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
+
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -43,8 +47,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-import java.util.Queue;
-import org.team5924.frc2025.generated.TunerConstants;
 
 /**
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn motor controller, and

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.team5924.frc2025.Constants;
 

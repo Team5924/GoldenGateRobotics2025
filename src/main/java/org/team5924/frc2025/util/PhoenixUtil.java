@@ -16,8 +16,9 @@
 
 package org.team5924.frc2025.util;
 
-import com.ctre.phoenix6.StatusCode;
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.StatusCode;
 
 public class PhoenixUtil {
   /** Attempts to run the command until no error is produced. */

@@ -16,13 +16,15 @@
 
 package org.team5924.frc2025.subsystems.rollers;
 
+import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.littletonrobotics.junction.Logger;
 
 @RequiredArgsConstructor
 public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageState>
