@@ -18,6 +18,7 @@ package org.team5924.frc2025.subsystems.elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+/** TODO: Add documentation. */
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
@@ -37,11 +38,29 @@ public interface ElevatorIO {
     public double rightSupplyCurrentAmps = 0.0;
     public double rightTorqueCurrentAmps = 0.0;
     public double rightTempCelsius = 0.0;
+
+    public double motionMagicVelocityTarget = 0.0;
+    public double motionMagicPositionTarget = 0.0;
+
+    public double setpointMeters = 0.0;
+
+    public double acceleration = 0.0;
+
+    public boolean minSoftStop = false;
+    public boolean maxSoftStop = false;
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
+  public default void updateTunableNumbers() {}
+
+  public default void setHeight(double heightMeters) {}
+
   public default void setVoltage(double volts) {}
 
   public default void setPosition(double rads) {}
+
+  public default void setSoftStopOn() {}
+
+  public default void setSoftStopOff() {}
 }

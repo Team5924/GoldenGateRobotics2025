@@ -26,6 +26,7 @@ import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
+
   private static final int loadShootId = Constants.CORAL_IN_AND_OUT_CAN_ID;
   private static final int handoffId = Constants.CORAL_HANDOFF_CAN_ID;
   private static final String bus = Constants.CORAL_IN_AND_OUT_BUS;
