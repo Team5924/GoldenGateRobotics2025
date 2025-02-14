@@ -26,7 +26,8 @@ import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
-  private static final int id = Constants.CORAL_IN_AND_OUT_CAN_ID;
+  private static final int inNOutId = Constants.CORAL_IN_AND_OUT_CAN_ID;
+  // private static final int handoffId = Constants.CORAL_HANDOFF_CAN_ID;
   private static final String bus = Constants.CORAL_IN_AND_OUT_BUS;
   private static final int currentLimitAmps = Constants.CORAL_IN_AND_OUT_CURRENT_LIMIT;
   private static final boolean invert = Constants.CORAL_IN_AND_OUT_INVERT;
@@ -47,7 +48,7 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
       new Alert("Shooter LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
   public CoralInAndOutIOKrakenFOC() {
-    super(id, bus, currentLimitAmps, invert, brake, reduction);
+    super(inNOutId, bus, currentLimitAmps, invert, brake, reduction);
   }
 
   public void updateInputs(CoralInAndOutIOInputs inputs) {
@@ -56,6 +57,7 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
       inputs.intakeLCConnected = true;
       intakeLCDisconnectAlert.set(false);
       intakeLCInvalidMeasure.set(false);
+
     } catch (SensorRuntimeException e) {
       switch (e.getErrorType()) {
         case DISCONNECTED -> {

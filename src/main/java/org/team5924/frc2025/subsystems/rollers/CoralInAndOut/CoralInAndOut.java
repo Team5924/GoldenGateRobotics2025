@@ -64,6 +64,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   }
 
   public void setGoalState(CoralState goalState) {
+    this.goalState = goalState;
     switch (goalState) {
       case LOADING -> RobotState.getInstance().setCoralInAndOutState(CoralState.LOADING);
       case SHOOTING -> RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING);

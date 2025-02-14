@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.DriveCommands;
+import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.generated.TunerConstants;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
@@ -34,6 +35,9 @@ import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
 import org.team5924.frc2025.subsystems.drive.ModuleIO;
 import org.team5924.frc2025.subsystems.drive.ModuleIOSim;
 import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
+import org.team5924.frc2025.subsystems.elevator.Elevator;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
@@ -49,6 +53,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final CoralInAndOut coralInAndOut;
+  private final Elevator elevator;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -70,6 +75,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
+        elevator = new Elevator(new ElevatorIOTalonFX() {});
         break;
 
       case SIM:
@@ -82,6 +88,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
+        elevator = new Elevator(new ElevatorIO() {});
         break;
 
       default:
@@ -94,6 +101,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -160,14 +168,33 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Coral In and Out
+    //     operatorController
+    //         .leftTrigger()
+    //         .onTrue(
+    //             Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+    //     operatorController
+    //         .rightTrigger()
+    //         .onTrue(
+    //             Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+
+    elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
     operatorController
-        .leftTrigger()
-        .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+        .a()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
     operatorController
-        .rightTrigger()
-        .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+        .b()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
+    operatorController
+        .x()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+    operatorController
+        .y()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+    operatorController
+        .leftBumper()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
   }
 
   /**
