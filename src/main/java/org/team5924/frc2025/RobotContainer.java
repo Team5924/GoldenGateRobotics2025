@@ -168,22 +168,33 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Coral In and Out
-    operatorController
-        .leftTrigger()
-        .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
-    operatorController
-        .rightTrigger()
-        .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+    //     operatorController
+    //         .leftTrigger()
+    //         .onTrue(
+    //             Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+    //     operatorController
+    //         .rightTrigger()
+    //         .onTrue(
+    //             Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
 
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
     operatorController
         .a()
-        .whileTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
     operatorController
-        .a()
-        .whileFalse(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+        .b()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
+    operatorController
+        .x()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+    operatorController
+        .y()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+    operatorController
+        .leftBumper()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
   }
 
   /**

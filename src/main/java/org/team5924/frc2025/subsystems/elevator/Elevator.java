@@ -41,8 +41,8 @@ public class Elevator extends SubsystemBase {
 
   public enum ElevatorState {
     INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
-    L1(new LoggedTunableNumber("Elevator/L1Height", 20)),
-    L2(new LoggedTunableNumber("Elevator/L2Height", 0.5)),
+    L1(new LoggedTunableNumber("Elevator/L1Height", 0.3)),
+    L2(new LoggedTunableNumber("Elevator/L2Height", 0.6)),
     L3(new LoggedTunableNumber("Elevator/L3Height", 1)),
     L4(new LoggedTunableNumber("Elevator/L4Height", 1.5)),
     MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),

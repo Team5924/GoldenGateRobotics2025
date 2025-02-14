@@ -81,19 +81,19 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private double setpoint;
 
   /* Gains */
-  LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA", 0.1);
-  LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/kS", 0.51);
-  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", .12);
-  LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 1);
-  LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI", 0.0);
-  LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0.0);
-  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.51);
+  LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA", 0);
+  LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/kS", 0.5);
+  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", 0.12);
+  LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 5);
+  LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI", 0);
+  LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0);
+  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0);
 
   LoggedTunableNumber motionAcceleration =
-      new LoggedTunableNumber("Elevator/MotionAcceleration", 3);
+      new LoggedTunableNumber("Elevator/MotionAcceleration", 200);
   LoggedTunableNumber motionCruiseVelocity =
-      new LoggedTunableNumber("Elevator/MotionCruiseVelocity", 4);
-  LoggedTunableNumber motionJerk = new LoggedTunableNumber("Elevator/MotionJerk", 10);
+      new LoggedTunableNumber("Elevator/MotionCruiseVelocity", 100);
+  LoggedTunableNumber motionJerk = new LoggedTunableNumber("Elevator/MotionJerk", 1000);
 
   /* Status Signals */
   private final StatusSignal<Angle> leftPosition;
@@ -290,7 +290,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void updateTunableNumbers() {
-    if (kA.hasChanged(0)
+    if (kA.hasChanged(hashCode())
         || kS.hasChanged(0)
         || kV.hasChanged(0)
         || kP.hasChanged(0)
@@ -391,8 +391,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   }
 
   @Override
-  public void setPosition(double rads) {
-    leftTalon.setControl(positionControl.withPosition(Radians.of(rads)));
+  public void setPosition(double meters) {
+    leftTalon.setControl(
+        positionControl.withPosition(Radians.of(metersToRotations(meters) * 2 * Math.PI)));
   }
 
   public double rotationsToMeters(double rotations) {
