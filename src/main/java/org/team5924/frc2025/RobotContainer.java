@@ -168,17 +168,24 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Coral In and Out
-    //     operatorController
-    //         .leftTrigger()
-    //         .onTrue(
-    //             Commands.runOnce(() ->
-    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
-    //     operatorController
-    //         .rightTrigger()
-    //         .onTrue(
-    //             Commands.runOnce(() ->
-    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+    operatorController
+        .leftTrigger()
+        .onTrue(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+    operatorController
+        .rightTrigger()
+        .onTrue(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
+    operatorController
+        .leftTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    operatorController
+        .rightTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
+    // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
     operatorController
         .a()
