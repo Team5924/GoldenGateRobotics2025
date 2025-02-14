@@ -149,8 +149,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     /* Motor Config Create */
     currentLimitsConfigs = new CurrentLimitsConfigs();
-    currentLimitsConfigs.SupplyCurrentLimit = 100;
-    currentLimitsConfigs.StatorCurrentLimit = 100;
+    currentLimitsConfigs.SupplyCurrentLimit = 80;
+    currentLimitsConfigs.StatorCurrentLimit = 80;
 
     leaderMotorConfigs = new MotorOutputConfigs();
     leaderMotorConfigs.Inverted = ELEVATOR_LEFT_INVERSION;
@@ -275,10 +275,11 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     inputs.rightTempCelsius = rightTempCelsius.getValue().in(Celsius);
 
     double currentTime = closedLoopReferenceSlope.getTimestamp().getTime();
-    if (currentTime - prevReferenceSlopeTimestamp > 0.0) {
+    double timeDiff = currentTime - prevReferenceSlopeTimestamp;
+    if (timeDiff > 0.0) {
       inputs.acceleration =
           (inputs.motionMagicVelocityTarget - prevClosedLoopReferenceSlope)
-              / (currentTime - prevReferenceSlopeTimestamp);
+              / timeDiff;
     }
     prevClosedLoopReferenceSlope = inputs.motionMagicVelocityTarget;
     prevReferenceSlopeTimestamp = currentTime;
