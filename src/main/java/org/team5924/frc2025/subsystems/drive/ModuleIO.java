@@ -16,9 +16,8 @@
 
 package org.team5924.frc2025.subsystems.drive;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.math.geometry.Rotation2d;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
   @AutoLog

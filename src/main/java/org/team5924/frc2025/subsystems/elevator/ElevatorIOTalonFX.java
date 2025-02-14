@@ -292,13 +292,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void updateTunableNumbers() {
     if (kA.hasChanged(hashCode())
-        || kS.hasChanged(0)
-        || kV.hasChanged(0)
-        || kP.hasChanged(0)
-        || kI.hasChanged(0)
-        || kD.hasChanged(0)
-        || motionAcceleration.hasChanged(0)
-        || motionCruiseVelocity.hasChanged(0)) {
+        || kS.hasChanged(hashCode())
+        || kV.hasChanged(hashCode())
+        || kP.hasChanged(hashCode())
+        || kI.hasChanged(hashCode())
+        || kD.hasChanged(hashCode())
+        || motionAcceleration.hasChanged(hashCode())
+        || motionCruiseVelocity.hasChanged(hashCode())) {
       slot0Configs.kA = kA.get();
       slot0Configs.kS = kS.get();
       slot0Configs.kV = kV.get();

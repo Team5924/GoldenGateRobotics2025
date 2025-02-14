@@ -16,16 +16,14 @@
 
 package org.team5924.frc2025.util;
 
-import java.nio.ByteBuffer;
-
-import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
-import org.team5924.frc2025.util.exceptions.SensorRuntimeException.SensorErrorType;
-
 import au.grapplerobotics.interfaces.LaserCanInterface;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
+import java.nio.ByteBuffer;
 import lombok.Getter;
+import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
+import org.team5924.frc2025.util.exceptions.SensorRuntimeException.SensorErrorType;
 
 /**
  * Wrapper class for {@code LaserCAN.Measurement}. Data is stored in a serializable struct for

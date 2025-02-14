@@ -16,13 +16,12 @@
 
 package org.team5924.frc2025.subsystems.rollers;
 
-import org.team5924.frc2025.Constants;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import org.team5924.frc2025.Constants;
 
 public class GenericRollerSystemIOSim implements GenericRollerSystemIO {
   private final DCMotorSim motorSim;
