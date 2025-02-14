@@ -38,6 +38,9 @@ public interface VisionIO {
 
     public double lowestTagAmbiguityFront = 1;
     public double lowestTagAmbiguityBack = 1;
+
+    public double avgFrontCameraTagArea = 0.0;
+    public double avgBackCameraTagArea = 0.0;
   }
 
   /** Updates the set of loggable inputs. */

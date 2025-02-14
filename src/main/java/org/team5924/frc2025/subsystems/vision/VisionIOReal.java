@@ -54,6 +54,10 @@ public class VisionIOReal implements VisionIO {
         lowestTagAmbiguityBack = backTagAmbiguity;
       }
     }
+
+    inputs.avgFrontCameraTagArea = frontCameraEstimate.avgTagArea;
+    inputs.avgFrontCameraTagArea = frontCameraEstimate.avgTagArea;
+
     inputs.lowestTagAmbiguityFront = lowestTagAmbiguityFront;
     inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
 
@@ -69,7 +73,7 @@ public class VisionIOReal implements VisionIO {
       inputs.computedBotPoseY =
           (frontCameraEstimate.pose.getY() + backCameraEstimate.pose.getY()) / 2;
     }
-
+    
     inputs.botPoseRotationRadians = frontCameraEstimate.pose.getRotation().getRadians();
   }
 }
