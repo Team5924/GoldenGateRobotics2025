@@ -18,6 +18,8 @@ package org.team5924.frc2025.subsystems.elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+/** TODO: Add documentation. */
+
 public interface ElevatorIO {
   @AutoLog
   public static class ElevatorIOInputs {
@@ -58,8 +60,4 @@ public interface ElevatorIO {
   public default void setVoltage(double volts) {}
 
   public default void setPosition(double rads) {}
-
-  public default void setSoftStopOn() {}
-
-  public default void setSoftStopOff() {}
 }
