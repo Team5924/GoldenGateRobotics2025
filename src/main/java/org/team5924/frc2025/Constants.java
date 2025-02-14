@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -59,4 +60,18 @@ public final class Constants {
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
   public static final boolean TUNING_MODE = true;
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
+
+  // Blue alliance, 1 is closest to driver station on the left, numbers increase as you move around counterclockwise
+  public static final Pose2d SCORING_LINEUP_POSE_1 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_2 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_3 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_4 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_5 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_6 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_7 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_8 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_9 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_10 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_11 = new Pose2d();
+  public static final Pose2d SCORING_LINEUP_POSE_12 = new Pose2d();
 }
