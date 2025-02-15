@@ -18,11 +18,10 @@ package org.team5924.frc2025.subsystems.climber;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.function.DoubleSupplier;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
@@ -31,14 +30,7 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 @Setter
 @Getter
 public class Climber extends SubsystemBase {
-
-  public interface VoltageState {
-    DoubleSupplier getVoltageSupplier();
-  }
-
-  @RequiredArgsConstructor
-  @Getter
-  public enum ClimberState implements VoltageState {
+  public enum ClimberState {
     // In the process of climbing, but not currently moving
     CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 0.0)),
 
@@ -51,7 +43,11 @@ public class Climber extends SubsystemBase {
     // Climber is moving down/up depending on voltage multiplier
     MOVING(new LoggedTunableNumber("Climber/MovingVoltage", 12.0));
 
-    private final DoubleSupplier voltageSupplier;
+    private final LoggedTunableNumber volts;
+
+    ClimberState(LoggedTunableNumber volts) {
+      this.volts = volts;
+    }
   }
 
   // 1 = up, -1 = down
@@ -63,7 +59,7 @@ public class Climber extends SubsystemBase {
   private final Alert disconnected;
   protected final Timer stateTimer = new Timer();
 
-  @Getter private final ClimberIO io;
+  private final ClimberIO io;
 
   private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
 
@@ -84,10 +80,10 @@ public class Climber extends SubsystemBase {
 
     disconnected.set(!inputs.motorConnected);
 
+    // If the robot's state is STOW and the cage is within range, then set the robot's state to
+    // READY_TO_CLIMB
     if (getGoalState() == ClimberState.STOW && isCageInClimber()) {
-      setGoalState(
-          ClimberState.READY_TO_CLIMB); // if the cage is within range and the robot's state is
-      // STOW, then set the robot's state to READY_TO_CLIMB
+      setGoalState(ClimberState.READY_TO_CLIMB);
     }
 
     if (getGoalState() != lastState) {
@@ -95,7 +91,7 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-    io.runVolts(goalState.getVoltageSupplier().getAsDouble() * voltageMultiplier);
+    io.runVolts(goalState.volts.getAsDouble() * voltageMultiplier);
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
@@ -108,11 +104,13 @@ public class Climber extends SubsystemBase {
     // Validate state transitions
     if (getGoalState() == ClimberState.STOW
         && (goalState == ClimberState.CLIMB || goalState == ClimberState.MOVING)) {
-      Logger.recordOutput(
-          "Climber/InvalidTransition",
-          "Cannot transition from STOW to "
+      DriverStation.reportError(
+          "Cannot transition Climber from STOW to "
               + goalState.name()
-              + "; robot needs to be READY_TO_CLIMB before performing any climbing action");
+              + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
+          new StackTraceElement[] {
+            new StackTraceElement("Climber", "setGoalState", "Climber", 106)
+          });
       return;
     }
 
