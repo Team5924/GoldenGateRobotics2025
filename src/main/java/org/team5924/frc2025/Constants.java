@@ -81,5 +81,5 @@ public final class Constants {
   public static final int ELEVATOR_RIGHT_TALON_ID = 31;
   public static final double MOTOR_TO_ELEVATOR_REDUCTION = 4.16;
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
-  public static final Distance SPROCKET_RADIUS = Inches.of(1.44);
+  public static final Distance SPROCKET_RADIUS = Inches.of(.6405);
 }
