@@ -66,18 +66,18 @@ public class ClimberIOTalonFX implements ClimberIO {
       new Alert("Climber LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
   public ClimberIOTalonFX() {
-    reduction = Constants.SHOOTER_REDUCTION;
-    talon = new TalonFX(Constants.SHOOTER_CAN_ID, Constants.SHOOTER_BUS);
+    reduction = Constants.CLIMBER_REDUCTION;
+    talon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
 
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.Inverted =
-        Constants.SHOOTER_INVERT
+        Constants.CLIMBER_INVERT
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
     config.MotorOutput.NeutralMode =
-        Constants.SHOOTER_BRAKE ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-    config.CurrentLimits.SupplyCurrentLimit = Constants.SHOOTER_CURRENT_LIMIT;
+        Constants.CLIMBER_BRAKE ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    config.CurrentLimits.SupplyCurrentLimit = Constants.CLIMBER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     talon.getConfigurator().apply(config);
 

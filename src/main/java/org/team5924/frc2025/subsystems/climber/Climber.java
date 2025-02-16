@@ -18,7 +18,6 @@ package org.team5924.frc2025.subsystems.climber;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import lombok.Getter;
@@ -31,8 +30,8 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 @Getter
 public class Climber extends SubsystemBase {
   public enum ClimberState {
-    // In the process of climbing, but not currently moving
-    CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 0.0)),
+    // Pulling onto cage, lifting robot
+    CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 12.0)),
 
     // Tucked in
     STOW(new LoggedTunableNumber("Climber/StowVoltage", 0.0)),
@@ -40,8 +39,8 @@ public class Climber extends SubsystemBase {
     // Ready to climb
     READY_TO_CLIMB(new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0)),
 
-    // Climber is moving down/up depending on voltage multiplier
-    MOVING(new LoggedTunableNumber("Climber/MovingVoltage", 12.0));
+    // Lowering robot
+    REVERSE_CLIMB(new LoggedTunableNumber("Climber/MovingVoltage", -12.0));
 
     private final LoggedTunableNumber volts;
 
@@ -51,7 +50,7 @@ public class Climber extends SubsystemBase {
   }
 
   // 1 = up, -1 = down
-  private double voltageMultiplier = 1;
+  // private double voltageMultiplier = 1;
 
   private ClimberState goalState = ClimberState.STOW;
   private ClimberState lastState;
@@ -82,7 +81,8 @@ public class Climber extends SubsystemBase {
 
     // If the robot's state is STOW and the cage is within range, then set the robot's state to
     // READY_TO_CLIMB
-    if (getGoalState() == ClimberState.STOW && isCageInClimber()) {
+    if (getGoalState() == ClimberState.STOW
+        && isCageInClimber()) { // TODO: add elevator in stow, algae pivot to stow
       setGoalState(ClimberState.READY_TO_CLIMB);
     }
 
@@ -91,7 +91,7 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-    io.runVolts(goalState.volts.getAsDouble() * voltageMultiplier);
+    // io.runVolts(goalState.volts.getAsDouble() * voltageMultiplier);
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
@@ -102,24 +102,24 @@ public class Climber extends SubsystemBase {
    */
   public void setGoalState(ClimberState goalState) {
     // Validate state transitions
-    if (getGoalState() == ClimberState.STOW
-        && (goalState == ClimberState.CLIMB || goalState == ClimberState.MOVING)) {
-      DriverStation.reportError(
-          "Cannot transition Climber from STOW to "
-              + goalState.name()
-              + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
-          new StackTraceElement[] {
-            new StackTraceElement("Climber", "setGoalState", "Climber", 106)
-          });
-      return;
-    }
+    // if (getGoalState() == ClimberState.STOW
+    //     && (goalState == ClimberState.CLIMB || goalState == ClimberState.REVERSE_CLIMB)) {
+    //   DriverStation.reportError(
+    //       "Cannot transition Climber from STOW to "
+    //           + goalState.name()
+    //           + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
+    //       new StackTraceElement[] {
+    //         new StackTraceElement("Climber", "setGoalState", "Climber", 106)
+    //       });
+    //   return;
+    // }
 
     this.goalState = goalState;
     switch (goalState) {
       case CLIMB -> RobotState.getInstance().setClimberState(ClimberState.CLIMB);
       case STOW -> RobotState.getInstance().setClimberState(ClimberState.STOW);
       case READY_TO_CLIMB -> RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
-      case MOVING -> RobotState.getInstance().setClimberState(ClimberState.MOVING);
+      case REVERSE_CLIMB -> RobotState.getInstance().setClimberState(ClimberState.REVERSE_CLIMB);
     }
   }
 
@@ -127,13 +127,14 @@ public class Climber extends SubsystemBase {
    * Sets the goal state of the climber when it isn't moving (neither Dpad Up nor Dpad Down is
    * pressed).
    */
-  public void setGoalStateToNotMoving() {
-    switch (getGoalState()) {
-      case MOVING ->
-          setGoalState(ClimberState.CLIMB); // the climber stopped moving, return to climb state
-      default -> {} // the climber was not moving in the first place, don't need a state change here
-    }
-  }
+  // public void setGoalStateToNotMoving() {
+  //   switch (getGoalState()) {
+  //     case MOVING ->
+  //         setGoalState(ClimberState.CLIMB); // the climber stopped moving, return to climb state
+  //     default -> {} // the climber was not moving in the first place, don't need a state change
+  // here
+  //   }
+  // }
 
   /**
    * @return true if cage is detected by climber LaserCAN

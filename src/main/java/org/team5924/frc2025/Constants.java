@@ -16,6 +16,10 @@
 
 package org.team5924.frc2025;
 
+import static edu.wpi.first.units.Units.Inches;
+
+import com.ctre.phoenix6.signals.InvertedValue;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -38,7 +42,7 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = false;
+  public static final boolean TUNING_MODE = true;
   public static final boolean ALLOW_ASSERTS = true;
 
   /* ### Subsystems ### */
@@ -50,24 +54,15 @@ public final class Constants {
   public static final int CLIMBER_CURRENT_LIMIT = 40;
   public static final boolean CLIMBER_INVERT = false;
   public static final boolean CLIMBER_BRAKE = true;
-  public static final double CLIMBER_REDUCTION = 18.0 / 12.0;
+  public static final double CLIMBER_REDUCTION = 58.3;
   public static final double CLIMBER_SIM_MOI = 0.001;
-  public static final double CLIMBER_MIN_RADS = -Math.PI / 2;
-  public static final double CLIMBER_MAX_RADS = Math.PI / 2;
+  public static final double CLIMBER_MIN_RADS = -Math.PI / 2; // TODO: get real min
+  public static final double CLIMBER_MAX_RADS = Math.PI / 2; // TODO: get real max
   public static final int CLIMBER_LASER_CAN_ID = 0; // TODO: update ID
-
-  /* SHOOTER */
-  public static final int SHOOTER_CAN_ID = 0;
-  public static final String SHOOTER_BUS = "rio";
-  public static final int SHOOTER_CURRENT_LIMIT = 40;
-  public static final boolean SHOOTER_INVERT = false;
-  public static final boolean SHOOTER_BRAKE = true;
-  public static final double SHOOTER_REDUCTION = 18.0 / 12.0;
-  public static final double SHOOTER_SIM_MOI = 0.001;
 
   /* # Rollers # */
   /* Coral In-And-Out */
-  public static final int CORAL_IN_AND_OUT_CAN_ID = 25;
+  public static final int CORAL_IN_AND_OUT_CAN_ID = 33;
   public static final String CORAL_IN_AND_OUT_BUS = "rio";
   public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
   public static final boolean CORAL_IN_AND_OUT_INVERT = false;
@@ -76,4 +71,26 @@ public final class Constants {
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
+
+  /* # Pivot # */
+  public static final int ALGAE_PIVOT_TALON_ID = 55;
+  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
+  public static final int ALGAE_PIVOT_CANCODER_ID = 45;
+
+  /* Coral Handoff */
+  public static final int CORAL_HANDOFF_CAN_ID = 32;
+  public static final String CORAL_HANDOFF_BUS = "rio";
+  public static final int CORAL_HANDOFF_CURRENT_LIMIT = 40;
+  public static final boolean CORAL_HANDOFF_INVERT = false;
+  public static final boolean CORAL_HANDOFF_BRAKE = false;
+  public static final double CORAL_HANDOFF_REDUCTION = 18.0 / 12.0;
+  public static final double CORAL_HANDOFF_SIM_MOI = 0.001;
+  // TODO: Fill out Coral Handoff Constants with real values - all need to be fixed
+
+  /* # Elevator # */
+  public static final int ELEVATOR_LEFT_TALON_ID = 30;
+  public static final int ELEVATOR_RIGHT_TALON_ID = 31;
+  public static final double MOTOR_TO_ELEVATOR_REDUCTION = 3;
+  public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
+  public static final Distance SPROCKET_RADIUS = Inches.of(2);
 }

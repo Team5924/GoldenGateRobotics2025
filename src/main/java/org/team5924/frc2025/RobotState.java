@@ -20,7 +20,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.team5924.frc2025.subsystems.algae.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 
 @Getter
@@ -44,9 +46,20 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/ClimberState")
   private ClimberState climberState = ClimberState.STOW;
 
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/ElevatorState")
+  private ElevatorState elevatorState = ElevatorState.MANUAL;
+
   /* ### Coral In and Out ### */
   @Getter
   @Setter
   @AutoLogOutput(key = "RobotState/CoralState")
-  private CoralState coralInAndOutState = CoralState.EMPTY;
+  private CoralState coralInAndOutState = CoralState.NO_CORAL;
+
+  /* ### Algae Pivot ### */
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/AlgaePivotState")
+  private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
 }

@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.DriveCommands;
+import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.generated.TunerConstants;
 import org.team5924.frc2025.subsystems.climber.Climber;
 import org.team5924.frc2025.subsystems.climber.ClimberIO;
@@ -38,6 +39,9 @@ import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
 import org.team5924.frc2025.subsystems.drive.ModuleIO;
 import org.team5924.frc2025.subsystems.drive.ModuleIOSim;
 import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
+import org.team5924.frc2025.subsystems.elevator.Elevator;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
@@ -54,6 +58,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Climber climber;
   private final CoralInAndOut coralInAndOut;
+  private final Elevator elevator;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -76,6 +81,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         climber = new Climber(new ClimberIOTalonFX());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
+        elevator = new Elevator(new ElevatorIOTalonFX() {});
         break;
 
       case SIM:
@@ -89,6 +95,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         climber = new Climber(new ClimberIOSim());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
+        elevator = new Elevator(new ElevatorIO() {});
         break;
 
       default:
@@ -102,6 +109,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         climber = new Climber(new ClimberIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -175,29 +183,46 @@ public class RobotContainer {
     operatorController
         .rightTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
+    operatorController
+        .leftTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    operatorController
+        .rightTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
-    // # Climber #
+    // Elevator
+    elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
+    operatorController
+        .a()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+    operatorController
+        .b()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
+    operatorController
+        .x()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+    operatorController
+        .y()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+    operatorController
+        .leftBumper()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
 
+    // Climber
     // Dpad Down
     driveController
         .pov(180)
-        .onTrue(
-            Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.MOVING))
-                .finallyDo(() -> climber.setVoltageMultiplier(-1)));
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
+    // .finallyDo(() -> climber.setVoltageMultiplier(-1)));
 
     // Dpad Up
     driveController
         .pov(0)
-        .onTrue(
-            Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.MOVING))
-                .finallyDo(() -> climber.setVoltageMultiplier(1)));
-
-    // No Dpad Up or Dpad Down
-    driveController
-        .pov(180)
-        .or(driveController.pov(0))
-        .onFalse(Commands.runOnce(() -> climber.setGoalStateToNotMoving()));
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
+    // .finallyDo(() -> climber.setVoltageMultiplier(1)));
   }
 
   /**

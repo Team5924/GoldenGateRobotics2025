@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
@@ -29,6 +28,10 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
     extends SubsystemBase {
   public interface VoltageState {
     DoubleSupplier getVoltageSupplier();
+
+    default DoubleSupplier getHandoffVoltage() {
+      return getVoltageSupplier();
+    }
   }
 
   public abstract G getGoalState();
@@ -37,7 +40,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
   private final String name;
 
-  @Getter private final GenericRollerSystemIO genericIo;
+  protected final GenericRollerSystemIO io;
   protected final GenericRollerSystemIOInputsAutoLogged genericInputs =
       new GenericRollerSystemIOInputsAutoLogged();
 
@@ -46,7 +49,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
   public GenericRollerSystem(String name, GenericRollerSystemIO io) {
     this.name = name;
-    this.genericIo = io;
+    this.io = io;
 
     disconnected = new Alert(name + " motor disconnected!", Alert.AlertType.kWarning);
     stateTimer.start();
@@ -54,7 +57,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
   @Override
   public void periodic() {
-    genericIo.updateInputs(genericInputs);
+    io.updateInputs(genericInputs);
     Logger.processInputs(name, genericInputs);
     disconnected.set(!genericInputs.motorConnected);
 
@@ -63,7 +66,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
       lastState = getGoalState();
     }
 
-    genericIo.runVolts(getGoalState().getVoltageSupplier().getAsDouble());
+    io.runVolts(getGoalState().getVoltageSupplier().getAsDouble());
     Logger.recordOutput("Rollers/" + name + "Goal", getGoalState().toString());
   }
 }
