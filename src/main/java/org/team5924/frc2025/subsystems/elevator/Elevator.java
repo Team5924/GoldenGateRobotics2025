@@ -40,8 +40,8 @@ public class Elevator extends SubsystemBase {
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
   public enum ElevatorState {
-    INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
-    L1(new LoggedTunableNumber("Elevator/L1Height", 0.3)),
+    INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", .19)),
+    L1(new LoggedTunableNumber("Elevator/L1Height", 0.185)),
     L2(new LoggedTunableNumber("Elevator/L2Height", 0.6)),
     L3(new LoggedTunableNumber("Elevator/L3Height", 1)),
     L4(new LoggedTunableNumber("Elevator/L4Height", 1.5)),

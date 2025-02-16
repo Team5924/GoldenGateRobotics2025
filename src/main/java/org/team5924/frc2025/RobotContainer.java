@@ -198,7 +198,7 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
     operatorController
         .y()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
     operatorController
         .leftBumper()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
