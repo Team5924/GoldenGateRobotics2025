@@ -167,11 +167,13 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // Coral In and Out
+    // Coral In and Out 
+
+    //leftTriggerOnlyShoots when Elevator is at 
     operatorController
         .leftTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L2_AND_L3)));
     operatorController
         .rightTrigger()
         .onTrue(

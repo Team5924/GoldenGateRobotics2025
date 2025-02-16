@@ -20,8 +20,6 @@ import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import org.team5924.frc2025.Robot;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
@@ -35,7 +33,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   @Getter
   /*
    * ALL LOGGEDTUNABLE DEFAULT VALUES ARE SHITTY CONSTANTS
-   * 
+   *
    */
   public enum CoralState implements VoltageState {
     NO_CORAL(
@@ -82,28 +80,23 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
     super("CoralInAndOut", io);
   }
 
-  public void updateCoralState(){
-    if(
-      isCoralInIntake() && 
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING) &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)){
+  public void updateCoralState() {
+    if (isCoralInIntake()
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)) {
       setGoalState(CoralState.STORED_CORAL_IN_INTAKE);
-    }
-    else if(
-      isCoralInShooter() &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1) &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)&&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)){
+    } else if (isCoralInShooter()
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)) {
       setGoalState(CoralState.STORED_CORAL_IN_SHOOTER);
-    }
-    else if(
-      !isCoralInIntake() &&
-      !isCoralInShooter() &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1) &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)&&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4) &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING) &&
-      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)){
+    } else if (!isCoralInIntake()
+        && !isCoralInShooter()
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING)
+        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)) {
       setGoalState(CoralState.NO_CORAL);
     }
   }
@@ -116,7 +109,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
             goalState.getHandoffVoltage().getAsDouble());
     super.periodic();
 
-    //update CoralState periodically
+    // update CoralState periodically
     updateCoralState();
   }
 
@@ -129,34 +122,37 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);
       case STORED_CORAL_IN_INTAKE:
         RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_INTAKE);
-      case STORED_CORAL_IN_SHOOTER: 
+      case STORED_CORAL_IN_SHOOTER:
         RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_SHOOTER);
       case SHOOTING_L2_AND_L3:
-        if((RobotState.getInstance().getElevatorState().equals(ElevatorState.L2) || 
-            RobotState.getInstance().getElevatorState().equals(ElevatorState.L3)) &&
-            RobotState.getInstance().getCoralInAndOutState().equals(CoralState.STORED_CORAL_IN_SHOOTER)){
+        if ((RobotState.getInstance().getElevatorState().equals(ElevatorState.L2)
+                || RobotState.getInstance().getElevatorState().equals(ElevatorState.L3))
+            && RobotState.getInstance()
+                .getCoralInAndOutState()
+                .equals(CoralState.STORED_CORAL_IN_SHOOTER)) {
           RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L2_AND_L3);
           break;
-        }
-        else{
+        } else {
           break;
         }
       case SHOOTING_L4:
-        if(RobotState.getInstance().getElevatorState().equals(ElevatorState.L4) &&
-        RobotState.getInstance().getCoralInAndOutState().equals(CoralState.STORED_CORAL_IN_SHOOTER)){
+        if (RobotState.getInstance().getElevatorState().equals(ElevatorState.L4)
+            && RobotState.getInstance()
+                .getCoralInAndOutState()
+                .equals(CoralState.STORED_CORAL_IN_SHOOTER)) {
           RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L4);
           break;
-        }
-        else{
+        } else {
           break;
         }
       case SHOOTING_L1:
-        if(RobotState.getInstance().getElevatorState().equals(ElevatorState.L1) &&
-        RobotState.getInstance().getCoralInAndOutState().equals(CoralState.STORED_CORAL_IN_SHOOTER)){
+        if (RobotState.getInstance().getElevatorState().equals(ElevatorState.L1)
+            && RobotState.getInstance()
+                .getCoralInAndOutState()
+                .equals(CoralState.STORED_CORAL_IN_SHOOTER)) {
           RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L1);
           break;
-        }
-        else{
+        } else {
           break;
         }
       case SPIT_BACK:
