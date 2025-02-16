@@ -63,7 +63,7 @@ public final class Constants {
   
   /* # Pivot # */
   public static final int ALGAE_PIVOT_TALON_ID = 55;
-  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
+  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 62.5; // TODO: most likely change
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
   
   /* Coral Handoff */
