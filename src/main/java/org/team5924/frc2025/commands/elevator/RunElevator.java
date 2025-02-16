@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class RunElevator extends Command {
@@ -36,23 +37,28 @@ public class RunElevator extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevator.setSoftStopOn();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     switch (RobotState.getInstance().getElevatorState()) {
-      case MOVING:
-        if (elevator.isAtSetpoint()) {
+      case MOVING -> {
+        if (!elevator.isAtSetpoint()) {
           RobotState.getInstance().setElevatorState(elevator.getGoalState());
         }
-        break;
-      case MANUAL:
-        elevator.setVoltage(-joystickY.getAsDouble() * 10);
-        break;
-      default:
-        break;
+      }
+      case MANUAL -> elevator.setVoltage(-joystickY.getAsDouble() * 1);
+      case INTAKE -> elevator.setGoalState(ElevatorState.INTAKE);
+      case L1 -> elevator.setGoalState(ElevatorState.L1);
+      case L2 -> elevator.setGoalState(ElevatorState.L2);
+      case L3 -> elevator.setGoalState(ElevatorState.L3);
+      case L4 -> elevator.setGoalState(ElevatorState.L4);
+      default -> {}
     }
+    // elevator.setVoltage(-joystickY.getAsDouble() * 5);
   }
 
   // Called once the command ends or is interrupted.

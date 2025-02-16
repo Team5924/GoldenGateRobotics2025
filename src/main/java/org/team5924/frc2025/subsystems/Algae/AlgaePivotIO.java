@@ -42,6 +42,10 @@ public interface AlgaePivotIO {
 
   public default void setPosition(double rads) {}
 
+  public default void setSoftStopOn() {}
+
+  public default void setSoftStopOff() {}
+
   /** Stop roller */
   default void stop() {}
 }
