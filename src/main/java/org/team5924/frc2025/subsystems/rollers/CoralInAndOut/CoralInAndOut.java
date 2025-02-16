@@ -20,7 +20,10 @@ import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import org.team5924.frc2025.Robot;
 import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
@@ -30,6 +33,10 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState> {
   @RequiredArgsConstructor
   @Getter
+  /*
+   * ALL LOGGEDTUNABLE DEFAULT VALUES ARE SHITTY CONSTANTS
+   * 
+   */
   public enum CoralState implements VoltageState {
     NO_CORAL(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/NoCoralVoltage", 0.0),
@@ -37,10 +44,19 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
     INTAKING(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/IntakingVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/IntakingVoltage", 12.0)),
-    STORED_CORAL(
+    STORED_CORAL_IN_INTAKE(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
-    SHOOTING(
+    STORED_CORAL_IN_SHOOTER(
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
+    SHOOTING_L2_AND_L3(
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 12),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
+    SHOOTING_L4(
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 4),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
+    SHOOTING_L1(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
@@ -66,6 +82,32 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
     super("CoralInAndOut", io);
   }
 
+  public void updateCoralState(){
+    if(
+      isCoralInIntake() && 
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING) &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)){
+      setGoalState(CoralState.STORED_CORAL_IN_INTAKE);
+    }
+    else if(
+      isCoralInShooter() &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1) &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)&&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)){
+      setGoalState(CoralState.STORED_CORAL_IN_SHOOTER);
+    }
+    else if(
+      !isCoralInIntake() &&
+      !isCoralInShooter() &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1) &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)&&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4) &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING) &&
+      !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)){
+      setGoalState(CoralState.NO_CORAL);
+    }
+  }
+
   @Override
   public void periodic() {
     ((CoralInAndOutIO) io)
@@ -73,16 +115,53 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
             goalState.getVoltageSupplier().getAsDouble(),
             goalState.getHandoffVoltage().getAsDouble());
     super.periodic();
+
+    //update CoralState periodically
+    updateCoralState();
   }
 
   public void setGoalState(CoralState goalState) {
     this.goalState = goalState;
     switch (goalState) {
-      case NO_CORAL -> RobotState.getInstance().setCoralInAndOutState(CoralState.NO_CORAL);
-      case INTAKING -> RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);
-      case STORED_CORAL -> RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL);
-      case SHOOTING -> RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING);
-      case SPIT_BACK -> RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
+      case NO_CORAL:
+        RobotState.getInstance().setCoralInAndOutState(CoralState.NO_CORAL);
+      case INTAKING:
+        RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);
+      case STORED_CORAL_IN_INTAKE:
+        RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_INTAKE);
+      case STORED_CORAL_IN_SHOOTER: 
+        RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_SHOOTER);
+      case SHOOTING_L2_AND_L3:
+        if((RobotState.getInstance().getElevatorState().equals(ElevatorState.L2) || 
+            RobotState.getInstance().getElevatorState().equals(ElevatorState.L3)) &&
+            RobotState.getInstance().getCoralInAndOutState().equals(CoralState.STORED_CORAL_IN_SHOOTER)){
+          RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L2_AND_L3);
+          break;
+        }
+        else{
+          break;
+        }
+      case SHOOTING_L4:
+        if(RobotState.getInstance().getElevatorState().equals(ElevatorState.L4) &&
+        RobotState.getInstance().getCoralInAndOutState().equals(CoralState.STORED_CORAL_IN_SHOOTER)){
+          RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L4);
+          break;
+        }
+        else{
+          break;
+        }
+      case SHOOTING_L1:
+        if(RobotState.getInstance().getElevatorState().equals(ElevatorState.L1) &&
+        RobotState.getInstance().getCoralInAndOutState().equals(CoralState.STORED_CORAL_IN_SHOOTER)){
+          RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L1);
+          break;
+        }
+        else{
+          break;
+        }
+      case SPIT_BACK:
+        RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
+        break;
     }
   }
 
