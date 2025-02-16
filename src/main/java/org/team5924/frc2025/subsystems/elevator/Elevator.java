@@ -93,20 +93,6 @@ public class Elevator extends SubsystemBase {
         / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
   }
 
-  // public double rotationsToMeters(double rotations) {
-  //   return rotations
-  //       * 2
-  //       * Math.PI
-  //       * SPROCKET_RADIUS.in(Meters)
-  //       / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
-  // }
-
-  // public static double metersToRotations(double height) {
-  //   return height
-  //       * Constants.MOTOR_TO_ELEVATOR_REDUCTION
-  //       / (2 * Math.PI * SPROCKET_RADIUS.in(Meters));
-  // }
-
   public boolean isAtSetpoint() {
     return Math.abs(getElevatorPositionMeters() - this.goalState.heightMeters.getAsDouble())
         < POSITION_TOLERANCE.getAsDouble();

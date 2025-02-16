@@ -345,15 +345,17 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   }
 
   public double rotationsToMeters(double rotations) {
-    return rotations
+    return (rotations
         * 2
         * Math.PI
         * Constants.SPROCKET_RADIUS.in(Meters)
-        / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
+        / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
+        * 2; // Multiply by 2 to account for cascade rigging
   }
 
   public static double metersToRotations(double height) {
     return height
+        / 2 // Divide by 2 to account for cascade rigging
         * Constants.MOTOR_TO_ELEVATOR_REDUCTION
         / (2 * Math.PI * Constants.SPROCKET_RADIUS.in(Meters));
   }
