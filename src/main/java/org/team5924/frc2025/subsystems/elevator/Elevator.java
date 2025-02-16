@@ -16,18 +16,18 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
-
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
+
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import lombok.Getter;
 
 public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
@@ -83,6 +83,7 @@ public class Elevator extends SubsystemBase {
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
     io.setHeight(goalState.heightMeters.getAsDouble());
+    io.periodicUpdates();
   }
 
   private double getElevatorPositionMeters() {
@@ -118,6 +119,7 @@ public class Elevator extends SubsystemBase {
       default -> {
         RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
         io.setPosition(goalState.heightMeters.getAsDouble());
+        RobotState.getInstance().setElevatorState(goalState);
       }
     }
   }

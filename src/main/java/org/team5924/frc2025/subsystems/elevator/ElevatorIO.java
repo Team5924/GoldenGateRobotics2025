@@ -52,7 +52,7 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void updateTunableNumbers() {}
+  public default void periodicUpdates() {}
 
   public default void setHeight(double heightMeters) {}
 

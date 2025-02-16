@@ -24,6 +24,8 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -38,12 +40,16 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreCANdi;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.S1CloseStateValue;
+import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2CloseStateValue;
+import com.ctre.phoenix6.signals.S2StateValue;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Celsius;
@@ -56,6 +62,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /** TODO: Need to rezero elevator on min height. */
@@ -68,10 +75,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   /* Sensor Hardware */
   private final CoreCANdi elevatorCANdi;
+  private final CANcoder elevatorCANCoder;
 
   /* Configurators */
   private TalonFXConfigurator leaderTalonConfig;
   private TalonFXConfigurator followerTalonConfig;
+  private CANcoderConfigurator elevatorCANCoderConfig;
 
   /* Configs */
   private final CurrentLimitsConfigs currentLimitsConfigs;
@@ -80,6 +89,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private final Slot0Configs slot0Configs;
   private final MotionMagicConfigs motionMagicConfigs;
   private double setpoint;
+  private final CANcoderConfiguration canCoderConfig;
 
   /* Gains */
   LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA", 0);
@@ -120,12 +130,29 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private final PositionVoltage positionControl =
       new PositionVoltage(0).withUpdateFreqHz(0.0).withEnableFOC(true);
 
+  /* Alerts */
+  private final Alert updateMotorConfigAlert =
+      new Alert("Update elevator motor config error!", Alert.AlertType.kWarning);
+
+  private final Alert initalMotorConfigAlert =
+      new Alert(
+          "Initial elevator motor config error! Restart robot code to clear.",
+          Alert.AlertType.kError);
+
+  private final Alert candiPin1FloatAlert =
+      new Alert("Elevator CANdiPin1 is floating. Check connection.", Alert.AlertType.kWarning);
+
+  private final Alert candiPin2FloatAlert =
+      new Alert("Elevator CANdiPin2 is floating. Check connection.", Alert.AlertType.kWarning);
+
   public ElevatorIOTalonFX() {
     leftTalon = new TalonFX(Constants.ELEVATOR_LEFT_TALON_ID);
     rightTalon = new TalonFX(Constants.ELEVATOR_RIGHT_TALON_ID);
+    elevatorCANCoder = new CANcoder(Constants.ELEVATOR_CANCODER_ID);
 
     this.leaderTalonConfig = leftTalon.getConfigurator();
     this.followerTalonConfig = rightTalon.getConfigurator();
+    this.elevatorCANCoderConfig = elevatorCANCoder.getConfigurator();
 
     // Constants used in CANdi construction
     final int kCANdiId = 39;
@@ -189,21 +216,37 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     FeedbackConfigs feedbackConfigs = new FeedbackConfigs();
     feedbackConfigs.SensorToMechanismRatio = Constants.MOTOR_TO_ELEVATOR_REDUCTION;
+    feedbackConfigs.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    feedbackConfigs.FeedbackRemoteSensorID = Constants.ELEVATOR_CANCODER_ID;
+    feedbackConfigs.SensorToMechanismRatio = Constants.CANCODER_TO_ELEVATOR_REDUCTION;
+    feedbackConfigs.RotorToSensorRatio = Constants.MOTOR_TO_ELEVATOR_REDUCTION;
 
-    /** TODO: check for bad config apply and error */
-    leaderTalonConfig.apply(currentLimitsConfigs);
-    leaderTalonConfig.apply(leaderMotorConfigs);
-    leaderTalonConfig.apply(slot0Configs);
-    leaderTalonConfig.apply(motionMagicConfigs);
-    leaderTalonConfig.apply(openLoopRampsConfigs);
-    leaderTalonConfig.apply(closedLoopRampsConfigs);
+    canCoderConfig = new CANcoderConfiguration();
+    canCoderConfig.MagnetSensor.MagnetOffset = Constants.ELEVATOR_CANCODER_OFFSET;
 
-    followerTalonConfig.apply(currentLimitsConfigs);
-    followerTalonConfig.apply(followerMotorConfigs);
-    followerTalonConfig.apply(slot0Configs);
-    followerTalonConfig.apply(motionMagicConfigs);
-    followerTalonConfig.apply(openLoopRampsConfigs);
-    followerTalonConfig.apply(closedLoopRampsConfigs);
+    // Apply Configs
+    StatusCode[] statusArray = new StatusCode[14];
+
+    statusArray[0] = leaderTalonConfig.apply(currentLimitsConfigs);
+    statusArray[1] = leaderTalonConfig.apply(leaderMotorConfigs);
+    statusArray[2] = leaderTalonConfig.apply(slot0Configs);
+    statusArray[3] = leaderTalonConfig.apply(motionMagicConfigs);
+    statusArray[4] = leaderTalonConfig.apply(openLoopRampsConfigs);
+    statusArray[5] = leaderTalonConfig.apply(closedLoopRampsConfigs);
+    statusArray[6] = leaderTalonConfig.apply(feedbackConfigs);
+
+    statusArray[7] = followerTalonConfig.apply(currentLimitsConfigs);
+    statusArray[8] = followerTalonConfig.apply(followerMotorConfigs);
+    statusArray[9] = followerTalonConfig.apply(slot0Configs);
+    statusArray[10] = followerTalonConfig.apply(motionMagicConfigs);
+    statusArray[11] = followerTalonConfig.apply(openLoopRampsConfigs);
+    statusArray[12] = followerTalonConfig.apply(closedLoopRampsConfigs);
+
+    statusArray[13] = elevatorCANCoderConfig.apply(canCoderConfig);
+
+    boolean isErrorPresent = false;
+    for (StatusCode s : statusArray) if (!s.isOK()) isErrorPresent = true;
+    initalMotorConfigAlert.set(isErrorPresent);
 
     leftPosition = leftTalon.getPosition();
     leftVelocity = leftTalon.getVelocity();
@@ -278,8 +321,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     double timeDiff = currentTime - prevReferenceSlopeTimestamp;
     if (timeDiff > 0.0) {
       inputs.acceleration =
-          (inputs.motionMagicVelocityTarget - prevClosedLoopReferenceSlope)
-              / timeDiff;
+          (inputs.motionMagicVelocityTarget - prevClosedLoopReferenceSlope) / timeDiff;
     }
     prevClosedLoopReferenceSlope = inputs.motionMagicVelocityTarget;
     prevReferenceSlopeTimestamp = currentTime;
@@ -291,6 +333,19 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   }
 
   @Override
+  public void periodicUpdates() {
+    updateTunableNumbers();
+    isAtZero();
+
+    if (elevatorCANdi.getS1State().getValue() == S1StateValue.Floating)
+      candiPin1FloatAlert.set(true);
+    else candiPin1FloatAlert.set(false);
+
+    if (elevatorCANdi.getS2State().getValue() == S2StateValue.Floating)
+      candiPin2FloatAlert.set(true);
+    else candiPin2FloatAlert.set(false);
+  }
+
   public void updateTunableNumbers() {
     if (kA.hasChanged(hashCode())
         || kS.hasChanged(hashCode())
@@ -298,6 +353,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         || kP.hasChanged(hashCode())
         || kI.hasChanged(hashCode())
         || kD.hasChanged(hashCode())
+        || kG.hasChanged(hashCode())
         || motionAcceleration.hasChanged(hashCode())
         || motionCruiseVelocity.hasChanged(hashCode())) {
       slot0Configs.kA = kA.get();
@@ -306,14 +362,26 @@ public class ElevatorIOTalonFX implements ElevatorIO {
       slot0Configs.kP = kP.get();
       slot0Configs.kI = kI.get();
       slot0Configs.kD = kD.get();
+      slot0Configs.kG = kG.get();
 
       motionMagicConfigs.MotionMagicAcceleration = motionAcceleration.get();
       motionMagicConfigs.MotionMagicCruiseVelocity = motionCruiseVelocity.get();
 
-      leaderTalonConfig.apply(slot0Configs);
-      followerTalonConfig.apply(slot0Configs);
-      leaderTalonConfig.apply(motionMagicConfigs);
-      followerTalonConfig.apply(motionMagicConfigs);
+      StatusCode[] status = new StatusCode[4];
+
+      status[0] = leaderTalonConfig.apply(slot0Configs);
+      status[1] = followerTalonConfig.apply(slot0Configs);
+      status[2] = leaderTalonConfig.apply(motionMagicConfigs);
+      status[3] = followerTalonConfig.apply(motionMagicConfigs);
+
+      Logger.recordOutput("Elevator/Leader/Slot0ConfigApplyStatus", status[0]);
+      Logger.recordOutput("Elevator/Follower/Slot0ConfigApplyStatus", status[1]);
+      Logger.recordOutput("Elevator/Leader/MotionMagicConfigApplyStatus", status[2]);
+      Logger.recordOutput("Elevator/Follower/MotionMagicConfigApplyStatus", status[3]);
+
+      boolean isErrorPresent = false;
+      for (StatusCode s : status) if (!s.isOK()) isErrorPresent = true;
+      updateMotorConfigAlert.set(isErrorPresent);
     }
   }
 
@@ -325,7 +393,11 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     }
 
     setpoint = heightMeters;
-    leftTalon.setControl(new MotionMagicVoltage(metersToRotations(heightMeters)));
+    leftTalon.setControl(
+        new MotionMagicVoltage(metersToRotations(heightMeters))
+            .withEnableFOC(true)
+            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
+            .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue()));
     Logger.recordOutput("Elevator/GoalHeight", heightMeters);
   }
 
@@ -344,12 +416,21 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         positionControl.withPosition(Radians.of(metersToRotations(meters) * 2 * Math.PI)));
   }
 
+  public boolean isAtZero() {
+    if (elevatorCANdi.getS1Closed().getValue()) {
+      leftTalon.setPosition(0.0);
+      return true;
+    }
+
+    return false;
+  }
+
   public double rotationsToMeters(double rotations) {
     return (rotations
-        * 2
-        * Math.PI
-        * Constants.SPROCKET_RADIUS.in(Meters)
-        / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
+            * 2
+            * Math.PI
+            * Constants.SPROCKET_RADIUS.in(Meters)
+            / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
         * 2; // Multiply by 2 to account for cascade rigging
   }
 
