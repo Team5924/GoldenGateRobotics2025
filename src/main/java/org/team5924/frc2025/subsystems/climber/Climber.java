@@ -24,6 +24,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
+import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Setter
@@ -33,14 +35,14 @@ public class Climber extends SubsystemBase {
     // Pulling onto cage, lifting robot
     CLIMB(new LoggedTunableNumber("Climber/ClimbingVoltage", 12.0)),
 
-    // Tucked in
+    // Default state, will be here most of the match
     STOW(new LoggedTunableNumber("Climber/StowVoltage", 0.0)),
 
     // Ready to climb
     READY_TO_CLIMB(new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0)),
 
     // Lowering robot
-    REVERSE_CLIMB(new LoggedTunableNumber("Climber/MovingVoltage", -12.0));
+    REVERSE_CLIMB(new LoggedTunableNumber("Climber/ReverseClimbingVoltage", -12.0));
 
     private final LoggedTunableNumber volts;
 
@@ -79,10 +81,13 @@ public class Climber extends SubsystemBase {
 
     disconnected.set(!inputs.motorConnected);
 
-    // If the robot's state is STOW and the cage is within range, then set the robot's state to
-    // READY_TO_CLIMB
+    // If the robot's state is STOW && the cage is within range && elevator + algae pivot are both
+    // stow,
+    // then set the robot's state to READY_TO_CLIMB
     if (getGoalState() == ClimberState.STOW
-        && isCageInClimber()) { // TODO: add elevator in stow, algae pivot to stow
+        && isCageInClimber()
+        && RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE
+        && RobotState.getInstance().getAlgaePivotState() == AlgaePivotState.INTAKE_FLOOR) {
       setGoalState(ClimberState.READY_TO_CLIMB);
     }
 
@@ -91,7 +96,7 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-    // io.runVolts(goalState.volts.getAsDouble() * voltageMultiplier);
+    io.runVolts(goalState.volts.getAsDouble());
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 

@@ -223,6 +223,18 @@ public class RobotContainer {
         .pov(0)
         .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
     // .finallyDo(() -> climber.setVoltageMultiplier(1)));
+
+    // No Dpad Up or Dpad Down
+    driveController
+        .pov(180)
+        .or(driveController.pov(0))
+        .onFalse(
+            Commands.runOnce(
+                () ->
+                    climber.setGoalState(
+                        climber.getGoalState() == Climber.ClimberState.STOW
+                            ? Climber.ClimberState.STOW
+                            : Climber.ClimberState.READY_TO_CLIMB)));
   }
 
   /**
