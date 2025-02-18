@@ -39,6 +39,9 @@ public interface ElevatorIO {
     public double rightTorqueCurrentAmps = 0.0;
     public double rightTempCelsius = 0.0;
 
+    public double posMeters = 0.0;
+    public double velMetersPerSecond = 0.0;
+
     public double motionMagicVelocityTarget = 0.0;
     public double motionMagicPositionTarget = 0.0;
 
@@ -57,8 +60,6 @@ public interface ElevatorIO {
   public default void setHeight(double heightMeters) {}
 
   public default void setVoltage(double volts) {}
-
-  public default void setPosition(double rads) {}
 
   public default void setSoftStopOn() {}
 

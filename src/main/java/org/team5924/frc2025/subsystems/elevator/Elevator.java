@@ -16,18 +16,21 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
+
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
-
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import lombok.Getter;
 
 public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
@@ -38,6 +41,8 @@ public class Elevator extends SubsystemBase {
   private final ElevatorIO io;
 
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
+
+  public final SysIdRoutine sysId;
 
   public enum ElevatorState {
     INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
@@ -68,6 +73,15 @@ public class Elevator extends SubsystemBase {
         new Alert("Left elevator motor disconnected!", Alert.AlertType.kWarning);
     this.rightMotorDisconnected =
         new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
+
+    sysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Volts.of(.75).per(Seconds),
+                Volts.of(1),
+                Seconds.of(new LoggedTunableNumber("Elevator/SysIdTime", 10).getAsDouble()),
+                (state) -> Logger.recordOutput("Elevator/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism((voltage) -> setVoltage(voltage.in(Volts)), null, this));
   }
 
   @Override
@@ -118,8 +132,8 @@ public class Elevator extends SubsystemBase {
       case MOVING -> DriverStation.reportError("Invalid goal ElevatorState!", null);
       default -> {
         RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
-        io.setPosition(goalState.heightMeters.getAsDouble());
-        RobotState.getInstance().setElevatorState(goalState);
+        io.setHeight(goalState.heightMeters.getAsDouble());
+        // RobotState.getInstance().setElevatorState(goalState);
       }
     }
   }
