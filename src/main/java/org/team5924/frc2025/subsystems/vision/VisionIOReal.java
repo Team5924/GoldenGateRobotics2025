@@ -73,7 +73,7 @@ public class VisionIOReal implements VisionIO {
       inputs.computedBotPoseY =
           (frontCameraEstimate.pose.getY() + backCameraEstimate.pose.getY()) / 2;
     }
-    
+
     inputs.botPoseRotationRadians = frontCameraEstimate.pose.getRotation().getRadians();
   }
 }

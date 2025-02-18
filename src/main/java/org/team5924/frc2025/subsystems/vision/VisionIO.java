@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
@@ -41,6 +42,8 @@ public interface VisionIO {
 
     public double avgFrontCameraTagArea = 0.0;
     public double avgBackCameraTagArea = 0.0;
+
+    public Pose2d botPose2d;
   }
 
   /** Updates the set of loggable inputs. */
