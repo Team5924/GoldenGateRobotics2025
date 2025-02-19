@@ -32,7 +32,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   @RequiredArgsConstructor
   @Getter
   /*
-   * ALL LOGGEDTUNABLE DEFAULT VALUES ARE SHITTY CONSTANTS
+   * ALL LOGGEDTUNABLE DEFAULT VALUES ARE TERRIBLE CONSTANTS
    *
    */
   public enum CoralState implements VoltageState {
