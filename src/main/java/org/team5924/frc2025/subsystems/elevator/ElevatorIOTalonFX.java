@@ -36,7 +36,6 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -275,18 +274,18 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     voltageControl =
         new VoltageOut(0)
             .withUpdateFreqHz(0.0)
-            .withEnableFOC(true)
+            .withEnableFOC(false)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
     positionControl =
         new PositionVoltage(0)
             .withUpdateFreqHz(0.0)
-            .withEnableFOC(true)
+            .withEnableFOC(false)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
     magicMotionVoltage =
         new MotionMagicVoltage(0)
-            .withEnableFOC(true)
+            .withEnableFOC(false)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
 
@@ -411,7 +410,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void setVoltage(double volts) {
     Logger.recordOutput("Elevator/JoystickValue", volts);
-    leftTalon.setControl(new DutyCycleOut(volts).withEnableFOC(false));
+    leftTalon.setControl(voltageControl.withOutput(volts));
   }
 
   public boolean isAtZero() {
@@ -428,13 +427,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         * 2
         * Math.PI
         * Constants.SPROCKET_RADIUS.in(Meters)
-        / Constants.MOTOR_TO_ELEVATOR_REDUCTION);
-    // * 2; // Multiply by 2 to account for cascade rigging
+        / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
+        * 2; // Multiply by 2 to account for cascade rigging
   }
 
   public static double metersToRotations(double height) {
     return height
-        // / 2 // Divide by 2 to account for cascade rigging
+        / 2 // Divide by 2 to account for cascade rigging
         * Constants.MOTOR_TO_ELEVATOR_REDUCTION
         / (2 * Math.PI * Constants.SPROCKET_RADIUS.in(Meters));
   }

@@ -42,7 +42,8 @@ public class Elevator extends SubsystemBase {
 
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
-  public final SysIdRoutine sysId;
+  public final SysIdRoutine upSysId;
+  public final SysIdRoutine downSysId;
 
   public enum ElevatorState {
     INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
@@ -74,11 +75,20 @@ public class Elevator extends SubsystemBase {
     this.rightMotorDisconnected =
         new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
 
-    sysId =
+    upSysId =
         new SysIdRoutine(
             new SysIdRoutine.Config(
-                Volts.of(.75).per(Seconds),
+                Volts.of(.5).per(Seconds),
                 Volts.of(1),
+                Seconds.of(new LoggedTunableNumber("Elevator/SysIdTime", 10).getAsDouble()),
+                (state) -> Logger.recordOutput("Elevator/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism((voltage) -> setVoltage(voltage.in(Volts)), null, this));
+
+    downSysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Volts.of(.5).per(Seconds),
+                Volts.of(.5),
                 Seconds.of(new LoggedTunableNumber("Elevator/SysIdTime", 10).getAsDouble()),
                 (state) -> Logger.recordOutput("Elevator/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> setVoltage(voltage.in(Volts)), null, this));

@@ -50,11 +50,12 @@ public class RunElevator extends Command {
           RobotState.getInstance().setElevatorState(elevator.getGoalState());
         }
       }
-      case MANUAL ->
-          elevator.setVoltage(
-              (-joystickY.getAsDouble() * 0.1) > 0.005 || (-joystickY.getAsDouble() * 0.1) < -0.005
-                  ? (-joystickY.getAsDouble() * 0.1)
-                  : 0.0);
+      case MANUAL -> {
+        elevator.setVoltage(
+            (-joystickY.getAsDouble() * 0.1) > 0.005 || (-joystickY.getAsDouble() * 0.1) < -0.005
+                ? (-joystickY.getAsDouble() * 0.1)
+                : 0.0);
+      }
       case INTAKE -> elevator.setGoalState(ElevatorState.INTAKE);
       case L1 -> elevator.setGoalState(ElevatorState.L1);
       case L2 -> elevator.setGoalState(ElevatorState.L2);
