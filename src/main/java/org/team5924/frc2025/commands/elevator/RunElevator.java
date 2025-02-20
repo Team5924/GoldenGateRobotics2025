@@ -52,8 +52,8 @@ public class RunElevator extends Command {
       }
       case MANUAL -> {
         elevator.setVoltage(
-            (-joystickY.getAsDouble() * 0.1) > 0.005 || (-joystickY.getAsDouble() * 0.1) < -0.005
-                ? (-joystickY.getAsDouble() * 0.1)
+            (-joystickY.getAsDouble()) > 0.05 || (-joystickY.getAsDouble()) < -0.05
+                ? (-joystickY.getAsDouble() * 6)
                 : 0.0);
       }
       case INTAKE -> elevator.setGoalState(ElevatorState.INTAKE);

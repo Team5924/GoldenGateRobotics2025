@@ -93,17 +93,17 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   /* Gains */
   LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA", 0.00);
-  LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/kS", 0.29);
-  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", 0);
-  LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 0);
+  LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/kS", 0.13);
+  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", 0.4);
+  LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 7);
   LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI", 0);
-  LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0);
-  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.43);
+  LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0.07);
+  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.33);
 
   LoggedTunableNumber motionAcceleration =
-      new LoggedTunableNumber("Elevator/MotionAcceleration", 200);
+      new LoggedTunableNumber("Elevator/MotionAcceleration", 400);
   LoggedTunableNumber motionCruiseVelocity =
-      new LoggedTunableNumber("Elevator/MotionCruiseVelocity", 100);
+      new LoggedTunableNumber("Elevator/MotionCruiseVelocity", 400);
   LoggedTunableNumber motionJerk = new LoggedTunableNumber("Elevator/MotionJerk", 1000);
 
   /* Status Signals */
@@ -171,12 +171,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     leaderMotorConfigs.Inverted = ELEVATOR_LEFT_INVERSION;
     leaderMotorConfigs.PeakForwardDutyCycle = 1.0;
     leaderMotorConfigs.PeakReverseDutyCycle = -1.0;
-    leaderMotorConfigs.NeutralMode = NeutralModeValue.Brake;
+    leaderMotorConfigs.NeutralMode = NeutralModeValue.Coast;
 
     followerMotorConfigs = new MotorOutputConfigs();
     followerMotorConfigs.PeakForwardDutyCycle = 1.0;
     followerMotorConfigs.PeakReverseDutyCycle = -1.0;
-    followerMotorConfigs.NeutralMode = NeutralModeValue.Brake;
+    followerMotorConfigs.NeutralMode = NeutralModeValue.Coast;
 
     slot0Configs = new Slot0Configs();
     slot0Configs.kP = kP.get();
@@ -274,18 +274,18 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     voltageControl =
         new VoltageOut(0)
             .withUpdateFreqHz(0.0)
-            .withEnableFOC(false)
+            .withEnableFOC(true)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
     positionControl =
         new PositionVoltage(0)
             .withUpdateFreqHz(0.0)
-            .withEnableFOC(false)
+            .withEnableFOC(true)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
     magicMotionVoltage =
         new MotionMagicVoltage(0)
-            .withEnableFOC(false)
+            .withEnableFOC(true)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
 
@@ -354,7 +354,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void periodicUpdates() {
     updateTunableNumbers();
-    // isAtZero();
+    isAtZero();
 
     candiPin1FloatAlert.set(elevatorCANdi.getS1State().getValue() == S1StateValue.Floating);
     candiPin2FloatAlert.set(elevatorCANdi.getS2State().getValue() == S2StateValue.Floating);
@@ -424,10 +424,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   public double rotationsToMeters(double rotations) {
     return (rotations
-        * 2
-        * Math.PI
-        * Constants.SPROCKET_RADIUS.in(Meters)
-        / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
+            * 2
+            * Math.PI
+            * Constants.SPROCKET_RADIUS.in(Meters)
+            / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
         * 2; // Multiply by 2 to account for cascade rigging
   }
 

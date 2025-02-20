@@ -82,7 +82,7 @@ public final class Constants {
   public static final int ELEVATOR_CANCODER_ID = 40; // TODO: Check and change if needed
   public static final int ELEVATOR_CANDI_ID = 39;
   public static final String ELEVATOR_CANDI_BUS = "rio";
-  public static final double MOTOR_TO_ELEVATOR_REDUCTION = 4.16;
+  public static final double MOTOR_TO_ELEVATOR_REDUCTION = 4.00;
   public static final double CANCODER_TO_ELEVATOR_REDUCTION = 1.0;
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
   public static final Distance SPROCKET_RADIUS = Inches.of(.6405);
