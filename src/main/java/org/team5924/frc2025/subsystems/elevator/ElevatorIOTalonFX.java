@@ -38,7 +38,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.CANdi;
@@ -126,7 +125,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   double prevReferenceSlopeTimestamp = 0.0;
 
   private final VoltageOut voltageControl;
-  private final PositionVoltage positionControl;
   private final MotionMagicVoltage magicMotionVoltage;
 
   /* Alerts */
@@ -273,12 +271,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     voltageControl =
         new VoltageOut(0)
-            .withUpdateFreqHz(0.0)
-            .withEnableFOC(true)
-            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
-            .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
-    positionControl =
-        new PositionVoltage(0)
             .withUpdateFreqHz(0.0)
             .withEnableFOC(true)
             .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
