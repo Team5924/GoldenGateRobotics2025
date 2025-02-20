@@ -22,7 +22,7 @@ import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.team5924.frc2025.subsystems.algae.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
-import org.team5924.frc2025.subsystems.rollers.Algae.AlgaeRoller.AlgaeState;
+import org.team5924.frc2025.subsystems.rollers.Algae.AlgaeRoller.AlgaeRollerState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 
 @Getter
@@ -60,6 +60,6 @@ public class RobotState {
 
   @Getter
   @Setter
-  @AutoLogOutput(key = "RobotState/AlgaePivotState")
-  private AlgaePivotState algaeRollerState = AlgaeRollerState.NO_ALGAE;
+  @AutoLogOutput(key = "RobotState/AlgaeRollerState")
+  private AlgaeRollerState algaeRollerState = AlgaeRollerState.NO_ALGAE;
 }

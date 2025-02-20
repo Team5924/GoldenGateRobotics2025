@@ -1,5 +1,5 @@
 /*
- * CoralInAndOutIO.java
+ * AlgaeRollerIO.java
  */
 
 /* 
@@ -14,25 +14,22 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
- package org.team5924.frc2025.subsystems.rollers.Algae;
+package org.team5924.frc2025.subsystems.rollers.Algae;
 
- import org.littletonrobotics.junction.AutoLog;
- import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIO;
+import org.littletonrobotics.junction.AutoLog;
+import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIO;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIO.GenericRollerSystemIOInputs;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
- 
- public interface AlgaeRollerIO extends GenericRollerSystemIO {
- 
-   @AutoLog
-   abstract class AlgaeRollerInputs extends GenericRollerSystemIOInputs {
-     // Algae LaserCAN
-     public LaserCAN_Measurement algaeLCMeasurement = new LaserCAN_Measurement();
-     public boolean algaeLCConnected = true;
- 
-  
-   }
- 
-   /** Run roller at volts */
-   default void runVolts(double voltsIntakeAndShooter, double voltsHandoff) {}
- }
- 
+
+public interface AlgaeRollerIO extends GenericRollerSystemIO {
+
+  @AutoLog
+  abstract class AlgaeRollerIOInputs extends GenericRollerSystemIOInputs {
+    // Algae LaserCAN
+    public LaserCAN_Measurement algaeRollerLCMeasurement = new LaserCAN_Measurement();
+    public boolean algaeRollerLCConnected = true;
+  }
+
+  /** Run roller at volts */
+  default void runVolts(double volts) {}
+}

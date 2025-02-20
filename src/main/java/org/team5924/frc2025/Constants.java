@@ -44,7 +44,7 @@ public final class Constants {
 
   public static final boolean TUNING_MODE = true;
   public static final boolean ALLOW_ASSERTS = true;
-  
+
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
 
@@ -60,12 +60,12 @@ public final class Constants {
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
-  
+
   /* # Pivot # */
   public static final int ALGAE_PIVOT_TALON_ID = 55;
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
-  
+
   /* Coral Handoff */
   public static final int CORAL_HANDOFF_CAN_ID = 32;
   public static final String CORAL_HANDOFF_BUS = "rio";
@@ -82,4 +82,9 @@ public final class Constants {
   public static final double MOTOR_TO_ELEVATOR_REDUCTION = 3;
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
   public static final Distance SPROCKET_RADIUS = Inches.of(2);
+
+  /* Algae Rollers*/
+  public static final int ALGAE_TALON_ID = 70;
+  public static final String ALGAE_BUS = "rio";
+  
 }
