@@ -16,10 +16,13 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
-import org.littletonrobotics.junction.Logger;
-import org.team5924.frc2025.Constants;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 import static org.team5924.frc2025.Constants.ELEVATOR_LEFT_INVERSION;
-import org.team5924.frc2025.util.LoggedTunableNumber;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -50,13 +53,6 @@ import com.ctre.phoenix6.signals.S1CloseStateValue;
 import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2CloseStateValue;
 import com.ctre.phoenix6.signals.S2StateValue;
-
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Celsius;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -64,6 +60,9 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
+import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 /** TODO: Need to rezero elevator on min height. */
 
@@ -171,12 +170,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     leaderMotorConfigs.Inverted = ELEVATOR_LEFT_INVERSION;
     leaderMotorConfigs.PeakForwardDutyCycle = 1.0;
     leaderMotorConfigs.PeakReverseDutyCycle = -1.0;
-    leaderMotorConfigs.NeutralMode = NeutralModeValue.Coast;
+    leaderMotorConfigs.NeutralMode = NeutralModeValue.Brake;
 
     followerMotorConfigs = new MotorOutputConfigs();
     followerMotorConfigs.PeakForwardDutyCycle = 1.0;
     followerMotorConfigs.PeakReverseDutyCycle = -1.0;
-    followerMotorConfigs.NeutralMode = NeutralModeValue.Coast;
+    followerMotorConfigs.NeutralMode = NeutralModeValue.Brake;
 
     slot0Configs = new Slot0Configs();
     slot0Configs.kP = kP.get();
@@ -290,6 +289,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
             .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
 
     rightTalon.setControl(new Follower(leftTalon.getDeviceID(), true));
+    leftTalon.setPosition(0.0);
   }
 
   @Override
@@ -424,18 +424,20 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   public double rotationsToMeters(double rotations) {
     return (rotations
+            // * 2 // Multiply by 2 to account for cascade rigging
             * 2
             * Math.PI
             * Constants.SPROCKET_RADIUS.in(Meters)
             / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
-        * 2; // Multiply by 2 to account for cascade rigging
+        * 2;
   }
 
   public static double metersToRotations(double height) {
     return height
-        / 2 // Divide by 2 to account for cascade rigging
+        // * 2 // Multiply by 2 to account for cascade rigging
         * Constants.MOTOR_TO_ELEVATOR_REDUCTION
-        / (2 * Math.PI * Constants.SPROCKET_RADIUS.in(Meters));
+        / (2 * Math.PI * Constants.SPROCKET_RADIUS.in(Meters))
+        / 2;
   }
 
   private double getHeight() {
