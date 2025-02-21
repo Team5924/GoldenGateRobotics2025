@@ -107,7 +107,6 @@ public class Elevator extends SubsystemBase {
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
-    io.setHeight(goalState.heightMeters.getAsDouble());
     io.periodicUpdates();
   }
 
@@ -144,7 +143,6 @@ public class Elevator extends SubsystemBase {
       default -> {
         RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
         io.setHeight(goalState.heightMeters.getAsDouble());
-        // RobotState.getInstance().setElevatorState(goalState);
       }
     }
   }
