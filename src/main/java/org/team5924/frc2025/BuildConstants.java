@@ -29,5 +29,11 @@ public final class BuildConstants {
   public static final long BUILD_UNIX_TIME = 1739752582751L;
   public static final int DIRTY = 1;
 
-  private BuildConstants() {}
+  /**
+ * Prevents instantiation of the BuildConstants class.
+ *
+ * This private constructor enforces the utility class pattern by restricting object creation,
+ * since BuildConstants contains only static build metadata constants.
+ */
+private BuildConstants() {}
 }

@@ -65,6 +65,20 @@ public class ClimberIOTalonFX implements ClimberIO {
   private static final Alert laserCanInvalidMeasure =
       new Alert("Climber LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
+  /**
+   * Instantiates and configures the TalonFX motor controller for the climber subsystem.
+   *
+   * <p>Initializes the reduction factor using <code>Constants.CLIMBER_REDUCTION</code> and creates the
+   * TalonFX instance with the CAN ID and bus specified in <code>Constants</code>. Configures the motor
+   * controller by setting inversion (clockwise positive if <code>Constants.CLIMBER_INVERT</code> is true,
+   * otherwise counter-clockwise positive) and the neutral mode (brake if <code>Constants.CLIMBER_BRAKE</code>
+   * is true, otherwise coast). Applies the supply current limit from <code>Constants.CLIMBER_CURRENT_LIMIT</code>
+   * and enables current limiting.</p>
+   *
+   * <p>Retrieves status signals for position, velocity, applied voltage, supply current, torque current, and
+   * device temperature, setting an update frequency of 50 Hz for all. Optimizes bus utilization by disabling
+   * unused status signals.</p>
+   */
   public ClimberIOTalonFX() {
     reduction = Constants.CLIMBER_REDUCTION;
     talon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
@@ -95,6 +109,36 @@ public class ClimberIOTalonFX implements ClimberIO {
     talon.optimizeBusUtilization(0, 1.0);
   }
 
+  /**
+   * Refreshes sensor and motor status inputs for the climber subsystem.
+   *
+   * <p>
+   * Retrieves a measurement from the laser CAN sensor and updates the corresponding fields in the provided
+   * {@code ClimberIOInputs} instance. On a successful read, the laser measurement is converted via
+   * {@code LaserCAN_Measurement.fromLaserCAN} and the laser connection flag is set to true while clearing any
+   * disconnection or invalid measurement alerts.
+   * </p>
+   *
+   * <p>
+   * If a {@code SensorRuntimeException} is caught during the laser sensor read:
+   * <ul>
+   *   <li>If the error type is {@code DISCONNECTED}, the laser connection flag is set to false and the disconnection alert is activated.</li>
+   *   <li>If the error type is {@code INVALID_DATA}, the invalid measurement alert is activated.</li>
+   *   <li>For other error types, the exception is either rethrown (when assertions are enabled) or an error is logged.</li>
+   * </ul>
+   * </p>
+   *
+   * <p>
+   * Additionally, it refreshes all motor status signals (position, velocity, applied voltage, supply current, torque current,
+   * and temperature) using {@code BaseStatusSignal.refreshAll}. The motor's position and velocity are converted from rotations
+   * to radians and adjusted by the reduction factor before being updated in {@code inputs}. The motor connection status is
+   * determined based on the successful refresh of these signals.
+   * </p>
+   *
+   * @param inputs the {@code ClimberIOInputs} object to be updated with current sensor measurements and motor status data;
+   *               must not be {@code null}
+   * @throws SensorRuntimeException if an unexpected sensor error occurs and assertions are enabled
+   */
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     try {
@@ -128,11 +172,31 @@ public class ClimberIOTalonFX implements ClimberIO {
     inputs.tempCelsius = tempCelsius.getValueAsDouble();
   }
 
+  /**
+   * Commands the TalonFX motor controller to output a specified voltage.
+   *
+   * <p>Converts the desired voltage into a control signal using the configured voltage output
+   * mechanism and applies it to the motor. This method is used primarily for open-loop control of the motor.
+   *
+   * @param volts the voltage (in volts) to be applied to the motor
+   */
   @Override
   public void runVolts(double volts) {
     talon.setControl(voltageOut.withOutput(volts));
   }
 
+  /**
+   * Sets the climber's target angle in radians.
+   *
+   * Validates that the specified angle lies within the bounds defined by
+   * {@link Constants#CLIMBER_MIN_RADS} and {@link Constants#CLIMBER_MAX_RADS}. If the provided
+   * angle is outside these limits, an error is logged and an {@link IllegalArgumentException}
+   * is thrown. When the angle is valid, the method updates the motor controller's control output
+   * to achieve the desired position.
+   *
+   * @param rads the target angle in radians
+   * @throws IllegalArgumentException if {@code rads} is not within the permitted range
+   */
   @Override
   public void setAngle(double rads) throws IllegalArgumentException {
     if (rads < Constants.CLIMBER_MIN_RADS || rads > Constants.CLIMBER_MAX_RADS) {

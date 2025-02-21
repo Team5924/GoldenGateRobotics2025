@@ -37,28 +37,43 @@ public interface ClimberIO {
   }
 
   /**
-   * Updates the inputs object with the latest data from hardware
-   *
-   * @param inputs Inputs to update
-   */
+ * Refreshes the climber's sensor and status readings.
+ * <p>
+ * The default implementation performs no action. Implementations should override this method to update the
+ * provided {@code ClimberIOInputs} instance with the latest hardware data including motor connection status,
+ * position, velocity, applied voltage, supply and torque currents, temperature, and laser measurement details.
+ *
+ * @param inputs the {@link ClimberIOInputs} instance to update with current data
+ */
   public default void updateInputs(ClimberIOInputs inputs) {}
 
   /**
-   * Runs the motor at the specified voltage
-   *
-   * @param volts Voltage to apply
-   */
+ * Drives the motor with the specified voltage.
+ *
+ * Provide a voltage value (in volts) to control the motor's output. Positive values
+ * result in forward motion, while negative values yield reverse operation. The
+ * default implementation is a no-op and must be overridden to interact with hardware.
+ *
+ * @param volts the voltage (in volts) to apply to the motor
+ */
   public default void runVolts(double volts) {}
 
   /**
-   * Sets the target angle for the climber
-   *
-   * @param rads Target angle in radians, must be between {@link Constants}.CLIMBER_MIN_RADS and
-   *     {@link Constants}.CLIMBER_MAX_RADS
-   * @throws IllegalArgumentException if value does not fall in range
-   */
+ * Configures the climber to move to the specified target angle in radians.
+ *
+ * The target angle must be within the inclusive range defined by
+ * {@link Constants#CLIMBER_MIN_RADS} and {@link Constants#CLIMBER_MAX_RADS}.
+ *
+ * @param rads target angle in radians
+ * @throws IllegalArgumentException if {@code rads} is less than {@link Constants#CLIMBER_MIN_RADS} or greater than {@link Constants#CLIMBER_MAX_RADS}
+ */
   public default void setAngle(double rads) {}
 
-  /** stops the motor */
+  /**
+ * Stops the climber motor.
+ *
+ * <p>Halts motor operation by reducing the applied voltage to zero. This default implementation performs no
+ * action and should be overridden by hardware-specific implementations to ensure proper motor shutdown behavior.
+ */
   default void stop() {}
 }
