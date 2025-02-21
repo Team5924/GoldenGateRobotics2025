@@ -86,5 +86,8 @@ public final class Constants {
   /* Algae Rollers*/
   public static final int ALGAE_TALON_ID = 70;
   public static final String ALGAE_BUS = "rio";
-  
+  public static final int ALGAE_CURRENT_LIMIT = 40;  // Adjust value as needed
+  public static final boolean ALGAE_INVERT = false;    // Adjust value as needed
+  public static final boolean ALGAE_BRAKE = true;       // Adjust value as needed
+  public static final double ALGAE_REDUCTION = 1.0;     // Adjust value as needed
 }
