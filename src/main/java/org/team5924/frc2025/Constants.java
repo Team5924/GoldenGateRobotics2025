@@ -56,14 +56,14 @@ public final class Constants {
   public static final int CORAL_IN_AND_OUT_CURRENT_LIMIT = 40;
   public static final boolean CORAL_IN_AND_OUT_INVERT = false;
   public static final boolean CORAL_IN_AND_OUT_BRAKE = true;
-  public static final double CORAL_IN_AND_OUT_REDUCTION = 18.0 / 12.0;
+  public static final double CORAL_IN_AND_OUT_REDUCTION = 24.0 / 12.0;
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
 
   /* # Pivot # */
   public static final int ALGAE_PIVOT_TALON_ID = 55;
-  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 3;
+  public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 62.5; // TODO: most likely change
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
 
   /* Coral Handoff */
@@ -72,14 +72,19 @@ public final class Constants {
   public static final int CORAL_HANDOFF_CURRENT_LIMIT = 40;
   public static final boolean CORAL_HANDOFF_INVERT = false;
   public static final boolean CORAL_HANDOFF_BRAKE = false;
-  public static final double CORAL_HANDOFF_REDUCTION = 18.0 / 12.0;
+  public static final double CORAL_HANDOFF_REDUCTION = 24.0 / 12.0;
   public static final double CORAL_HANDOFF_SIM_MOI = 0.001;
   // TODO: Fill out Coral Handoff Constants with real values - all need to be fixed
 
   /* # Elevator # */
   public static final int ELEVATOR_LEFT_TALON_ID = 30;
   public static final int ELEVATOR_RIGHT_TALON_ID = 31;
-  public static final double MOTOR_TO_ELEVATOR_REDUCTION = 3;
+  public static final int ELEVATOR_CANCODER_ID = 40; // TODO: Check and change if needed
+  public static final int ELEVATOR_CANDI_ID = 39;
+  public static final String ELEVATOR_CANDI_BUS = "rio";
+  public static final double MOTOR_TO_ELEVATOR_REDUCTION = 4.00;
+  public static final double CANCODER_TO_ELEVATOR_REDUCTION = 1.0;
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
-  public static final Distance SPROCKET_RADIUS = Inches.of(2);
+  public static final Distance SPROCKET_RADIUS = Inches.of(.6405);
+  public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
 }
