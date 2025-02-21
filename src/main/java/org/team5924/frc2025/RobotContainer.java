@@ -56,7 +56,10 @@ public class RobotContainer {
   private final Drive drive;
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
+<<<<<<< Updated upstream
   //   private final Vision vision;
+=======
+>>>>>>> Stashed changes
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -79,7 +82,10 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
+<<<<<<< Updated upstream
         // vision = new Vision(new VisionIOReal());
+=======
+>>>>>>> Stashed changes
         break;
 
       case SIM:
@@ -93,7 +99,10 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
+<<<<<<< Updated upstream
         // vision = new Vision(new VisionIO() {});
+=======
+>>>>>>> Stashed changes
         break;
 
       default:
@@ -107,7 +116,10 @@ public class RobotContainer {
                 new ModuleIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
+<<<<<<< Updated upstream
         // vision = new Vision(new VisionIO() {});
+=======
+>>>>>>> Stashed changes
         break;
     }
 
