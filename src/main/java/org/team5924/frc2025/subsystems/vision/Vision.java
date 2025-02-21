@@ -50,7 +50,7 @@ public class Vision extends SubsystemBase {
     boolean isRedAlliance = allianceSubscriber.get();
     if (isRedAlliance != previousAllianceSubscriberValue) {
       previousAllianceSubscriberValue = isRedAlliance;
-      LimelightHelpers.setPipelineIndex("frontCamera", isRedAlliance ? 0 : 1);
+      LimelightHelpers.setPipelineIndex("front", isRedAlliance ? 0 : 1);
     }
   }
 
