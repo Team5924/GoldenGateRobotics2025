@@ -67,7 +67,20 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * Initializes the RobotContainer, setting up subsystems, input devices, and autonomous routines.
+   * 
+   * <p>This constructor instantiates the drive, climber, coral in/out, and elevator subsystems using mode-specific IO
+   * implementations:
+   * <ul>
+   *   <li>REAL mode: Hardware-specific IO implementations for actual robot operation.</li>
+   *   <li>SIM mode: Simulation IO implementations to support physics-based simulation.</li>
+   *   <li>Default (REPLAYED) mode: Disabled or default IO implementations for replayed operation.</li>
+   * </ul>
+   * Additionally, it configures the autonomous command chooser with various drive characterization and system
+   * identification routines, and binds operator controls by invoking {@link #configureButtonBindings()}.
+   * </p>
+   */
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
@@ -137,10 +150,24 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Assigns controller buttons to commands across multiple subsystems including drive, coral control, elevator,
+   * and climber.
+   *
+   * <p>Configured bindings:
+   * <ul>
+   *   <li><b>Drive Subsystem:</b> Sets the default joystick drive command; holds A button for angle lock (0°);
+   *       X button to stop drive; and B button to reset the gyro by reinitializing the drive pose.</li>
+   *   <li><b>Coral Control:</b> Uses the operator's triggers to set the coral state's shooting when the left trigger
+   *       is pressed and intaking when the right trigger is pressed. When released, resets the state to NO_CORAL.</li>
+   *   <li><b>Elevator Subsystem:</b> Establishes the default command for joystick-based elevator control and maps the
+   *       A, B, X, Y, and left bumper buttons to specific elevator goal states (L1, L2, L3, L4, and MANUAL, respectively).</li>
+   *   <li><b>Climber Subsystem:</b> Maps the drive controller's D-pad: pressing down (pov 180°) initiates CLIMB,
+   *       pressing up (pov 0°) initiates REVERSE_CLIMB, while releasing both reverts the climber to STOW if already
+   *       in STOW or sets it to READY_TO_CLIMB otherwise.</li>
+   * </ul>
+   *
+   * <p>The method configures these mappings using lambda expressions and the command framework to ensure responsive,
+   * context-sensitive control of each subsystem.
    */
   private void configureButtonBindings() {
     // Default command, normal field-relative drive

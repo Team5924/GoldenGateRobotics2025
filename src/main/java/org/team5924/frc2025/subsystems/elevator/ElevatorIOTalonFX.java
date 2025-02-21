@@ -238,6 +238,29 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     rightTalon.setControl(new Follower(leftTalon.getDeviceID(), true));
   }
 
+  /**
+   * Updates the elevator input signals from sensor readings and status signals, ensuring that the
+   * elevator system's state remains current.
+   *
+   * <p>Refreshes left and right motor connection statuses by aggregating the status of the position,
+   * velocity, applied voltage, supply current, torque current, and temperature signals using
+   * {@code BaseStatusSignal.refreshAll(...)}. Converts sensor values to standard SI units:
+   * <ul>
+   *   <li>Positions in radians</li>
+   *   <li>Velocities in radians per second</li>
+   *   <li>Applied voltage in volts</li>
+   *   <li>Supply and torque currents in amps</li>
+   *   <li>Temperature in Celsius</li>
+   * </ul>
+   *
+   * <p>Calculates acceleration by comparing the current motion magic velocity target with the previous one,
+   * divided by the elapsed time between updates. Retrieves soft stop states from the CAN digital inputs
+   * corresponding to sensor channels S1Closed and S2Closed. Finally, invokes {@code updateTunableNumbers()}
+   * to update any modified tunable parameters.
+   *
+   * @param inputs the {@code ElevatorIOInputs} instance to be updated with the latest motor connection statuses,
+   *               sensor readings, computed acceleration, and soft stop limits.
+   */
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     inputs.leftMotorConnected =

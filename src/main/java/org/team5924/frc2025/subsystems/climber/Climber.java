@@ -46,6 +46,11 @@ public class Climber extends SubsystemBase {
 
     private final LoggedTunableNumber volts;
 
+    /**
+     * Initializes the ClimberState with a specified voltage configuration.
+     *
+     * @param volts the tunable voltage parameter defining the output level for this state
+     */
     ClimberState(LoggedTunableNumber volts) {
       this.volts = volts;
     }
@@ -67,6 +72,14 @@ public class Climber extends SubsystemBase {
   private static final LoggedTunableNumber laserCanDetectThreshold =
       new LoggedTunableNumber("Climber/LaserCAN/DetectThreshold", 20);
 
+  /**
+   * Constructs a new Climber instance.
+   * 
+   * Initializes the hardware interface using the provided ClimberIO, sets up a disconnection alert 
+   * for monitoring the climber's connectivity, and starts the state timer to manage state transitions.
+   *
+   * @param io the ClimberIO instance used for communication with the climber hardware
+   */
   public Climber(ClimberIO io) {
     this.io = io;
 
@@ -74,6 +87,16 @@ public class Climber extends SubsystemBase {
     stateTimer.start();
   }
 
+  /**
+   * Processes periodic updates for the climber subsystem.
+   *
+   * <p>Updates sensor inputs and logs data, sets the disconnection alert based on motor connectivity,
+   * and transitions the climber to READY_TO_CLIMB when in STOW state with appropriate sensor and state conditions.
+   * When the goal state changes, the state timer is reset to measure elapsed time for the new state.
+   * Finally, commands the climber motor with the voltage defined by the current goal state and logs the current target.
+   *
+   * @implNote Designed to be called periodically by the subsystem scheduler.
+   */
   @Override
   public void periodic() {
     io.updateInputs(inputs);
@@ -101,9 +124,21 @@ public class Climber extends SubsystemBase {
   }
 
   /**
-   * Sets the goal state of the climber.
+   * Updates the climber's target operational state and synchronizes this change with the global robot state.
    *
-   * @param goalState the new goal state
+   * <p>Assigns the specified state to the climber's internal goal and notifies the RobotState subsystem accordingly.
+   * Supported states include:
+   * <ul>
+   *   <li>{@code CLIMB} - Initiates the climbing operation.</li>
+   *   <li>{@code STOW} - Retracts or deactivates the climbing mechanism.</li>
+   *   <li>{@code READY_TO_CLIMB} - Prepares the system for climbing.</li>
+   *   <li>{@code REVERSE_CLIMB} - Engages reverse climbing actions.</li>
+   * </ul>
+   *
+   * <p>Note: Transition validation for disallowed state changes (e.g., directly from STOW to CLIMB or REVERSE_CLIMB)
+   * is indicated in commented-out code. No exceptions are thrown if an unsupported transition is attempted.
+   *
+   * @param goalState the desired target state for the climber
    */
   public void setGoalState(ClimberState goalState) {
     // Validate state transitions
@@ -142,7 +177,12 @@ public class Climber extends SubsystemBase {
   // }
 
   /**
-   * @return true if cage is detected by climber LaserCAN
+   * Checks if the climber's LaserCAN sensor detects the presence of the cage.
+   *
+   * Detection is confirmed when the LaserCAN sensor returns a valid measurement status 
+   * and the measured distance is less than the configured threshold.
+   *
+   * @return true if a valid measurement is obtained and the distance is below the threshold, false otherwise.
    */
   public boolean isCageInClimber() {
     return inputs.laserCanMeasurement.getStatus() == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT
@@ -150,10 +190,26 @@ public class Climber extends SubsystemBase {
             < (int) Math.floor(laserCanDetectThreshold.get());
   }
 
+  /**
+   * Applies a specific voltage to the climber motor by relaying the command to the I/O interface.
+   *
+   * <p>The voltage provided is directly forwarded to the climber system's motor controller to control
+   * the mechanism's power output.
+   *
+   * @param volts the voltage to apply to the climber motor, in volts
+   */
   public void runVolts(double volts) {
     io.runVolts(volts);
   }
 
+  /**
+   * Adjusts the climber mechanism to the specified angle in radians.
+   *
+   * <p>This method delegates the command to the climber's IO interface to update the
+   * current angle as measured in radians.
+   *
+   * @param rads the desired angle in radians
+   */
   public void setAngle(double rads) {
     io.setAngle(rads);
   }

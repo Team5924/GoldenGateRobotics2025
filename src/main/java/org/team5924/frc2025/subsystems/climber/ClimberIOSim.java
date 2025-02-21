@@ -28,6 +28,14 @@ public class ClimberIOSim implements ClimberIO {
   private double appliedVoltage = 0.0;
   private static final DCMotor CLIMBER_GEARBOX = DCMotor.getKrakenX60Foc(1);
 
+  /**
+   * Constructs a ClimberIOSim and initializes its motor simulation.
+   *
+   * <p>Configures {@code motorSim} by creating a DC motor system model using
+   * {@code LinearSystemId.createDCMotorSystem} with the {@code CLIMBER_GEARBOX} constant,
+   * a reduction ratio defined in {@code Constants.CLIMBER_REDUCTION}, and a moment of inertia
+   * specified by {@code Constants.CLIMBER_SIM_MOI}. This simulation setup emulates the climber's motor behavior.
+   */
   public ClimberIOSim() {
     motorSim =
         new DCMotorSim(
@@ -36,6 +44,16 @@ public class ClimberIOSim implements ClimberIO {
             CLIMBER_GEARBOX);
   }
 
+  /**
+   * Updates the climber simulation inputs based on current motor simulation readings.
+   *
+   * <p>If the driver station is disabled, the motor voltage is set to zero prior to simulation update.
+   * The simulation is then advanced by the loop period defined in {@code Constants.LOOP_PERIODIC_SECONDS},
+   * and the provided {@code ClimberIOInputs} object is populated with the updated angular position (in radians),
+   * angular velocity (in radians per second), applied voltage, and the motor's supply current (in amps).
+   *
+   * @param inputs the {@link ClimberIOInputs} object to update with simulation state values
+   */
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     if (DriverStation.isDisabled()) {
@@ -49,12 +67,27 @@ public class ClimberIOSim implements ClimberIO {
     inputs.supplyCurrentAmps = motorSim.getCurrentDrawAmps();
   }
 
+  /**
+   * Clamps and applies the specified voltage to the motor simulation.
+   *
+   * <p>The provided voltage is constrained to the range of -12.0V to 12.0V using a clamping function,
+   * ensuring the applied voltage remains within safe operational limits. The clamped voltage is then set as
+   * the input voltage for the motor simulation.
+   *
+   * @param volts the desired voltage for the motor, before being clamped
+   */
   @Override
   public void runVolts(double volts) {
     appliedVoltage = MathUtil.clamp(volts, -12.0, 12.0);
     motorSim.setInputVoltage(appliedVoltage);
   }
 
+  /**
+   * Halts the climber motor simulation by setting the applied voltage to 0.0 volts.
+   *
+   * <p>This method delegates to {@link #runVolts(double)} with a zero voltage parameter,
+   * ensuring that the motor stops, which is particularly critical when the robot is disabled.</p>
+   */
   @Override
   public void stop() {
     runVolts(0.0);
