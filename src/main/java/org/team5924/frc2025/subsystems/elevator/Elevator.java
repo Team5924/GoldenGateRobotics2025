@@ -16,21 +16,21 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
+import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.util.LoggedTunableNumber;
+
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
-
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import lombok.Getter;
-import org.littletonrobotics.junction.Logger;
-import org.team5924.frc2025.Constants;
-import org.team5924.frc2025.RobotState;
-import org.team5924.frc2025.util.LoggedTunableNumber;
 
 public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
@@ -139,7 +139,7 @@ public class Elevator extends SubsystemBase {
     this.goalState = goalState;
     switch (goalState) {
       case MANUAL -> RobotState.getInstance().setElevatorState(ElevatorState.MANUAL);
-      case MOVING -> DriverStation.reportError("Invalid goal ElevatorState!", null);
+      case MOVING -> DriverStation.reportError("MOVING is an intermediate state and cannot be set as a goal state!", null);
       default -> {
         RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
         io.setHeight(goalState.heightMeters.getAsDouble());
