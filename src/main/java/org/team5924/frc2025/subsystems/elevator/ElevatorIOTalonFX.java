@@ -52,13 +52,6 @@ import com.ctre.phoenix6.signals.S1CloseStateValue;
 import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2CloseStateValue;
 import com.ctre.phoenix6.signals.S2StateValue;
-
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Celsius;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -427,7 +420,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
             * Math.PI
             * Constants.SPROCKET_RADIUS.in(Meters)
             / Constants.MOTOR_TO_ELEVATOR_REDUCTION)
-            * 2; // Account for cascade rigging
+        * 2; // Account for cascade rigging
   }
 
   public static double metersToRotations(double height) {
