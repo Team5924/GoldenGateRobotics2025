@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
+import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.util.LimelightHelpers;
 
 /** Add your docs here. */
@@ -56,7 +57,7 @@ public class VisionIOReal implements VisionIO {
     }
 
     inputs.avgFrontCameraTagArea = frontCameraEstimate.avgTagArea;
-    inputs.avgFrontCameraTagArea = frontCameraEstimate.avgTagArea;
+    inputs.avgBackCameraTagArea = backCameraEstimate.avgTagArea;
 
     inputs.lowestTagAmbiguityFront = lowestTagAmbiguityFront;
     inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
@@ -75,5 +76,10 @@ public class VisionIOReal implements VisionIO {
     }
 
     inputs.botPoseRotationRadians = frontCameraEstimate.pose.getRotation().getRadians();
+
+    inputs.aprilTagPipelineLatencySeconds =
+        LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
+    inputs.aprilTagCaptureLatencySeconds =
+        LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
   }
 }

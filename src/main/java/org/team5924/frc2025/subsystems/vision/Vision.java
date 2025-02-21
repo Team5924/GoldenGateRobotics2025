@@ -61,6 +61,10 @@ public class Vision extends SubsystemBase {
         new Rotation2d(inputs.botPoseRotationRadians));
   }
 
+  public double getLatencySeconds() {
+    return inputs.aprilTagCaptureLatencySeconds + inputs.aprilTagPipelineLatencySeconds;
+  }
+
   public double getNumberFiducialsSpotted() {
     return inputs.totalFiducials;
   }

@@ -87,4 +87,8 @@ public final class Constants {
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
   public static final Distance SPROCKET_RADIUS = Inches.of(.6405);
   public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
+
+  /* # Vision # */
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-tagaprl";
+  // public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-tagaprl";
 }

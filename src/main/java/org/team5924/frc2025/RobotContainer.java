@@ -16,9 +16,19 @@
 
 package org.team5924.frc2025;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
+import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
 import org.team5924.frc2025.generated.TunerConstants;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
@@ -33,17 +43,9 @@ import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.team5924.frc2025.subsystems.vision.Vision;
+import org.team5924.frc2025.subsystems.vision.VisionIO;
+import org.team5924.frc2025.subsystems.vision.VisionIOReal;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -56,10 +58,7 @@ public class RobotContainer {
   private final Drive drive;
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
-<<<<<<< Updated upstream
-  //   private final Vision vision;
-=======
->>>>>>> Stashed changes
+  private final Vision vision;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -82,10 +81,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
-<<<<<<< Updated upstream
-        // vision = new Vision(new VisionIOReal());
-=======
->>>>>>> Stashed changes
+        vision = new Vision(new VisionIOReal());
         break;
 
       case SIM:
@@ -99,10 +95,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
-<<<<<<< Updated upstream
-        // vision = new Vision(new VisionIO() {});
-=======
->>>>>>> Stashed changes
+        vision = new Vision(new VisionIO() {});
         break;
 
       default:
@@ -116,10 +109,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
-<<<<<<< Updated upstream
-        // vision = new Vision(new VisionIO() {});
-=======
->>>>>>> Stashed changes
+        vision = new Vision(new VisionIO() {});
         break;
     }
 
@@ -232,6 +222,9 @@ public class RobotContainer {
     operatorController
         .leftBumper()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+
+    // Vision
+    vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision));
   }
 
   /**

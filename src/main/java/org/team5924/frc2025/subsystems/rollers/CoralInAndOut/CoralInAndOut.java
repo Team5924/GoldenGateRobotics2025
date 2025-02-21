@@ -17,16 +17,14 @@
 package org.team5924.frc2025.subsystems.rollers.CoralInAndOut;
 
 import java.util.function.DoubleSupplier;
-
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem.VoltageState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Setter
 @Getter
