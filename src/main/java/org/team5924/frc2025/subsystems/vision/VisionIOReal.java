@@ -25,9 +25,9 @@ public class VisionIOReal implements VisionIO {
   @Override
   public void updateInputs(VisionIOInputs inputs) {
     LimelightHelpers.PoseEstimate frontCameraEstimate =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue("frontCamera");
+        LimelightHelpers.getBotPoseEstimate_wpiBlue("front");
     LimelightHelpers.PoseEstimate backCameraEstimate =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue("backCamera");
+        LimelightHelpers.getBotPoseEstimate_wpiBlue("back");
 
     inputs.frontCameraPoseX = frontCameraEstimate.pose.getX();
     inputs.frontCameraPoseY = frontCameraEstimate.pose.getY();

@@ -17,7 +17,6 @@
 package org.team5924.frc2025.subsystems.drive;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Rotation;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.CANBus;
@@ -56,7 +55,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -290,7 +288,6 @@ public class Drive extends SubsystemBase {
     return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
   }
 
-
   /** Returns the module states (turn angles and drive velocities) for all of the modules. */
   @AutoLogOutput(key = "SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
@@ -379,49 +376,49 @@ public class Drive extends SubsystemBase {
     };
   }
 
-  //creates a path with a single waypoint which is the destination
-  public PathPlannerPath createSimplePath(Pose2d destinationPose2d){
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-        destinationPose2d
-    );
+  // creates a path with a single waypoint which is the destination
+  public PathPlannerPath createSimplePath(Pose2d destinationPose2d) {
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(destinationPose2d);
 
     return new PathPlannerPath(
-      waypoints, 
-      null, //insert pathconstraints here
-      null, //this can be kept as null
-      new GoalEndState(0.0, Rotation2d.fromDegrees(0))); //dummy values
+        waypoints,
+        null, // insert pathconstraints here
+        null, // this can be kept as null
+        new GoalEndState(0.0, Rotation2d.fromDegrees(0))); // dummy values
   }
 
   public Command followPathCommand(Pose2d destinationPose2d) {
-    try{
-        PathPlannerPath path = createSimplePath(destinationPose2d);
+    try {
+      PathPlannerPath path = createSimplePath(destinationPose2d);
 
-        return new FollowPathCommand(
-                path,
-                this::getPose, // Robot pose supplier
-                this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::runVelocity, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
-                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-                ),
-                Constants.robotConfig, // The robot configuration
-                () -> {
-                  // Boolean supplier that controls when the path will be mirrored for the red alliance
-                  // This will flip the path being followed to the red side of the field.
-                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+      return new FollowPathCommand(
+          path,
+          this::getPose, // Robot pose supplier
+          this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          this::runVelocity, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds,
+          // AND feedforwards
+          new PPHolonomicDriveController( // PPHolonomicController is the built in path following
+              // controller for holonomic drive trains
+              new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+              new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+              ),
+          Constants.robotConfig, // The robot configuration
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                  var alliance = DriverStation.getAlliance();
-                  if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                  }
-                  return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
+          );
     } catch (Exception e) {
-        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-        return Commands.none();
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+      return Commands.none();
     }
   }
 }
