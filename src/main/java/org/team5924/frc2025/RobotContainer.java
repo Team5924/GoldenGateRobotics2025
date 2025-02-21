@@ -54,6 +54,7 @@ public class RobotContainer {
   private final Drive drive;
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
+  //   private final Vision vision;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -76,6 +77,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
+        // vision = new Vision(new VisionIOReal());
         break;
 
       case SIM:
@@ -89,6 +91,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackRight));
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
+        // vision = new Vision(new VisionIO() {});
         break;
 
       default:
@@ -102,6 +105,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
+        // vision = new Vision(new VisionIO() {});
         break;
     }
 
