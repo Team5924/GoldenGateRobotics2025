@@ -401,7 +401,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void setVoltage(double volts) {
-    Logger.recordOutput("Elevator/JoystickValue", volts);
+    Logger.recordOutput("Elevator/RequestedVoltsManual", volts);
     leftTalon.setControl(voltageControl.withOutput(volts));
   }
 
