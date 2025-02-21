@@ -19,10 +19,13 @@ package org.team5924.frc2025.subsystems.elevator;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
@@ -39,12 +42,15 @@ public class Elevator extends SubsystemBase {
 
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
+  public final SysIdRoutine upSysId;
+  public final SysIdRoutine downSysId;
+
   public enum ElevatorState {
     INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
-    L1(new LoggedTunableNumber("Elevator/L1Height", 0.3)),
-    L2(new LoggedTunableNumber("Elevator/L2Height", 0.6)),
-    L3(new LoggedTunableNumber("Elevator/L3Height", 1)),
-    L4(new LoggedTunableNumber("Elevator/L4Height", 1.5)),
+    L1(new LoggedTunableNumber("Elevator/L1Height", 0.15)),
+    L2(new LoggedTunableNumber("Elevator/L2Height", 0.23)),
+    L3(new LoggedTunableNumber("Elevator/L3Height", .4)),
+    L4(new LoggedTunableNumber("Elevator/L4Height", .657)),
     MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),
     MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0));
 
@@ -68,6 +74,24 @@ public class Elevator extends SubsystemBase {
         new Alert("Left elevator motor disconnected!", Alert.AlertType.kWarning);
     this.rightMotorDisconnected =
         new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
+
+    upSysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Volts.of(.75).per(Seconds),
+                Volts.of(1),
+                Seconds.of(new LoggedTunableNumber("Elevator/SysIdTime", 10).getAsDouble()),
+                (state) -> Logger.recordOutput("Elevator/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism((voltage) -> setVoltage(voltage.in(Volts)), null, this));
+
+    downSysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                Volts.of(2).per(Seconds),
+                Volts.of(2),
+                Seconds.of(new LoggedTunableNumber("Elevator/SysIdTime", 10).getAsDouble()),
+                (state) -> Logger.recordOutput("Elevator/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism((voltage) -> setVoltage(voltage.in(Volts)), null, this));
   }
 
   @Override
@@ -83,6 +107,7 @@ public class Elevator extends SubsystemBase {
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
     io.setHeight(goalState.heightMeters.getAsDouble());
+    io.periodicUpdates();
   }
 
   private double getElevatorPositionMeters() {
@@ -92,20 +117,6 @@ public class Elevator extends SubsystemBase {
         * Constants.SPROCKET_RADIUS.in(Meters)
         / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
   }
-
-  // public double rotationsToMeters(double rotations) {
-  //   return rotations
-  //       * 2
-  //       * Math.PI
-  //       * SPROCKET_RADIUS.in(Meters)
-  //       / Constants.MOTOR_TO_ELEVATOR_REDUCTION;
-  // }
-
-  // public static double metersToRotations(double height) {
-  //   return height
-  //       * Constants.MOTOR_TO_ELEVATOR_REDUCTION
-  //       / (2 * Math.PI * SPROCKET_RADIUS.in(Meters));
-  // }
 
   public boolean isAtSetpoint() {
     return Math.abs(getElevatorPositionMeters() - this.goalState.heightMeters.getAsDouble())
@@ -131,7 +142,8 @@ public class Elevator extends SubsystemBase {
       case MOVING -> DriverStation.reportError("Invalid goal ElevatorState!", null);
       default -> {
         RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
-        io.setPosition(goalState.heightMeters.getAsDouble());
+        io.setHeight(goalState.heightMeters.getAsDouble());
+        // RobotState.getInstance().setElevatorState(goalState);
       }
     }
   }
