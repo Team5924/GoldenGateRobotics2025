@@ -43,12 +43,14 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Voltage;
+import org.team5924.frc2025.util.swerve.ModuleLimits;
 
 // import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -271,6 +273,12 @@ public class TunerConstants {
               kInvertRightSide,
               kBackRightSteerMotorInverted,
               kBackRightEncoderInverted);
+
+  public static final ModuleLimits moduleLimitsFree =
+      new ModuleLimits(
+          Units.feetToMeters(15.0), // max speed, guess
+          Units.feetToMeters(75.0), // max acceleration, guess
+          Units.degreesToRadians(1080.0));
 
   /**
    * Creates a CommandSwerveDrivetrain instance. This should only be called once in your robot
