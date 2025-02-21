@@ -45,8 +45,6 @@ public final class Constants {
   public static final boolean TUNING_MODE = true;
   public static final boolean ALLOW_ASSERTS = true;
 
-  /* ### Subsystems ### */
-  /* # Rollers # */
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
 
