@@ -42,7 +42,6 @@ public class RobotState {
 
   @Getter
   @Setter
-  @AutoLogOutput(key = "RobotState/ElevatorState")
   private ElevatorState elevatorState = ElevatorState.MANUAL;
 
   /* ### Coral In and Out ### */

@@ -100,6 +100,7 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
 
+    Logger.recordOutput("RobotState/ElevatorState", RobotState.getInstance().getElevatorState());
     Logger.recordOutput("Elevator/GoalState", goalState.toString());
     Logger.recordOutput("Elevator/TargetHeight", goalState.heightMeters);
 
