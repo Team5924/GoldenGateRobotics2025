@@ -16,7 +16,14 @@
 
 package org.team5924.frc2025;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -61,17 +68,122 @@ public final class Constants {
   public static final boolean TUNING_MODE = true;
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
 
-  // Blue alliance, 1 is closest to driver station on the left, numbers increase as you move around counterclockwise
-  public static final Pose2d SCORING_LINEUP_POSE_1 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_2 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_3 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_4 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_5 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_6 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_7 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_8 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_9 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_10 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_11 = new Pose2d();
-  public static final Pose2d SCORING_LINEUP_POSE_12 = new Pose2d();
+  public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT =
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  public static final Translation2d FIELD_CENTER =
+      new Translation2d(
+          Meters.of(APRIL_TAG_FIELD_LAYOUT.getFieldLength()),
+          Meters.of(APRIL_TAG_FIELD_LAYOUT.getFieldWidth()));
+
+  // Distance in one dimension from center to scoring poses in meters. Smaller number are the closer
+  // positions
+  public static final double SCORING_X_1 = 3.5051746;
+  public static final double SCORING_X_2 = 3.7526976;
+  public static final double SCORING_X_3 = 4.0372792;
+  public static final double SCORING_X_4 = 4.5322998;
+  public static final double SCORING_X_5 = 4.8168814;
+  public static final double SCORING_X_6 = 5.0644044;
+
+  // Only 3 because also mirrored up and down
+  public static final double SCORING_Y_1 = 0.1642872;
+  public static final double SCORING_Y_2 = 0.5929884;
+  public static final double SCORING_Y_3 = 0.757301;
+
+  public static final Pose2d SCORE_A_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_6), Meters.of(SCORING_Y_1))),
+      new Rotation2d(Degrees.of(0)));
+  public static final Pose2d SCORE_B_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_6), Meters.of(-SCORING_Y_1))),
+      new Rotation2d(Degrees.of(0)));
+  public static final Pose2d SCORE_C_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_5), Meters.of(-SCORING_Y_2))),
+      new Rotation2d(Degrees.of(60)));
+  public static final Pose2d SCORE_D_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_4), Meters.of(-SCORING_Y_3))),
+      new Rotation2d(Degrees.of(60)));
+  public static final Pose2d SCORE_E_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_3), Meters.of(-SCORING_Y_3))),
+      new Rotation2d(Degrees.of(120)));
+  public static final Pose2d SCORE_F_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_2), Meters.of(-SCORING_Y_2))),
+      new Rotation2d(Degrees.of(120)));
+  public static final Pose2d SCORE_G_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_1), Meters.of(-SCORING_Y_1))),
+      new Rotation2d(Degrees.of(180)));
+  public static final Pose2d SCORE_H_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_1), Meters.of(SCORING_Y_1))),
+      new Rotation2d(Degrees.of(180)));
+  public static final Pose2d SCORE_I_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_2), Meters.of(SCORING_Y_2))),
+      new Rotation2d(Degrees.of(-120)));
+  public static final Pose2d SCORE_J_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_3), Meters.of(SCORING_Y_3))),
+      new Rotation2d(Degrees.of(-120)));
+  public static final Pose2d SCORE_K_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_4), Meters.of(SCORING_Y_3))),
+      new Rotation2d(Degrees.of(-60)));
+  public static final Pose2d SCORE_L_BLUE =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(-SCORING_X_5), Meters.of(SCORING_Y_2))),
+      new Rotation2d(Degrees.of(-60)));
+
+  public static final Pose2d SCORE_A_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_6), Meters.of(-SCORING_Y_1))),
+      new Rotation2d(Degrees.of(180)));
+  public static final Pose2d SCORE_B_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_6), Meters.of(SCORING_Y_1))),
+      new Rotation2d(Degrees.of(180)));
+  public static final Pose2d SCORE_C_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_5), Meters.of(SCORING_Y_2))),
+      new Rotation2d(Degrees.of(-120)));
+  public static final Pose2d SCORE_D_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_4), Meters.of(SCORING_Y_3))),
+      new Rotation2d(Degrees.of(-120)));
+  public static final Pose2d SCORE_E_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_3), Meters.of(SCORING_Y_3))),
+      new Rotation2d(Degrees.of(-60)));
+  public static final Pose2d SCORE_F_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_2), Meters.of(SCORING_Y_2))),
+      new Rotation2d(Degrees.of(-60)));
+  public static final Pose2d SCORE_G_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_1), Meters.of(SCORING_Y_1))),
+      new Rotation2d(Degrees.of(0)));
+  public static final Pose2d SCORE_H_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_1), Meters.of(-SCORING_Y_1))),
+      new Rotation2d(Degrees.of(0)));
+  public static final Pose2d SCORE_I_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_2), Meters.of(-SCORING_Y_2))),
+      new Rotation2d(Degrees.of(60)));
+  public static final Pose2d SCORE_J_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_3), Meters.of(-SCORING_Y_3))),
+      new Rotation2d(Degrees.of(60)));
+  public static final Pose2d SCORE_K_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_4), Meters.of(-SCORING_Y_3))),
+      new Rotation2d(Degrees.of(120)));
+  public static final Pose2d SCORE_L_RED =
+    new Pose2d(
+      FIELD_CENTER.plus(new Translation2d(Meters.of(SCORING_X_5), Meters.of(-SCORING_Y_2))),
+      new Rotation2d(Degrees.of(120)));
 }
