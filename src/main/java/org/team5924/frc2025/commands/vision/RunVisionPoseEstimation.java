@@ -41,39 +41,41 @@ public class RunVisionPoseEstimation extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-@Override
-public void execute() {
-  MegatagPoseEstimate estimatedPose = vision.getBotPose2dBlue();
-  if (estimatedPose == null) {
-    Logger.recordOutput("Vision Error", "Failed to get pose estimate");
-    return;
+  @Override
+  public void execute() {
+    MegatagPoseEstimate estimatedPose = vision.getBotPose2dBlue();
+    if (estimatedPose == null) {
+      Logger.recordOutput("Vision Error", "Failed to get pose estimate");
+      return;
+    }
+    Logger.recordOutput("Vision Pose", estimatedPose.fieldToCamera);
+    if (isPoseValid(estimatedPose) && isVisionReliable(estimatedPose)) {
+      drive.addVisionMeasurement(
+          estimatedPose.fieldToCamera,
+          Timer.getFPGATimestamp()
+              - (estimatedPose.isFrontLimelight
+                  ? vision.getLatencySecondsFront()
+                  : vision.getLatencySecondsBack()));
+    }
   }
-  Logger.recordOutput("Vision Pose", estimatedPose.fieldToCamera);
-  if (isPoseValid(estimatedPose) && isVisionReliable(estimatedPose)) {
-    drive.addVisionMeasurement(
-        estimatedPose.fieldToCamera,
-        Timer.getFPGATimestamp()
-            - (estimatedPose.isFrontLimelight
-                ? vision.getLatencySecondsFront()
-                : vision.getLatencySecondsBack()));
+
+  private boolean isPoseValid(MegatagPoseEstimate pose) {
+    return pose.fieldToCamera.getX() != 0 && pose.fieldToCamera.getY() != 0;
   }
-}
 
-private boolean isPoseValid(MegatagPoseEstimate pose) {
-  return pose.fieldToCamera.getX() != 0 && pose.fieldToCamera.getY() != 0;
-}
+  private boolean isVisionReliable(MegatagPoseEstimate pose) {
+    int fiducialsSpotted =
+        pose.isFrontLimelight
+            ? vision.getNumberFiducialsSpottedFront()
+            : vision.getNumberFiducialsSpottedBack();
+    double lowestAmbiguity =
+        pose.isFrontLimelight
+            ? vision.getLowestTagAmbiguityFront()
+            : vision.getLowestTagAmbiguityBack();
 
-private boolean isVisionReliable(MegatagPoseEstimate pose) {
-  int fiducialsSpotted = pose.isFrontLimelight
-      ? vision.getNumberFiducialsSpottedFront()
-      : vision.getNumberFiducialsSpottedBack();
-  double lowestAmbiguity = pose.isFrontLimelight
-      ? vision.getLowestTagAmbiguityFront()
-      : vision.getLowestTagAmbiguityBack();
-  
-  return (fiducialsSpotted == 1 && lowestAmbiguity < 0.15)
-      || (fiducialsSpotted >= 2 && lowestAmbiguity < 0.4);
-}
+    return (fiducialsSpotted == 1 && lowestAmbiguity < 0.15)
+        || (fiducialsSpotted >= 2 && lowestAmbiguity < 0.4);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

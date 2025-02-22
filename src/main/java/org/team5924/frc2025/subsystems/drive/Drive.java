@@ -343,10 +343,9 @@ public class Drive extends SubsystemBase {
   }
 
   /** Adds a new timestamped vision measurement. */
-  public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) { // ,
-    // Matrix<N3, N1> visionMeasurementStdDevs) {
+  public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
     poseEstimator.addVisionMeasurement(
-        visionRobotPoseMeters, timestampSeconds); // , visionMeasurementStdDevs);
+        visionRobotPoseMeters, timestampSeconds);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
@@ -379,40 +378,4 @@ public class Drive extends SubsystemBase {
         null, // this can be kept as null
         new GoalEndState(0.0, Rotation2d.fromDegrees(0))); // dummy values
   }
-
-  // public Command followPathCommand(Pose2d destinationPose2d) {
-  //   try {
-  //     PathPlannerPath path = createSimplePath(destinationPose2d);
-
-  //     return new FollowPathCommand(
-  //         path,
-  //         this::getPose, // Robot pose supplier
-  //         this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-  //         this::runVelocity, // Method that will drive the robot given ROBOT RELATIVE
-  // ChassisSpeeds,
-  //         // AND feedforwards
-  //         new PPHolonomicDriveController( // PPHolonomicController is the built in path following
-  //             // controller for holonomic drive trains
-  //             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-  //             new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-  //             ),
-  //         PP_CONFIG, // Constants.robotConfig, // The robot configuration
-  //         () -> {
-  //           // Boolean supplier that controls when the path will be mirrored for the red alliance
-  //           // This will flip the path being followed to the red side of the field.
-  //           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-  //           var alliance = DriverStation.getAlliance();
-  //           if (alliance.isPresent()) {
-  //             return alliance.get() == DriverStation.Alliance.Red;
-  //           }
-  //           return false;
-  //         },
-  //         this // Reference to this subsystem to set requirements
-  //         );
-  //   } catch (Exception e) {
-  //     DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-  //     return Commands.none();
-  //   }
-  // }
 }

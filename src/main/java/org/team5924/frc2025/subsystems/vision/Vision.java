@@ -55,13 +55,13 @@ public class Vision extends SubsystemBase {
 
   public MegatagPoseEstimate getBotPose2dBlue() {
     if (inputs.megatag2PoseEstimateFront == null && inputs.megatag2PoseEstimateBack == null) {
-        return null;
+      return null;
     }
     if (inputs.megatag2PoseEstimateFront == null) {
-        return inputs.megatag2PoseEstimateBack;
+      return inputs.megatag2PoseEstimateBack;
     }
     if (inputs.megatag2PoseEstimateBack == null) {
-        return inputs.megatag2PoseEstimateFront;
+      return inputs.megatag2PoseEstimateFront;
     }
     if (inputs.lowestTagAmbiguityFront < inputs.lowestTagAmbiguityBack) {
       return inputs.megatag2PoseEstimateFront;
