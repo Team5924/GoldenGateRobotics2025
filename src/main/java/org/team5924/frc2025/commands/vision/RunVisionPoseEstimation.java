@@ -40,7 +40,7 @@ public class RunVisionPoseEstimation extends Command {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
+
   @Override
   public void execute() {
     MegatagPoseEstimate estimatedPose = vision.getBotPose2dBlue();

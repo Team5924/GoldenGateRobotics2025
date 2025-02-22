@@ -19,6 +19,7 @@ package org.team5924.frc2025.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 public class MegatagPoseEstimate implements StructSerializable {
