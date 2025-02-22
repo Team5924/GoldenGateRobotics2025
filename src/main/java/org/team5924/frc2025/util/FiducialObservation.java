@@ -89,6 +89,11 @@ public class FiducialObservation implements StructSerializable {
   }
 
   public static FiducialObservation[] fromLimelight(LimelightHelpers.RawFiducial[] fiducials) {
+    if (fiducials == null) {
+      System.out.println("null fiducial!");
+      return null;
+    }
+
     FiducialObservation[] rv = new FiducialObservation[fiducials.length];
     for (int i = 0; i < fiducials.length; ++i) {
       rv[i] = fromLimelight(fiducials[i]);

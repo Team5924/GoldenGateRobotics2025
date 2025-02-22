@@ -30,6 +30,7 @@ public class MegatagPoseEstimate implements StructSerializable {
     public double tagSpan;
     public double avgTagDist;
     public double avgTagArea;
+    public boolean isFrontLimelight;
 
     @Override
     public Class<MegatagPoseEstimate> getTypeClass() {
@@ -48,12 +49,12 @@ public class MegatagPoseEstimate implements StructSerializable {
 
     @Override
     public int getSize() {
-      return Pose2d.struct.getSize() + kSizeDouble * 5 + kSizeInt32;
+      return Pose2d.struct.getSize() + kSizeDouble * 5 + kSizeInt32 + kSizeBool;
     }
 
     @Override
     public String getSchema() {
-      return "Pose2d fieldToCamera;double timestampSeconds;double latency;int tagCount;double tagSpan;double avgTagDist;double avgTagArea";
+      return "Pose2d fieldToCamera;double timestampSeconds;double latency;int tagCount;double tagSpan;double avgTagDist;double avgTagArea;bool isFrontLimelight;";
     }
 
     @Override
@@ -71,7 +72,7 @@ public class MegatagPoseEstimate implements StructSerializable {
       rv.tagSpan = bb.getDouble();
       rv.avgTagDist = bb.getDouble();
       rv.avgTagArea = bb.getDouble();
-      rv.fiducialIds = new int[0];
+      rv.isFrontLimelight = bb.get() != 0;
       return rv;
     }
 
@@ -84,6 +85,7 @@ public class MegatagPoseEstimate implements StructSerializable {
       bb.putDouble(value.tagSpan);
       bb.putDouble(value.avgTagDist);
       bb.putDouble(value.avgTagArea);
+      bb.put((byte) (value.isFrontLimelight ? 1 : 0));
     }
   }
 
@@ -94,11 +96,17 @@ public class MegatagPoseEstimate implements StructSerializable {
   public double tagSpan;
   public double avgTagDist;
   public double avgTagArea;
-  public int[] fiducialIds;
+  public boolean isFrontLimelight;
 
   public MegatagPoseEstimate() {}
 
-  public static MegatagPoseEstimate fromLimelight(LimelightHelpers.PoseEstimate poseEstimate) {
+  public static MegatagPoseEstimate fromLimelight(
+      LimelightHelpers.PoseEstimate poseEstimate, boolean isFrontLimelight) {
+    if (poseEstimate == null) {
+      System.out.println("null megatag!!");
+      return null;
+    }
+
     MegatagPoseEstimate rv = new MegatagPoseEstimate();
     rv.fieldToCamera = poseEstimate.pose;
     if (rv.fieldToCamera == null) rv.fieldToCamera = MathHelpers.kPose2dZero;
@@ -108,10 +116,7 @@ public class MegatagPoseEstimate implements StructSerializable {
     rv.tagSpan = poseEstimate.tagSpan;
     rv.avgTagDist = poseEstimate.avgTagDist;
     rv.avgTagArea = poseEstimate.avgTagArea;
-    rv.fiducialIds = new int[poseEstimate.rawFiducials.length];
-    for (int i = 0; i < rv.fiducialIds.length; ++i) {
-      rv.fiducialIds[i] = poseEstimate.rawFiducials[i].id;
-    }
+    rv.isFrontLimelight = isFrontLimelight;
 
     return rv;
   }

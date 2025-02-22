@@ -16,12 +16,12 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.util.MegatagPoseEstimate;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
@@ -49,15 +49,39 @@ public class Vision extends SubsystemBase {
     boolean isRedAlliance = allianceSubscriber.get();
     if (isRedAlliance != previousAllianceSubscriberValue) {
       previousAllianceSubscriberValue = isRedAlliance;
-      RobotState.getInstance().setIsRedAlliance(isRedAlliance);
+      RobotState.getInstance().setRedAlliance(isRedAlliance);
     }
   }
 
-  public Pose2d getBotPose2dBlue() {
+  public MegatagPoseEstimate getBotPose2dBlue() {
     if (inputs.lowestTagAmbiguityFront < inputs.lowestTagAmbiguityBack) {
-      return inputs.megatag2PoseEstimatesFront.fieldToCamera;
+      return inputs.megatag2PoseEstimateFront;
     } else {
-      return inputs.megatag2PoseEstimatesBack.fieldToCamera;
+      return inputs.megatag2PoseEstimateBack;
     }
+  }
+
+  public double getLatencySecondsFront() {
+    return inputs.frontAprilTagCaptureLatencySeconds + inputs.frontAprilTagPipelineLatencySeconds;
+  }
+
+  public double getLatencySecondsBack() {
+    return inputs.backAprilTagCaptureLatencySeconds + inputs.backAprilTagPipelineLatencySeconds;
+  }
+
+  public double getLowestTagAmbiguityFront() {
+    return inputs.lowestTagAmbiguityFront;
+  }
+
+  public double getLowestTagAmbiguityBack() {
+    return inputs.lowestTagAmbiguityBack;
+  }
+
+  public int getNumberFiducialsSpottedFront() {
+    return inputs.frontFiducials.length;
+  }
+
+  public int getNumberFiducialsSpottedBack() {
+    return inputs.backFiducials.length;
   }
 }

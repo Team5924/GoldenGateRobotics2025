@@ -35,13 +35,13 @@ public class VisionIOLimelight implements VisionIO {
   private void setLLSettings() {
     LimelightHelpers.setPipelineIndex(
         "front",
-        RobotState.getInstance().getIsRedAlliance()
+        RobotState.getInstance().isRedAlliance()
             ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
 
     LimelightHelpers.setPipelineIndex(
         "back",
-        RobotState.getInstance().getIsRedAlliance()
+        RobotState.getInstance().isRedAlliance()
             ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
 
@@ -101,8 +101,13 @@ public class VisionIOLimelight implements VisionIO {
       LimelightHelpers.PoseEstimate megatag2Front =
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
 
-      inputs.megatag2PoseEstimatesFront = MegatagPoseEstimate.fromLimelight(megatag2Front);
-      inputs.frontFiducials = FiducialObservation.fromLimelight(megatag2Front.rawFiducials);
+      inputs.megatag2PoseEstimateFront = MegatagPoseEstimate.fromLimelight(megatag2Front, true);
+      if (megatag2Front != null) {
+        inputs.frontFiducials = FiducialObservation.fromLimelight(megatag2Front.rawFiducials);
+        inputs.megatag2PoseEstimateFrontPose2d = megatag2Front.pose;
+        inputs.megatag2PoseEstimateFrontTagCount = megatag2Front.tagCount;
+        inputs.megatag2PoseEstimateFrontAvgTagArea = megatag2Front.avgTagArea;
+      }
 
       for (FiducialObservation rawFiducial : inputs.frontFiducials) {
         double frontTagAmbiguity = rawFiducial.ambiguity;
@@ -118,8 +123,13 @@ public class VisionIOLimelight implements VisionIO {
       LimelightHelpers.PoseEstimate megatag2Back =
           LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
 
-      inputs.megatag2PoseEstimatesBack = MegatagPoseEstimate.fromLimelight(megatag2Back);
-      inputs.backFiducials = FiducialObservation.fromLimelight(megatag2Back.rawFiducials);
+      inputs.megatag2PoseEstimateBack = MegatagPoseEstimate.fromLimelight(megatag2Back, false);
+      if (megatag2Back != null) {
+        inputs.backFiducials = FiducialObservation.fromLimelight(megatag2Back.rawFiducials);
+        inputs.megatag2PoseEstimateBackPose2d = megatag2Back.pose;
+        inputs.megatag2PoseEstimateBackTagCount = megatag2Back.tagCount;
+        inputs.megatag2PoseEstimateBackAvgTagArea = megatag2Back.avgTagArea;
+      }
 
       for (FiducialObservation rawFiducial : inputs.backFiducials) {
         double backTagAmbiguity = rawFiducial.ambiguity;
@@ -131,14 +141,14 @@ public class VisionIOLimelight implements VisionIO {
       inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
     }
 
-    inputs.FrontAprilTagPipelineLatencySeconds =
+    inputs.frontAprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
-    inputs.FrontAprilTagCaptureLatencySeconds =
+    inputs.frontAprilTagCaptureLatencySeconds =
         LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
 
-    inputs.BackAprilTagPipelineLatencySeconds =
+    inputs.backAprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
-    inputs.BackAprilTagCaptureLatencySeconds =
+    inputs.backAprilTagCaptureLatencySeconds =
         LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
 
     setLLSettings();

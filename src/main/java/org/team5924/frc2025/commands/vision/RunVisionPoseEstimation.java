@@ -16,12 +16,12 @@
 
 package org.team5924.frc2025.commands.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.vision.Vision;
+import org.team5924.frc2025.util.MegatagPoseEstimate;
 
 public class RunVisionPoseEstimation extends Command {
   private final Drive drive;
@@ -42,14 +42,32 @@ public class RunVisionPoseEstimation extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d estimatedPose = vision.getBotPose2dBlue();
-    Logger.recordOutput("Vision Pose", estimatedPose);
-    if (estimatedPose.getX() != 0
-            && estimatedPose.getY() != 0
-            && (vision.getNumberFiducialsSpotted() == 1 && vision.getLowestTagAmbiguity() < 0.15)
-        || (vision.getNumberFiducialsSpotted() >= 2 && vision.getLowestTagAmbiguity() < 0.4)) {
+    MegatagPoseEstimate estimatedPose = vision.getBotPose2dBlue();
+    Logger.recordOutput("Vision Pose", estimatedPose.fieldToCamera);
+    if (estimatedPose.fieldToCamera.getX() != 0
+            && estimatedPose.fieldToCamera.getY() != 0
+            && ((estimatedPose.isFrontLimelight
+                        ? vision.getNumberFiducialsSpottedFront()
+                        : vision.getNumberFiducialsSpottedBack())
+                    == 1
+                && (estimatedPose.isFrontLimelight
+                        ? vision.getLowestTagAmbiguityFront()
+                        : vision.getLowestTagAmbiguityBack())
+                    < 0.15)
+        || ((estimatedPose.isFrontLimelight
+                    ? vision.getNumberFiducialsSpottedFront()
+                    : vision.getNumberFiducialsSpottedBack())
+                >= 2
+            && (estimatedPose.isFrontLimelight
+                    ? vision.getLowestTagAmbiguityFront()
+                    : vision.getLowestTagAmbiguityBack())
+                < 0.4)) {
       drive.addVisionMeasurement(
-          estimatedPose, Timer.getFPGATimestamp() - vision.getLatencySeconds());
+          estimatedPose.fieldToCamera,
+          Timer.getFPGATimestamp()
+              - (estimatedPose.isFrontLimelight
+                  ? vision.getLatencySecondsFront()
+                  : vision.getLatencySecondsBack()));
     }
   }
 
