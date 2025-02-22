@@ -28,6 +28,8 @@ public class VisionIOLimelight implements VisionIO {
   public VisionIOLimelight() {
     LimelightHelpers.SetIMUMode("limelight-front", 1);
     LimelightHelpers.SetIMUMode("limelight-back", 1);
+
+    RobotState.getInstance().setLimelightImuMode(0);
   }
 
   private void setLLSettings() {
@@ -64,6 +66,8 @@ public class VisionIOLimelight implements VisionIO {
     if (!DriverStation.isDisabled()) {
       LimelightHelpers.SetIMUMode("limelight-front", 2);
       LimelightHelpers.SetIMUMode("limelight-back", 2);
+
+      RobotState.getInstance().setLimelightImuMode(2);
     } else {
       LimelightHelpers.SetRobotOrientation(
           "limelight-front",
@@ -127,10 +131,15 @@ public class VisionIOLimelight implements VisionIO {
       inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
     }
 
-    inputs.aprilTagPipelineLatencySeconds =
+    inputs.FrontAprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
-    inputs.aprilTagCaptureLatencySeconds =
+    inputs.FrontAprilTagCaptureLatencySeconds =
         LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
+
+    inputs.BackAprilTagPipelineLatencySeconds =
+        LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
+    inputs.BackAprilTagCaptureLatencySeconds =
+        LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
 
     setLLSettings();
   }

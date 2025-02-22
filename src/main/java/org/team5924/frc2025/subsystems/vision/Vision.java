@@ -17,7 +17,6 @@
 package org.team5924.frc2025.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -60,9 +59,5 @@ public class Vision extends SubsystemBase {
     } else {
       return inputs.megatag2PoseEstimatesBack.fieldToCamera;
     }
-  }
-
-  public double getLatencySeconds() {
-    return inputs.aprilTagCaptureLatencySeconds + inputs.aprilTagPipelineLatencySeconds;
   }
 }
