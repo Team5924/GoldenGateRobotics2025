@@ -20,8 +20,8 @@ import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.util.LimelightHelpers;
 
 /** Add your docs here. */
-public class VisionIOReal implements VisionIO {
-  public VisionIOReal() {}
+public class VisionIOLimelight implements VisionIO {
+  public VisionIOLimelight() {}
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
