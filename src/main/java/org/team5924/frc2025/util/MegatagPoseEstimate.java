@@ -64,6 +64,9 @@ public class MegatagPoseEstimate implements StructSerializable {
 
     @Override
     public MegatagPoseEstimate unpack(ByteBuffer bb) {
+      if (bb.remaining() < getSize()) {
+        throw new BufferUnderflowException();
+      }
       MegatagPoseEstimate rv = new MegatagPoseEstimate();
       rv.fieldToCamera = Pose2d.struct.unpack(bb);
       rv.timestampSeconds = bb.getDouble();
