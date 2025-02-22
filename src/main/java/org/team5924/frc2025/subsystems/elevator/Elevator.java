@@ -16,21 +16,21 @@
 
 package org.team5924.frc2025.subsystems.elevator;
 
-import org.littletonrobotics.junction.Logger;
-import org.team5924.frc2025.Constants;
-import org.team5924.frc2025.RobotState;
-import org.team5924.frc2025.util.LoggedTunableNumber;
-
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import lombok.Getter;
+import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
@@ -66,14 +66,22 @@ public class Elevator extends SubsystemBase {
   private final Alert leftMotorDisconnected;
   private final Alert rightMotorDisconnected;
 
+  private final Alert leftMotorOverTemp;
+  private final Alert rightMotorOverTemp;
+
   public Elevator(ElevatorIO io) {
     this.io = io;
     this.goalState = ElevatorState.MANUAL;
     RobotState.getInstance().setElevatorState(this.goalState);
     this.leftMotorDisconnected =
-        new Alert("Left elevator motor disconnected!", Alert.AlertType.kWarning);
+        new Alert("Left elevator motor disconnected!", Alert.AlertType.kError);
     this.rightMotorDisconnected =
-        new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
+        new Alert("Right elevator motor disconnected!", Alert.AlertType.kError);
+
+    this.leftMotorOverTemp =
+        new Alert("Left elevator motor over temperature!", Alert.AlertType.kWarning);
+    this.rightMotorOverTemp =
+        new Alert("Right elevator motor over temperature!", Alert.AlertType.kWarning);
 
     upSysId =
         new SysIdRoutine(
@@ -107,6 +115,9 @@ public class Elevator extends SubsystemBase {
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
+    leftMotorOverTemp.set(inputs.leftTempCelsius > Constants.MOTOR_MAX_TEMP);
+    rightMotorOverTemp.set(inputs.rightTempCelsius > Constants.MOTOR_MAX_TEMP);
+
     io.periodicUpdates();
   }
 
@@ -139,7 +150,9 @@ public class Elevator extends SubsystemBase {
     this.goalState = goalState;
     switch (goalState) {
       case MANUAL -> RobotState.getInstance().setElevatorState(ElevatorState.MANUAL);
-      case MOVING -> DriverStation.reportError("MOVING is an intermediate state and cannot be set as a goal state!", null);
+      case MOVING ->
+          DriverStation.reportError(
+              "MOVING is an intermediate state and cannot be set as a goal state!", null);
       default -> {
         RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
         io.setHeight(goalState.heightMeters.getAsDouble());

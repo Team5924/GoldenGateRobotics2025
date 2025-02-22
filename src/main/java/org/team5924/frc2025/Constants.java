@@ -47,6 +47,7 @@ public final class Constants {
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
+  public static final double MOTOR_MAX_TEMP = 95;
 
   /* ### Subsystems ### */
   /* # Rollers # */
