@@ -17,6 +17,7 @@
 package org.team5924.frc2025;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -40,6 +41,9 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   private Pose2d estimatedPose = new Pose2d();
 
+  @Getter @Setter private Rotation2d yawPosition = new Rotation2d();
+  @Getter @Setter private double yawVelocityRadPerSec = 0.0;
+
   @Getter @Setter private ElevatorState elevatorState = ElevatorState.MANUAL;
 
   /* ### Coral In and Out ### */
@@ -47,4 +51,7 @@ public class RobotState {
 
   /* ### Algae Pivot ### */
   @Getter @Setter private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+
+  /* ### Vision ### */
+  @Getter @Setter private int limelightImuMode = 0;
 }

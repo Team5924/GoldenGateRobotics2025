@@ -16,76 +16,113 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.util.FiducialObservation;
 import org.team5924.frc2025.util.LimelightHelpers;
+import org.team5924.frc2025.util.MegatagPoseEstimate;
 
 /** Add your docs here. */
 public class VisionIOLimelight implements VisionIO {
-  public VisionIOLimelight() {}
+  public VisionIOLimelight() {
+    LimelightHelpers.SetIMUMode("limelight-front", 1);
+    LimelightHelpers.SetIMUMode("limelight-back", 1);
+  }
+
+  private void setLLSettings() {
+    LimelightHelpers.setPipelineIndex("limelight-front", 0);
+    LimelightHelpers.setPipelineIndex("limelight-back", 0);
+
+    LimelightHelpers.setCameraPose_RobotSpace(
+        "limelight-front",
+        Constants.FRONT_LIMELIGHT_OFF_FORWARD,
+        Constants.FRONT_LIMELIGHT_OFF_SIDE,
+        Constants.FRONT_LIMELIGHT_OFF_UP,
+        Constants.FRONT_LIMELIGHT_OFF_ROLL,
+        Constants.FRONT_LIMELIGHT_OFF_PITCH,
+        Constants.FRONT_LIMELIGHT_OFF_YAW);
+
+    LimelightHelpers.setCameraPose_RobotSpace(
+        "limelight-back",
+        Constants.BACK_LIMELIGHT_OFF_FORWARD,
+        Constants.BACK_LIMELIGHT_OFF_SIDE,
+        Constants.BACK_LIMELIGHT_OFF_UP,
+        Constants.BACK_LIMELIGHT_OFF_ROLL,
+        Constants.BACK_LIMELIGHT_OFF_PITCH,
+        Constants.BACK_LIMELIGHT_OFF_YAW);
+
+    if (!DriverStation.isDisabled()) {
+      LimelightHelpers.SetIMUMode("limelight-front", 2);
+      LimelightHelpers.SetIMUMode("limelight-back", 2);
+    } else {
+      LimelightHelpers.SetRobotOrientation(
+          "limelight-front",
+          RobotState.getInstance().getYawPosition().getDegrees(),
+          RobotState.getInstance().getYawVelocityRadPerSec(),
+          0,
+          0,
+          0,
+          0);
+
+      LimelightHelpers.SetRobotOrientation(
+          "limelight-back",
+          RobotState.getInstance().getYawPosition().getDegrees(),
+          RobotState.getInstance().getYawVelocityRadPerSec(),
+          0,
+          0,
+          0,
+          0);
+    }
+  }
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    LimelightHelpers.PoseEstimate frontCameraEstimate =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue("front");
-    LimelightHelpers.PoseEstimate backCameraEstimate =
-        LimelightHelpers.getBotPoseEstimate_wpiBlue("back");
-
     double lowestTagAmbiguityFront = 1;
     double lowestTagAmbiguityBack = 1;
 
-    if (frontCameraEstimate != null) {
-      inputs.frontCameraPoseX = frontCameraEstimate.pose.getX();
-      inputs.frontCameraPoseY = frontCameraEstimate.pose.getY();
-      inputs.frontCameraFiducials = frontCameraEstimate.tagCount;
+    inputs.frontLimelightSeesTarget = LimelightHelpers.getTV("limelight-front");
+    inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-back");
 
-      for (LimelightHelpers.RawFiducial rawFiducial : frontCameraEstimate.rawFiducials) {
+    if (inputs.frontLimelightSeesTarget) {
+      LimelightHelpers.PoseEstimate megatag2Front =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+
+      inputs.megatag2PoseEstimatesFront = MegatagPoseEstimate.fromLimelight(megatag2Front);
+      inputs.frontFiducials = FiducialObservation.fromLimelight(megatag2Front.rawFiducials);
+
+      for (FiducialObservation rawFiducial : inputs.frontFiducials) {
         double frontTagAmbiguity = rawFiducial.ambiguity;
         if (frontTagAmbiguity < lowestTagAmbiguityFront) {
           lowestTagAmbiguityFront = frontTagAmbiguity;
         }
       }
 
-      inputs.avgFrontCameraTagArea = frontCameraEstimate.avgTagArea;
       inputs.lowestTagAmbiguityFront = lowestTagAmbiguityFront;
-      inputs.botPoseRotationRadians = frontCameraEstimate.pose.getRotation().getRadians();
     }
 
-    if (backCameraEstimate != null) {
-      inputs.backCameraPoseX = backCameraEstimate.pose.getX();
-      inputs.backCameraPoseY = backCameraEstimate.pose.getY();
-      inputs.backCameraFiducials = backCameraEstimate.tagCount;
+    if (inputs.backLimelightSeesTarget) {
+      LimelightHelpers.PoseEstimate megatag2Back =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
 
-      for (LimelightHelpers.RawFiducial rawFiducial : backCameraEstimate.rawFiducials) {
+      inputs.megatag2PoseEstimatesBack = MegatagPoseEstimate.fromLimelight(megatag2Back);
+      inputs.backFiducials = FiducialObservation.fromLimelight(megatag2Back.rawFiducials);
+
+      for (FiducialObservation rawFiducial : inputs.backFiducials) {
         double backTagAmbiguity = rawFiducial.ambiguity;
         if (backTagAmbiguity < lowestTagAmbiguityBack) {
           lowestTagAmbiguityBack = backTagAmbiguity;
         }
       }
 
-      inputs.avgBackCameraTagArea = backCameraEstimate.avgTagArea;
       inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
-    }
-
-    // inputs.totalFiducials = inputs.frontCameraFiducials + inputs.backCameraFiducials;
-
-    if ((frontCameraEstimate != null && backCameraEstimate != null)
-        && frontCameraEstimate.tagCount > backCameraEstimate.tagCount) {
-      inputs.computedBotPoseX = frontCameraEstimate.pose.getX();
-      inputs.computedBotPoseY = frontCameraEstimate.pose.getY();
-    } else if ((frontCameraEstimate != null && backCameraEstimate != null)
-        && backCameraEstimate.tagCount > frontCameraEstimate.tagCount) {
-      inputs.computedBotPoseX = backCameraEstimate.pose.getX();
-      inputs.computedBotPoseY = backCameraEstimate.pose.getY();
-    } else if (frontCameraEstimate != null && backCameraEstimate != null) {
-      inputs.computedBotPoseX =
-          (frontCameraEstimate.pose.getX() + backCameraEstimate.pose.getX()) / 2;
-      inputs.computedBotPoseY =
-          (frontCameraEstimate.pose.getY() + backCameraEstimate.pose.getY()) / 2;
     }
 
     inputs.aprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
     inputs.aprilTagCaptureLatencySeconds =
         LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
+
+    setLLSettings();
   }
 }

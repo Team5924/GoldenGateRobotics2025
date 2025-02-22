@@ -16,26 +16,25 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import org.littletonrobotics.junction.AutoLog;
+import org.team5924.frc2025.util.FiducialObservation;
+import org.team5924.frc2025.util.MegatagPoseEstimate;
 
 /** Add your docs here. */
 public interface VisionIO {
   @AutoLog
   public static class VisionIOInputs {
-    public double botPoseRotationRadians = 0.0;
+    public boolean frontLimelightSeesTarget = false;
+    public boolean backLimelightSeesTarget = false;
 
-    public double computedBotPoseX = 0.0;
-    public double computedBotPoseY = 0.0;
-    public double totalFiducials = 0.0;
+    public FiducialObservation[] frontFiducials = new FiducialObservation[] {};
+    public FiducialObservation[] backFiducials = new FiducialObservation[] {};
 
-    public double frontCameraPoseX = 0.0;
-    public double frontCameraPoseY = 0.0;
-    public double frontCameraFiducials = 0.0;
+    public MegatagPoseEstimate megatag2PoseEstimatesFront = new MegatagPoseEstimate();
+    public MegatagPoseEstimate megatag2PoseEstimatesBack = new MegatagPoseEstimate();
 
-    public double backCameraPoseX = 0.0;
-    public double backCameraPoseY = 0.0;
-    public double backCameraFiducials = 0.0;
+    public int frontTagCount = 0;
+    public int backTagCount = 0;
 
     public double lowestTagAmbiguityFront = 1;
     public double lowestTagAmbiguityBack = 1;
@@ -43,10 +42,10 @@ public interface VisionIO {
     public double avgFrontCameraTagArea = 0.0;
     public double avgBackCameraTagArea = 0.0;
 
-    public Pose2d botPose2d;
-
     public double aprilTagPipelineLatencySeconds = 0.0;
     public double aprilTagCaptureLatencySeconds = 0.0;
+
+    public int imuMode = 0;
   }
 
   /** Updates the set of loggable inputs. */

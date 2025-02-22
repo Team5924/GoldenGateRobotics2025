@@ -22,6 +22,7 @@ import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.util.LimelightHelpers;
 
 public class Vision extends SubsystemBase {
@@ -50,7 +51,17 @@ public class Vision extends SubsystemBase {
     boolean isRedAlliance = allianceSubscriber.get();
     if (isRedAlliance != previousAllianceSubscriberValue) {
       previousAllianceSubscriberValue = isRedAlliance;
-      LimelightHelpers.setPipelineIndex("front", isRedAlliance ? 0 : 1);
+      LimelightHelpers.setPipelineIndex(
+          "front",
+          isRedAlliance
+              ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
+              : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
+
+      LimelightHelpers.setPipelineIndex(
+          "back",
+          isRedAlliance
+              ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
+              : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
     }
   }
 
