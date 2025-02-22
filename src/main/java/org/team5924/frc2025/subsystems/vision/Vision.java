@@ -22,8 +22,7 @@ import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
-import org.team5924.frc2025.Constants;
-import org.team5924.frc2025.util.LimelightHelpers;
+import org.team5924.frc2025.RobotState;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
@@ -51,36 +50,19 @@ public class Vision extends SubsystemBase {
     boolean isRedAlliance = allianceSubscriber.get();
     if (isRedAlliance != previousAllianceSubscriberValue) {
       previousAllianceSubscriberValue = isRedAlliance;
-      LimelightHelpers.setPipelineIndex(
-          "front",
-          isRedAlliance
-              ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
-              : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
-
-      LimelightHelpers.setPipelineIndex(
-          "back",
-          isRedAlliance
-              ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
-              : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
+      RobotState.getInstance().setIsRedAlliance(isRedAlliance);
     }
   }
 
   public Pose2d getBotPose2dBlue() {
-    return new Pose2d(
-        inputs.computedBotPoseX,
-        inputs.computedBotPoseY,
-        new Rotation2d(inputs.botPoseRotationRadians));
+    if (inputs.lowestTagAmbiguityFront < inputs.lowestTagAmbiguityBack) {
+      return inputs.megatag2PoseEstimatesFront.fieldToCamera;
+    } else {
+      return inputs.megatag2PoseEstimatesBack.fieldToCamera;
+    }
   }
 
   public double getLatencySeconds() {
     return inputs.aprilTagCaptureLatencySeconds + inputs.aprilTagPipelineLatencySeconds;
-  }
-
-  public double getNumberFiducialsSpotted() {
-    return inputs.totalFiducials;
-  }
-
-  public double getLowestTagAmbiguity() {
-    return inputs.lowestTagAmbiguityFront;
   }
 }

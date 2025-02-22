@@ -31,8 +31,17 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   private void setLLSettings() {
-    LimelightHelpers.setPipelineIndex("limelight-front", 0);
-    LimelightHelpers.setPipelineIndex("limelight-back", 0);
+    LimelightHelpers.setPipelineIndex(
+        "front",
+        RobotState.getInstance().getIsRedAlliance()
+            ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
+            : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
+
+    LimelightHelpers.setPipelineIndex(
+        "back",
+        RobotState.getInstance().getIsRedAlliance()
+            ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
+            : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
 
     LimelightHelpers.setCameraPose_RobotSpace(
         "limelight-front",

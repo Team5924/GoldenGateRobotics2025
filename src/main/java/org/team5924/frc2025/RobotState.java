@@ -54,4 +54,5 @@ public class RobotState {
 
   /* ### Vision ### */
   @Getter @Setter private int limelightImuMode = 0;
+  @Getter @Setter private boolean isRedAlliance = true;
 }
