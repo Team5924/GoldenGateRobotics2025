@@ -63,8 +63,8 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
-  private final OperatorControls operatorControls = new OperatorControls(2);
+  private final CommandXboxController opManualBackupController = new CommandXboxController(1);
+  private final OperatorControls opPrimaryControlBoard = new OperatorControls(2);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -190,40 +190,68 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Coral In and Out
-    operatorController
+    opManualBackupController
         .leftTrigger()
         .onTrue(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
-    operatorController
+    opManualBackupController
         .rightTrigger()
         .onTrue(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
-    operatorController
+    opManualBackupController
         .leftTrigger()
         .onFalse(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-    operatorController
+    opManualBackupController
         .rightTrigger()
         .onFalse(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
     // Elevator
-    elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
-    operatorController
-        .a()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
-    operatorController
-        .b()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
-    operatorController
-        .x()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
-    operatorController
-        .y()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
-    operatorController
-        .leftBumper()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+    if (Constants.MANUAL_CONTROLS) {
+      elevator.setDefaultCommand(new RunElevator(elevator, opManualBackupController::getLeftY));
+      opManualBackupController
+          .a()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+      opManualBackupController
+          .b()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
+      opManualBackupController
+          .x()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+      opManualBackupController
+          .y()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+      opManualBackupController
+          .leftBumper()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+    } else {
+      opPrimaryControlBoard
+          .getL1Button()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+      opPrimaryControlBoard
+          .getL2Button()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
+      opPrimaryControlBoard
+          .getL3Button()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+      opPrimaryControlBoard
+          .getL4Button()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+      opPrimaryControlBoard
+          .getElevatorToIntakeButton()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+      opPrimaryControlBoard
+          .getAlgaeL2()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.ALGAE_L2)));
+      opPrimaryControlBoard
+          .getAlgaeL3()
+          .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.ALGAE_L3)));
+      opPrimaryControlBoard
+          .getAlgaeScore()
+          .onTrue(
+              Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.ALGAE_SCORE)));
+    }
 
     // Vision
     vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision));

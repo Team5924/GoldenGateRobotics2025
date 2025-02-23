@@ -51,6 +51,11 @@ public class Elevator extends SubsystemBase {
     L2(new LoggedTunableNumber("Elevator/L2Height", 0.23)),
     L3(new LoggedTunableNumber("Elevator/L3Height", .4)),
     L4(new LoggedTunableNumber("Elevator/L4Height", .657)),
+
+    ALGAE_L2(new LoggedTunableNumber("Elevator/AlgaeL2Height", 0.23)),
+    ALGAE_L3(new LoggedTunableNumber("Elevator/AlgaeL3Height", .4)),
+    ALGAE_SCORE(new LoggedTunableNumber("Elevator/AlgaeScoreHeight", .657)),
+
     MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),
     MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0));
 
