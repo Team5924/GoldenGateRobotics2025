@@ -25,10 +25,10 @@ import org.team5924.frc2025.util.MegatagPoseEstimate;
 /** Add your docs here. */
 public class VisionIOLimelight implements VisionIO {
   public VisionIOLimelight() {
-    LimelightHelpers.SetIMUMode("limelight-front", 1);
-    LimelightHelpers.SetIMUMode("limelight-back", 1);
+    LimelightHelpers.SetIMUMode("limelight-front", 0);
+    LimelightHelpers.SetIMUMode("limelight-back", 0);
 
-    RobotState.getInstance().setLimelightImuMode(1);
+    RobotState.getInstance().setLimelightImuMode(0);
   }
 
   private void setLLSettings() {
