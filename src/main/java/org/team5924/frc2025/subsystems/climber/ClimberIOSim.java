@@ -39,24 +39,25 @@ public class ClimberIOSim implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     if (DriverStation.isDisabled()) {
-      runVolts(0.0);
+      runRotateVolts(0.0);
     }
 
     motorSim.update(Constants.LOOP_PERIODIC_SECONDS);
-    inputs.positionRads = motorSim.getAngularPositionRad();
-    inputs.velocityRadsPerSec = motorSim.getAngularVelocityRadPerSec();
-    inputs.appliedVoltage = appliedVoltage;
-    inputs.supplyCurrentAmps = motorSim.getCurrentDrawAmps();
+    inputs.rotatePositionRads = motorSim.getAngularPositionRad();
+    inputs.rotateVelocityRadsPerSec = motorSim.getAngularVelocityRadPerSec();
+    inputs.rotateAppliedVoltage = appliedVoltage;
+    inputs.rotateSupplyCurrentAmps = motorSim.getCurrentDrawAmps();
   }
 
   @Override
-  public void runVolts(double volts) {
+  public void runRotateVolts(double volts) {
     appliedVoltage = MathUtil.clamp(volts, -12.0, 12.0);
     motorSim.setInputVoltage(appliedVoltage);
   }
 
   @Override
   public void stop() {
-    runVolts(0.0);
+    runRotateVolts(0.0);
+    runClampVolts(0.0);
   }
 }

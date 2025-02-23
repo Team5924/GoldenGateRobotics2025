@@ -42,14 +42,22 @@ import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
 /** Add your docs here. */
 public class ClimberIOTalonFX implements ClimberIO {
-  private final TalonFX talon;
+  private final TalonFX rotateTalon;
+  private final TalonFX clampTalon;
 
-  private final StatusSignal<Angle> position;
-  private final StatusSignal<AngularVelocity> velocity;
-  private final StatusSignal<Voltage> appliedVoltage;
-  private final StatusSignal<Current> supplyCurrent;
-  private final StatusSignal<Current> torqueCurrent;
-  private final StatusSignal<Temperature> tempCelsius;
+  private final StatusSignal<Angle> rotatePosition;
+  private final StatusSignal<AngularVelocity> rotateVelocity;
+  private final StatusSignal<Voltage> rotateAppliedVoltage;
+  private final StatusSignal<Current> rotateSupplyCurrent;
+  private final StatusSignal<Current> rotateTorqueCurrent;
+  private final StatusSignal<Temperature> rotateTempCelsius;
+
+  private final StatusSignal<Angle> clampPosition;
+  private final StatusSignal<AngularVelocity> clampVelocity;
+  private final StatusSignal<Voltage> clampAppliedVoltage;
+  private final StatusSignal<Current> clampSupplyCurrent;
+  private final StatusSignal<Current> clampTorqueCurrent;
+  private final StatusSignal<Temperature> clampTempCelsius;
 
   // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true).withUpdateFreqHz(0);
@@ -67,7 +75,8 @@ public class ClimberIOTalonFX implements ClimberIO {
 
   public ClimberIOTalonFX() {
     reduction = Constants.CLIMBER_REDUCTION;
-    talon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
+    rotateTalon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
+    clampTalon = new TalonFX(0, Constants.CLIMBER_BUS);
 
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -79,20 +88,42 @@ public class ClimberIOTalonFX implements ClimberIO {
         Constants.CLIMBER_BRAKE ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     config.CurrentLimits.SupplyCurrentLimit = Constants.CLIMBER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    talon.getConfigurator().apply(config);
+    rotateTalon.getConfigurator().apply(config);
+    clampTalon.getConfigurator().apply(config);
 
     // Get select status signals and set update frequency
-    position = talon.getPosition();
-    velocity = talon.getVelocity();
-    appliedVoltage = talon.getMotorVoltage();
-    supplyCurrent = talon.getSupplyCurrent();
-    torqueCurrent = talon.getTorqueCurrent();
-    tempCelsius = talon.getDeviceTemp();
+    rotatePosition = rotateTalon.getPosition();
+    rotateVelocity = rotateTalon.getVelocity();
+    rotateAppliedVoltage = rotateTalon.getMotorVoltage();
+    rotateSupplyCurrent = rotateTalon.getSupplyCurrent();
+    rotateTorqueCurrent = rotateTalon.getTorqueCurrent();
+    rotateTempCelsius = rotateTalon.getDeviceTemp();
+
+    clampPosition = clampTalon.getPosition();
+    clampVelocity = clampTalon.getVelocity();
+    clampAppliedVoltage = clampTalon.getMotorVoltage();
+    clampSupplyCurrent = clampTalon.getSupplyCurrent();
+    clampTorqueCurrent = clampTalon.getTorqueCurrent();
+    clampTempCelsius = clampTalon.getDeviceTemp();
+
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0, position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius);
+        50.0,
+        rotatePosition,
+        rotateVelocity,
+        rotateAppliedVoltage,
+        rotateSupplyCurrent,
+        rotateTorqueCurrent,
+        rotateTempCelsius,
+        clampPosition,
+        clampVelocity,
+        clampAppliedVoltage,
+        clampSupplyCurrent,
+        clampTorqueCurrent,
+        clampTempCelsius);
 
     // Disables status signals not called for update above
-    talon.optimizeBusUtilization(0, 1.0);
+    rotateTalon.optimizeBusUtilization(0, 1.0);
+    clampTalon.optimizeBusUtilization(0, 1.0);
   }
 
   @Override
@@ -116,21 +147,50 @@ public class ClimberIOTalonFX implements ClimberIO {
       }
     }
 
-    inputs.motorConnected =
+    inputs.rotateMotorConnected =
         BaseStatusSignal.refreshAll(
-                position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius)
+                rotatePosition,
+                rotateVelocity,
+                rotateAppliedVoltage,
+                rotateSupplyCurrent,
+                rotateTorqueCurrent,
+                rotateTempCelsius)
             .isOK();
-    inputs.positionRads = Units.rotationsToRadians(position.getValueAsDouble()) / reduction;
-    inputs.velocityRadsPerSec = Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction;
-    inputs.appliedVoltage = appliedVoltage.getValueAsDouble();
-    inputs.supplyCurrentAmps = supplyCurrent.getValueAsDouble();
-    inputs.torqueCurrentAmps = torqueCurrent.getValueAsDouble();
-    inputs.tempCelsius = tempCelsius.getValueAsDouble();
+    inputs.rotatePositionRads =
+        Units.rotationsToRadians(rotatePosition.getValueAsDouble()) / reduction;
+    inputs.rotateVelocityRadsPerSec =
+        Units.rotationsToRadians(rotateVelocity.getValueAsDouble()) / reduction;
+    inputs.rotateAppliedVoltage = rotateAppliedVoltage.getValueAsDouble();
+    inputs.rotateSupplyCurrentAmps = rotateSupplyCurrent.getValueAsDouble();
+    inputs.rotateTorqueCurrentAmps = rotateTorqueCurrent.getValueAsDouble();
+    inputs.rotateTempCelsius = rotateTempCelsius.getValueAsDouble();
+
+    inputs.clampMotorConnected =
+        BaseStatusSignal.refreshAll(
+                clampPosition,
+                clampVelocity,
+                clampAppliedVoltage,
+                clampSupplyCurrent,
+                clampTorqueCurrent,
+                clampTempCelsius)
+            .isOK();
+    inputs.clampPositionRads =
+        Units.rotationsToRadians(clampPosition.getValueAsDouble()) / reduction;
+    inputs.clampVelocityRadsPerSec =
+        Units.rotationsToRadians(clampVelocity.getValueAsDouble()) / reduction;
+    inputs.clampAppliedVoltage = clampAppliedVoltage.getValueAsDouble();
+    inputs.clampSupplyCurrentAmps = clampSupplyCurrent.getValueAsDouble();
+    inputs.clampTorqueCurrentAmps = clampTorqueCurrent.getValueAsDouble();
+    inputs.clampTempCelsius = clampTempCelsius.getValueAsDouble();
   }
 
   @Override
-  public void runVolts(double volts) {
-    talon.setControl(voltageOut.withOutput(volts));
+  public void runRotateVolts(double volts) {
+    rotateTalon.setControl(voltageOut.withOutput(volts));
+  }
+
+  public void runClampVolts(double volts) {
+    clampTalon.setControl(voltageOut.withOutput(volts));
   }
 
   @Override
@@ -144,6 +204,6 @@ public class ClimberIOTalonFX implements ClimberIO {
       throw new IllegalArgumentException(message);
     }
     rads = Math.min(Constants.CLIMBER_MIN_RADS, Math.max(rads, Constants.CLIMBER_MAX_RADS));
-    talon.setControl(positionOut.withPosition(Radians.of(rads)));
+    rotateTalon.setControl(positionOut.withPosition(Radians.of(rads)));
   }
 }

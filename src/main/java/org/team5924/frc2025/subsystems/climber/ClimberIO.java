@@ -23,13 +23,21 @@ import org.team5924.frc2025.util.LaserCAN_Measurement;
 public interface ClimberIO {
   @AutoLog
   public static class ClimberIOInputs {
-    public boolean motorConnected = true;
-    public double positionRads = 0.0;
-    public double velocityRadsPerSec = 0.0;
-    public double appliedVoltage = 0.0;
-    public double supplyCurrentAmps = 0.0;
-    public double torqueCurrentAmps = 0.0;
-    public double tempCelsius = 0.0;
+    public boolean rotateMotorConnected = true;
+    public double rotatePositionRads = 0.0;
+    public double rotateVelocityRadsPerSec = 0.0;
+    public double rotateAppliedVoltage = 0.0;
+    public double rotateSupplyCurrentAmps = 0.0;
+    public double rotateTorqueCurrentAmps = 0.0;
+    public double rotateTempCelsius = 0.0;
+
+    public boolean clampMotorConnected = true;
+    public double clampPositionRads = 0.0;
+    public double clampVelocityRadsPerSec = 0.0;
+    public double clampAppliedVoltage = 0.0;
+    public double clampSupplyCurrentAmps = 0.0;
+    public double clampTorqueCurrentAmps = 0.0;
+    public double clampTempCelsius = 0.0;
 
     // Climber LaserCAN
     public LaserCAN_Measurement laserCanMeasurement = new LaserCAN_Measurement();
@@ -48,7 +56,9 @@ public interface ClimberIO {
    *
    * @param volts Voltage to apply
    */
-  public default void runVolts(double volts) {}
+  public default void runRotateVolts(double volts) {}
+
+  public default void runClampVolts(double volts) {}
 
   /**
    * Sets the target angle for the climber

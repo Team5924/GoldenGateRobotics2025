@@ -58,7 +58,9 @@ public class Climber extends SubsystemBase {
   private ClimberState goalState = ClimberState.STOW;
   private ClimberState lastState;
 
-  private final Alert disconnected;
+  private final Alert rotateDisconnected;
+  private final Alert clampDisconnected;
+
   protected final Timer stateTimer = new Timer();
 
   private final ClimberIO io;
@@ -71,7 +73,8 @@ public class Climber extends SubsystemBase {
   public Climber(ClimberIO io) {
     this.io = io;
 
-    disconnected = new Alert("Climber disconnected!", Alert.AlertType.kWarning);
+    rotateDisconnected = new Alert("Climber disconnected!", Alert.AlertType.kWarning);
+    clampDisconnected = new Alert("Clamp motor is disconnected!", Alert.AlertType.kWarning);
     stateTimer.start();
   }
 
@@ -80,7 +83,7 @@ public class Climber extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
 
-    disconnected.set(!inputs.motorConnected);
+    rotateDisconnected.set(!inputs.rotateMotorConnected);
 
     // If the robot's state is STOW && the cage is within range && elevator + algae pivot are both
     // stow,
@@ -97,7 +100,7 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-    io.runVolts(goalState.volts.getAsDouble());
+    io.runRotateVolts(goalState.volts.getAsDouble());
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
@@ -158,8 +161,12 @@ public class Climber extends SubsystemBase {
             < (int) Math.floor(laserCanDetectThreshold.get());
   }
 
-  public void runVolts(double volts) {
-    io.runVolts(volts);
+  public void runrotateVolts(double volts) {
+    io.runRotateVolts(volts);
+  }
+
+  public void runClampVolts(double volts){
+    io.runClampVolts(volts);
   }
 
   public void setAngle(double rads) {
