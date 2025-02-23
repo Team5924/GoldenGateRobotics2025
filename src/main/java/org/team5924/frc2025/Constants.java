@@ -49,6 +49,31 @@ public final class Constants {
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
 
+  /* ### Controls ### */
+
+  /* USB Port IDs */
+  public static final int DRIVER_CONTROLLER_PORT = 0;
+  public static final int OPERATOR_XBOX_CONTROLLER_PORT = 1;
+  public static final int OPERATOR_CONTROL_BOARD_PORT = 2;
+
+  /* Operator Button IDs */
+  public static final int OP_ELEVATOR_L1 = 1;
+  public static final int OP_ELEVATOR_L2 = 2;
+  public static final int OP_ELEVATOR_L3 = 3;
+  public static final int OP_ELEVATOR_L4 = 4;
+
+  public static final int OP_ELEVATOR_INTAKE = 5;
+  public static final int OP_ELEVATOR_ALGAE_L2 = 6;
+  public static final int OP_ELEVATOR_ALGAE_L3 = 7;
+  public static final int OP_ELEVATOR_ALGAE_SCORE = 8;
+
+  public static final int OP_UNUSED_1 = 9;
+  public static final int OP_UNUSED_2 = 10;
+  public static final int OP_UNUSED_3 = 11;
+  public static final int OP_UNUSED_4 = 12;
+
+  /* Override Switch IDs */
+
   /* ### Subsystems ### */
   /* # Rollers # */
   /* Coral In-And-Out */

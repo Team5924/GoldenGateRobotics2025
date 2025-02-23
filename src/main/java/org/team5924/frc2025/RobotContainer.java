@@ -46,6 +46,7 @@ import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
 import org.team5924.frc2025.subsystems.vision.Vision;
 import org.team5924.frc2025.subsystems.vision.VisionIO;
 import org.team5924.frc2025.subsystems.vision.VisionIOLimelight;
+import org.team5924.frc2025.util.OperatorControls;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -63,6 +64,7 @@ public class RobotContainer {
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final OperatorControls operatorControls = new OperatorControls(2);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
