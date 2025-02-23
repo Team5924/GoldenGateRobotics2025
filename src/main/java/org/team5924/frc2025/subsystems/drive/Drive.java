@@ -165,7 +165,6 @@ public class Drive extends SubsystemBase {
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
-
     setpointGenerator = new SwerveSetpointGenerator(kinematics, getModuleTranslations());
     previousSetpoint = new SwerveSetpoint(getChassisSpeeds(), getModuleStates());
 

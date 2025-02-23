@@ -109,11 +109,11 @@ public final class Constants {
   public static final double FRONT_LIMELIGHT_OFF_YAW = 0.0;
 
   public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(8.971, Inches);
-  public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
+  public static final double BACK_LIMELIGHT_OFF_SIDE = Meters.convertFrom(9.755, Inches);
   public static final double BACK_LIMELIGHT_OFF_UP = Meters.convertFrom(16.145, Inches);
   public static final double BACK_LIMELIGHT_OFF_ROLL = 0.0;
   public static final double BACK_LIMELIGHT_OFF_PITCH = 15.0;
-  public static final double BACK_LIMELIGHT_OFF_YAW = 0.0;
+  public static final double BACK_LIMELIGHT_OFF_YAW = 180.0;
 
   public static final int LIMELIGHT_RED_ALLIANCE_PIPELINE = 0;
   public static final int LIMELIGHT_BLUE_ALLIANCE_PIPELINE = 0;

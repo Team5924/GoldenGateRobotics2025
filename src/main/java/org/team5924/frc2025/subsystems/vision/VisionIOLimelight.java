@@ -16,7 +16,6 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.util.FiducialObservation;
@@ -63,30 +62,31 @@ public class VisionIOLimelight implements VisionIO {
         Constants.BACK_LIMELIGHT_OFF_PITCH,
         Constants.BACK_LIMELIGHT_OFF_YAW);
 
-    if (!DriverStation.isDisabled()) {
-      LimelightHelpers.SetIMUMode("limelight-front", 2);
-      LimelightHelpers.SetIMUMode("limelight-back", 2);
+    // if (!DriverStation.isDisabled()) {
+    //   LimelightHelpers.SetIMUMode("limelight-front", 2);
+    //   LimelightHelpers.SetIMUMode("limelight-back", 2);
 
-      RobotState.getInstance().setLimelightImuMode(2);
-    } else {
-      LimelightHelpers.SetRobotOrientation(
-          "limelight-front",
-          RobotState.getInstance().getYawPosition().getDegrees(),
-          RobotState.getInstance().getYawVelocityRadPerSec(),
-          0,
-          0,
-          0,
-          0);
+    //   RobotState.getInstance().setLimelightImuMode(2);
+    // }
+    // } else {
+    LimelightHelpers.SetRobotOrientation(
+        "limelight-front",
+        RobotState.getInstance().getYawPosition().getDegrees(),
+        RobotState.getInstance().getYawVelocityRadPerSec(),
+        0,
+        0,
+        0,
+        0);
 
-      LimelightHelpers.SetRobotOrientation(
-          "limelight-back",
-          RobotState.getInstance().getYawPosition().getDegrees(),
-          RobotState.getInstance().getYawVelocityRadPerSec(),
-          0,
-          0,
-          0,
-          0);
-    }
+    LimelightHelpers.SetRobotOrientation(
+        "limelight-back",
+        RobotState.getInstance().getYawPosition().getDegrees(),
+        RobotState.getInstance().getYawVelocityRadPerSec(),
+        0,
+        0,
+        0,
+        0);
+    // }
   }
 
   @Override
@@ -99,7 +99,7 @@ public class VisionIOLimelight implements VisionIO {
 
     if (inputs.frontLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2Front =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
 
       inputs.megatag2PoseEstimateFront = MegatagPoseEstimate.fromLimelight(megatag2Front, true);
       if (megatag2Front != null) {
@@ -121,7 +121,7 @@ public class VisionIOLimelight implements VisionIO {
 
     if (inputs.backLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2Back =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
 
       inputs.megatag2PoseEstimateBack = MegatagPoseEstimate.fromLimelight(megatag2Back, false);
       if (megatag2Back != null) {
