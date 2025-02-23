@@ -26,6 +26,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import java.util.Queue;
+import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.generated.TunerConstants;
 
 /** IO implementation for Pigeon 2. */
@@ -54,6 +55,9 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.connected = BaseStatusSignal.refreshAll(yaw, yawVelocity).equals(StatusCode.OK);
     inputs.yawPosition = Rotation2d.fromDegrees(yaw.getValueAsDouble());
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelocity.getValueAsDouble());
+
+    RobotState.getInstance().setYawPosition(inputs.yawPosition);
+    RobotState.getInstance().setYawVelocityRadPerSec(inputs.yawVelocityRadPerSec);
 
     inputs.odometryYawTimestamps =
         yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();

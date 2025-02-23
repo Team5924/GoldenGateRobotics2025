@@ -20,6 +20,7 @@ import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystem;
@@ -114,6 +115,9 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
 
     // update CoralState periodically
     updateCoralState();
+    
+    Logger.recordOutput(
+        "RobotState/Coral/InAndOutState", RobotState.getInstance().getCoralInAndOutState());
   }
 
   public void setGoalState(CoralState goalState) {
