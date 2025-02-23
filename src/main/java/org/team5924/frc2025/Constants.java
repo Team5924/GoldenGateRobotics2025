@@ -60,6 +60,7 @@ public final class Constants {
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
+  public static final int CORAL_EXIT_LASER_CAN_ID = 12;
 
   /* # Pivot # */
   public static final int ALGAE_PIVOT_TALON_ID = 55;

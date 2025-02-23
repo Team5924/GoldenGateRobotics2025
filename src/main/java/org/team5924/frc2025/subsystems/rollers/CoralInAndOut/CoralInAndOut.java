@@ -76,6 +76,9 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   private static final LoggedTunableNumber shooterDetectThreshold =
       new LoggedTunableNumber("CoralInAndOutKrakenFOC/ShooterLaserCAN/DetectThreshold", 20);
 
+  private static final LoggedTunableNumber exitDetectThreshold =
+      new LoggedTunableNumber("CoralInAndOutKrakenFOC/ExitLaserCAN/DetectThreshold", 20);
+
   public CoralInAndOut(CoralInAndOutIO io) {
     super("CoralInAndOut", io);
   }
@@ -116,48 +119,38 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   public void setGoalState(CoralState goalState) {
     this.goalState = goalState;
     switch (goalState) {
-      case NO_CORAL:
-        RobotState.getInstance().setCoralInAndOutState(CoralState.NO_CORAL);
-      case INTAKING:
-        RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);
-      case STORED_CORAL_IN_INTAKE:
-        RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_INTAKE);
-      case STORED_CORAL_IN_SHOOTER:
-        RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_SHOOTER);
-      case SHOOTING_L2_AND_L3:
+      case NO_CORAL -> RobotState.getInstance().setCoralInAndOutState(CoralState.NO_CORAL);
+      case INTAKING -> RobotState.getInstance().setCoralInAndOutState(CoralState.INTAKING);
+      case STORED_CORAL_IN_INTAKE ->
+          RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_INTAKE);
+      case STORED_CORAL_IN_SHOOTER ->
+          RobotState.getInstance().setCoralInAndOutState(CoralState.STORED_CORAL_IN_SHOOTER);
+      case SHOOTING_L2_AND_L3 -> {
         if ((RobotState.getInstance().getElevatorState().equals(ElevatorState.L2)
                 || RobotState.getInstance().getElevatorState().equals(ElevatorState.L3))
             && RobotState.getInstance()
                 .getCoralInAndOutState()
                 .equals(CoralState.STORED_CORAL_IN_SHOOTER)) {
           RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L2_AND_L3);
-          break;
-        } else {
-          break;
         }
-      case SHOOTING_L4:
+      }
+      case SHOOTING_L4 -> {
         if (RobotState.getInstance().getElevatorState().equals(ElevatorState.L4)
             && RobotState.getInstance()
                 .getCoralInAndOutState()
                 .equals(CoralState.STORED_CORAL_IN_SHOOTER)) {
           RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L4);
-          break;
-        } else {
-          break;
         }
-      case SHOOTING_L1:
+      }
+      case SHOOTING_L1 -> {
         if (RobotState.getInstance().getElevatorState().equals(ElevatorState.L1)
             && RobotState.getInstance()
                 .getCoralInAndOutState()
                 .equals(CoralState.STORED_CORAL_IN_SHOOTER)) {
           RobotState.getInstance().setCoralInAndOutState(CoralState.SHOOTING_L1);
-          break;
-        } else {
-          break;
         }
-      case SPIT_BACK:
-        RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
-        break;
+      }
+      case SPIT_BACK -> RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
     }
   }
 
@@ -175,5 +168,13 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   public boolean isCoralInShooter() {
     return coralInputs.shooterLCMeasurement.getDistance()
         < (int) Math.floor(shooterDetectThreshold.get());
+  }
+
+  /**
+   * @return true if coral is detected by exit LaserCAN
+   */
+  public boolean hasCoralExited() {
+    return coralInputs.exitLCMeasurement.getDistance()
+        < (int) Math.floor(exitDetectThreshold.get());
   }
 }
