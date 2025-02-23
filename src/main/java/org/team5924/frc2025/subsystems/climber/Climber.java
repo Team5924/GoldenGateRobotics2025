@@ -101,7 +101,6 @@ public class Climber extends SubsystemBase {
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
-
   /**
    * Sets the goal state of the climber.
    *
@@ -112,46 +111,43 @@ public class Climber extends SubsystemBase {
     this.goalState = goalState;
     switch (goalState) {
       case CLIMB:
-      if(RobotState.getInstance().getClimberState().equals(ClimberState.STOW)){
-        DriverStation.reportError(
-        "Cannot transition Climber from STOW to "
-            + goalState.name()
-            + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
-        new StackTraceElement[] {
-          new StackTraceElement("Climber", "setGoalState", "Climber", 106)
-        });
-        break;
-      }
-      else if(RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)){
-        RobotState.getInstance().setClimberState(ClimberState.CLIMB);
-        break;
-      }
+        if (RobotState.getInstance().getClimberState().equals(ClimberState.STOW)) {
+          DriverStation.reportError(
+              "Cannot transition Climber from STOW to "
+                  + goalState.name()
+                  + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
+              new StackTraceElement[] {
+                new StackTraceElement("Climber", "setGoalState", "Climber", 106)
+              });
+          break;
+        } else if (RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)) {
+          RobotState.getInstance().setClimberState(ClimberState.CLIMB);
+          break;
+        }
 
       case STOW:
         RobotState.getInstance().setClimberState(ClimberState.STOW);
         break;
       case READY_TO_CLIMB:
         RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
-          break;
-      
+        break;
+
       case REVERSE_CLIMB:
-      if(RobotState.getInstance().getClimberState().equals(ClimberState.STOW)){
-        DriverStation.reportError(
-        "Cannot transition Climber from STOW to "
-            + goalState.name()
-            + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
-        new StackTraceElement[] {
-          new StackTraceElement("Climber", "setGoalState", "Climber", 106)
-        });
-        break;
-      }
-      else if(RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)){
-        RobotState.getInstance().setClimberState(ClimberState.REVERSE_CLIMB);
-        break;
-      }
+        if (RobotState.getInstance().getClimberState().equals(ClimberState.STOW)) {
+          DriverStation.reportError(
+              "Cannot transition Climber from STOW to "
+                  + goalState.name()
+                  + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
+              new StackTraceElement[] {
+                new StackTraceElement("Climber", "setGoalState", "Climber", 106)
+              });
+          break;
+        } else if (RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)) {
+          RobotState.getInstance().setClimberState(ClimberState.REVERSE_CLIMB);
+          break;
+        }
     }
   }
-
 
   /**
    * @return true if cage is detected by climber LaserCAN

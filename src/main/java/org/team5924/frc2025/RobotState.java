@@ -47,11 +47,6 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/ClimberState")
   private ClimberState climberState = ClimberState.STOW;
 
-  /* ### Climber ### */
-  @Setter
-  @AutoLogOutput(key = "RobotState/ClimberState")
-  private ClimberState climberState = ClimberState.STOW;
-
   @Getter @Setter private Rotation2d yawPosition = new Rotation2d();
   @Getter @Setter private double yawVelocityRadPerSec = 0.0;
 
