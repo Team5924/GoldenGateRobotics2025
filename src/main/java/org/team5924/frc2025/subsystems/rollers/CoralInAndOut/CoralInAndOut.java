@@ -115,7 +115,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
 
     // update CoralState periodically
     updateCoralState();
-    
+
     Logger.recordOutput(
         "RobotState/Coral/InAndOutState", RobotState.getInstance().getCoralInAndOutState());
   }
