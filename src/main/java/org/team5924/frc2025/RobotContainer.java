@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.team5924.frc2025.commands.drive.DriveCommands;
+import org.team5924.frc2025.commands.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
 import org.team5924.frc2025.generated.TunerConstants;
@@ -187,7 +187,15 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    driveController.x().onTrue(Drive.FollowPathCommand());
+    driveController.x().onTrue(drive.followPathCommand(Constants.SCORING_BUMPER_POSES_BLUE[6]));
+    driveController
+        .x()
+        .onFalse(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -driveController.getLeftY(),
+                () -> -driveController.getLeftX(),
+                () -> -driveController.getRightX()));
 
     // Coral In and Out
     operatorController
