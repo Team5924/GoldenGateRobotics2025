@@ -25,12 +25,14 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -40,8 +42,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -57,6 +58,7 @@ import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.Constants.Mode;
 import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.util.Conversions;
 import org.team5924.frc2025.util.LocalADStarAK;
 
 public class Drive extends SubsystemBase {
@@ -160,6 +162,38 @@ public class Drive extends SubsystemBase {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+
+    for (int i = 1; i <= 12; i++) {
+      Logger.recordOutput(
+          "Blue " + Conversions.getCharForNumber(i).toUpperCase() + " Scoring Pose",
+          Constants.SCORING_POSES_BLUE[i - 1]);
+      // System.out.println(
+      //     "Blue "
+      //         + Conversions.getCharForNumber(i).toUpperCase()
+      //         + " X: "
+      //         + Constants.SCORING_POSES_BLUE[i - 1].getX());
+      // System.out.println(
+      //     "Blue "
+      //         + Conversions.getCharForNumber(i).toUpperCase()
+      //         + " Y: "
+      //         + Constants.SCORING_POSES_BLUE[i - 1].getY());
+    }
+
+    for (int i = 1; i <= 12; i++) {
+      Logger.recordOutput(
+          "Red " + Conversions.getCharForNumber(i).toUpperCase() + " Scoring Pose",
+          Constants.SCORING_POSES_RED[i - 1]);
+      // System.out.println(
+      //     "Red "
+      //         + Conversions.getCharForNumber(i).toUpperCase()
+      //         + " X: "
+      //         + Constants.SCORING_POSES_RED[i - 1].getX());
+      // System.out.println(
+      //     "Red "
+      //         + Conversions.getCharForNumber(i).toUpperCase()
+      //         + " Y: "
+      //         + Constants.SCORING_POSES_RED[i - 1].getY());
+    }
   }
 
   @Override
@@ -342,12 +376,8 @@ public class Drive extends SubsystemBase {
   }
 
   /** Adds a new timestamped vision measurement. */
-  public void addVisionMeasurement(
-      Pose2d visionRobotPoseMeters,
-      double timestampSeconds,
-      Matrix<N3, N1> visionMeasurementStdDevs) {
-    poseEstimator.addVisionMeasurement(
-        visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+  public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+    poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
@@ -368,5 +398,16 @@ public class Drive extends SubsystemBase {
       new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
       new Translation2d(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
     };
+  }
+
+  // creates a path with a single waypoint which is the destination
+  public PathPlannerPath createSimplePath(Pose2d destinationPose2d) {
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(destinationPose2d);
+
+    return new PathPlannerPath(
+        waypoints,
+        null, // insert pathconstraints here
+        null, // this can be kept as null
+        new GoalEndState(0.0, Rotation2d.fromDegrees(0))); // dummy values
   }
 }

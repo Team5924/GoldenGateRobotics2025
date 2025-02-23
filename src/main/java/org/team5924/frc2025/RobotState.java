@@ -17,6 +17,7 @@
 package org.team5924.frc2025;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -46,20 +47,23 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/ClimberState")
   private ClimberState climberState = ClimberState.STOW;
 
-  @Getter
+  /* ### Climber ### */
   @Setter
-  @AutoLogOutput(key = "RobotState/ElevatorState")
-  private ElevatorState elevatorState = ElevatorState.MANUAL;
+  @AutoLogOutput(key = "RobotState/ClimberState")
+  private ClimberState climberState = ClimberState.STOW;
+
+  @Getter @Setter private Rotation2d yawPosition = new Rotation2d();
+  @Getter @Setter private double yawVelocityRadPerSec = 0.0;
+
+  @Getter @Setter private ElevatorState elevatorState = ElevatorState.MANUAL;
 
   /* ### Coral In and Out ### */
-  @Getter
-  @Setter
-  @AutoLogOutput(key = "RobotState/CoralState")
-  private CoralState coralInAndOutState = CoralState.NO_CORAL;
+  @Getter @Setter private CoralState coralInAndOutState = CoralState.NO_CORAL;
 
   /* ### Algae Pivot ### */
-  @Getter
-  @Setter
-  @AutoLogOutput(key = "RobotState/AlgaePivotState")
-  private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+  @Getter @Setter private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+
+  /* ### Vision ### */
+  @Getter @Setter private int limelightImuMode = 0;
+  @Getter @Setter private boolean isRedAlliance = true;
 }
