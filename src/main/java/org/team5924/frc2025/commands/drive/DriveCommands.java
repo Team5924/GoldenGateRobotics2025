@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025.commands.drive;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -37,7 +38,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.subsystems.drive.Drive;
+import org.team5924.frc2025.util.Pathing;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -158,6 +161,12 @@ public class DriveCommands {
 
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+  }
+
+  public static Command driveToReef(Drive drive, boolean isTargetLeft) {
+    Pose2d destinationPose = Pathing.getClosestPose(drive.getPose(), isTargetLeft);
+    Logger.recordOutput("Destination Pose", destinationPose);
+    return AutoBuilder.followPath(Pathing.createPath(drive.getPose(), destinationPose));
   }
 
   /**

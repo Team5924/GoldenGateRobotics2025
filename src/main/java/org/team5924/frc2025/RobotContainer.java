@@ -187,7 +187,9 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    driveController.x().onTrue(Drive.FollowPathCommand());
+    driveController.leftBumper().whileTrue(DriveCommands.driveToReef(drive, true));
+
+    driveController.rightBumper().whileTrue(DriveCommands.driveToReef(drive, false));
 
     // Coral In and Out
     operatorController
