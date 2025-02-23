@@ -26,12 +26,29 @@ import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
-  private static final int id = Constants.CORAL_IN_AND_OUT_CAN_ID;
+
+  private static final int loadShootId = Constants.CORAL_IN_AND_OUT_CAN_ID;
+  private static final int handoffId = Constants.CORAL_HANDOFF_CAN_ID;
   private static final String bus = Constants.CORAL_IN_AND_OUT_BUS;
   private static final int currentLimitAmps = Constants.CORAL_IN_AND_OUT_CURRENT_LIMIT;
   private static final boolean invert = Constants.CORAL_IN_AND_OUT_INVERT;
-  private static final boolean brake = Constants.CORAL_IN_AND_OUT_BRAKE;
+  private static final boolean loadShootBrake = Constants.CORAL_IN_AND_OUT_BRAKE;
+  private static final boolean handoffBrake = Constants.CORAL_HANDOFF_BRAKE;
   private static final double reduction = Constants.CORAL_IN_AND_OUT_REDUCTION;
+
+  private class HandoffKrakenFOC extends GenericRollerSystemIOKrakenFOC {
+    public HandoffKrakenFOC(
+        int handoffId,
+        String bus,
+        int currentLimitAmps,
+        boolean invert,
+        boolean brake,
+        double reduction) {
+      super(handoffId, bus, currentLimitAmps, invert, brake, reduction);
+    }
+  }
+
+  private final HandoffKrakenFOC innerHandoffSystem;
 
   private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
   private static final LaserCan shooterLC = new LaserCan(Constants.CORAL_SHOOTER_LASER_CAN_ID);
@@ -47,7 +64,9 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
       new Alert("Shooter LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
   public CoralInAndOutIOKrakenFOC() {
-    super(id, bus, currentLimitAmps, invert, brake, reduction);
+    super(loadShootId, bus, currentLimitAmps, invert, loadShootBrake, reduction);
+    innerHandoffSystem =
+        new HandoffKrakenFOC(handoffId, bus, currentLimitAmps, invert, handoffBrake, reduction);
   }
 
   public void updateInputs(CoralInAndOutIOInputs inputs) {
@@ -90,5 +109,11 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     }
 
     super.updateInputs(inputs);
+  }
+
+  @Override
+  public void runVolts(double volts, double handoffVolts) {
+    super.runVolts(volts);
+    innerHandoffSystem.runVolts(handoffVolts);
   }
 }
