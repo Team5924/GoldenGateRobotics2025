@@ -18,6 +18,7 @@ package org.team5924.frc2025.subsystems.climber;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import lombok.Getter;
@@ -100,46 +101,57 @@ public class Climber extends SubsystemBase {
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
+
   /**
    * Sets the goal state of the climber.
    *
    * @param goalState the new goal state
    */
   public void setGoalState(ClimberState goalState) {
-    // Validate state transitions
-    // if (getGoalState() == ClimberState.STOW
-    //     && (goalState == ClimberState.CLIMB || goalState == ClimberState.REVERSE_CLIMB)) {
-    //   DriverStation.reportError(
-    //       "Cannot transition Climber from STOW to "
-    //           + goalState.name()
-    //           + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
-    //       new StackTraceElement[] {
-    //         new StackTraceElement("Climber", "setGoalState", "Climber", 106)
-    //       });
-    //   return;
-    // }
 
     this.goalState = goalState;
     switch (goalState) {
-      case CLIMB -> RobotState.getInstance().setClimberState(ClimberState.CLIMB);
-      case STOW -> RobotState.getInstance().setClimberState(ClimberState.STOW);
-      case READY_TO_CLIMB -> RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
-      case REVERSE_CLIMB -> RobotState.getInstance().setClimberState(ClimberState.REVERSE_CLIMB);
+      case CLIMB:
+      if(RobotState.getInstance().getClimberState().equals(ClimberState.STOW)){
+        DriverStation.reportError(
+        "Cannot transition Climber from STOW to "
+            + goalState.name()
+            + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
+        new StackTraceElement[] {
+          new StackTraceElement("Climber", "setGoalState", "Climber", 106)
+        });
+        break;
+      }
+      else if(RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)){
+        RobotState.getInstance().setClimberState(ClimberState.CLIMB);
+        break;
+      }
+
+      case STOW:
+        RobotState.getInstance().setClimberState(ClimberState.STOW);
+        break;
+      case READY_TO_CLIMB:
+        RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
+          break;
+      
+      case REVERSE_CLIMB:
+      if(RobotState.getInstance().getClimberState().equals(ClimberState.STOW)){
+        DriverStation.reportError(
+        "Cannot transition Climber from STOW to "
+            + goalState.name()
+            + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
+        new StackTraceElement[] {
+          new StackTraceElement("Climber", "setGoalState", "Climber", 106)
+        });
+        break;
+      }
+      else if(RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)){
+        RobotState.getInstance().setClimberState(ClimberState.REVERSE_CLIMB);
+        break;
+      }
     }
   }
 
-  /**
-   * Sets the goal state of the climber when it isn't moving (neither Dpad Up nor Dpad Down is
-   * pressed).
-   */
-  // public void setGoalStateToNotMoving() {
-  //   switch (getGoalState()) {
-  //     case MOVING ->
-  //         setGoalState(ClimberState.CLIMB); // the climber stopped moving, return to climb state
-  //     default -> {} // the climber was not moving in the first place, don't need a state change
-  // here
-  //   }
-  // }
 
   /**
    * @return true if cage is detected by climber LaserCAN
