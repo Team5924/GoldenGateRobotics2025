@@ -17,9 +17,9 @@
 package org.team5924.frc2025.generated;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -43,12 +43,15 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.units.measure.Voltage;
+
+import org.team5924.frc2025.util.swerve.ModuleLimits;
 
 // import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -63,15 +66,15 @@ public class TunerConstants {
       new Slot0Configs()
           .withKP(150)
           .withKI(0)
-          .withKD(2)
-          .withKS(0.1)
+          .withKD(0.3)
+          .withKS(0.0)
           .withKV(1.5)
           .withKA(0)
           .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
   // When using closed-loop control, the drive motor uses the control
   // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
   private static final Slot0Configs driveGains =
-      new Slot0Configs().withKP(2).withKI(0).withKD(0).withKS(0.19169).withKV(0.65572);
+      new Slot0Configs().withKP(1.5).withKI(0).withKD(0).withKS(0.19169).withKV(0.65572);
 
   // The closed-loop output type to use for the steer motors;
   // This affects the PID/FF gains for the steer motors
@@ -117,18 +120,18 @@ public class TunerConstants {
 
   // Theoretical free speed (m/s) at 12 V applied output;
   // This needs to be tuned to your individual robot
-  public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(6.19);
+  public static final LinearVelocity kSpeedAt12Volts = FeetPerSecond.of(18.47);
 
   // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
   // This may need to be tuned to your individual robot
   private static final double kCoupleRatio = 4.909090909090909;
 
-  private static final double kDriveGearRatio = 5.154545454545454;
+  private static final double kDriveGearRatio = 5.67;
   private static final double kSteerGearRatio = 12.1;
   private static final Distance kWheelRadius = Inches.of(1.875);
 
-  private static final boolean kInvertLeftSide = false;
-  private static final boolean kInvertRightSide = true;
+  private static final boolean kInvertLeftSide = true;
+  private static final boolean kInvertRightSide = false;
 
   private static final int kPigeonId = 0;
 
@@ -271,6 +274,12 @@ public class TunerConstants {
               kInvertRightSide,
               kBackRightSteerMotorInverted,
               kBackRightEncoderInverted);
+
+  public static final ModuleLimits moduleLimitsFree =
+      new ModuleLimits(
+          Units.feetToMeters(18.47), // max speed, guess
+          Units.feetToMeters(75.0), // max acceleration, guess
+          Units.degreesToRadians(1080.0));
 
   /**
    * Creates a CommandSwerveDrivetrain instance. This should only be called once in your robot

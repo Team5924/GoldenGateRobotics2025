@@ -29,7 +29,7 @@ public class VisionIOLimelight implements VisionIO {
     LimelightHelpers.SetIMUMode("limelight-front", 1);
     LimelightHelpers.SetIMUMode("limelight-back", 1);
 
-    RobotState.getInstance().setLimelightImuMode(0);
+    RobotState.getInstance().setLimelightImuMode(1);
   }
 
   private void setLLSettings() {
