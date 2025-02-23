@@ -16,9 +16,6 @@
 
 package org.team5924.frc2025;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
-
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.measure.Distance;
 import static edu.wpi.first.units.Units.Degrees;
@@ -32,7 +29,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
