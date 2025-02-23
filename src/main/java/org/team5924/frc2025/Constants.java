@@ -120,7 +120,7 @@ public final class Constants {
 
   public static final Distance ROBOT_LENGTH_WITH_BUMPERS_FRONT_TO_BACK = Inches.of(35.75);
   public static final Distance ROBOT_LENGTH_WITH_BUMPERS_LEFT_TO_RIGHT = Inches.of(36.5);
-  public static final Distance DELTA_X_CENTER_OF_CORAL_OUT_FROM_CENTER = Inches.of(-0);
+  public static final Distance DELTA_X_CENTER_OF_CORAL_OUT_FROM_CENTER = Inches.of(-5.5);
 
   public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT =
       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
