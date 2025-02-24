@@ -42,7 +42,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
     SHOOTING(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 12.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2.50),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", -12.0),

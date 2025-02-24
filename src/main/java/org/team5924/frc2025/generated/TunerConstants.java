@@ -120,6 +120,13 @@ public class TunerConstants {
                   .withMountPosePitch(-0.20943012833595276)
                   .withMountPoseYaw(91.5396957397461));
 
+  private static final Pigeon2Configuration pigeonConfigs =
+      new Pigeon2Configuration()
+          .withMountPose(
+              new MountPoseConfigs()
+                  .withMountPoseRoll(-0.08099313080310822)
+                  .withMountPosePitch(-0.20943012833595276)
+                  .withMountPoseYaw(91.5396957397461));
   // CAN bus that the devices are located on;
   // All swerve devices must share the same CAN bus
   public static final CANBus kCANBus = new CANBus("Drive CANivore", "./logs/example.hoot");
