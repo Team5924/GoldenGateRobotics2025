@@ -49,7 +49,9 @@ public class RunVisionPoseEstimation extends Command {
       return;
     }
     Logger.recordOutput("Vision Pose", estimatedPose.fieldToCamera);
-    if (isPoseValid(estimatedPose) && isVisionReliable(estimatedPose)) {
+    if (isPoseValid(estimatedPose)
+        && isVisionReliable(estimatedPose)
+        && estimatedPose.avgTagDist < 1) {
       drive.addVisionMeasurement(
           estimatedPose.fieldToCamera,
           Timer.getFPGATimestamp()
