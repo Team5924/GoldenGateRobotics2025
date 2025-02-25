@@ -46,11 +46,11 @@ public class Elevator extends SubsystemBase {
   public final SysIdRoutine downSysId;
 
   public enum ElevatorState {
-    INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0.095)),
-    L1(new LoggedTunableNumber("Elevator/L1Height", 0.17)),
-    L2(new LoggedTunableNumber("Elevator/L2Height", 0.22)),
-    L3(new LoggedTunableNumber("Elevator/L3Height", .42)),
-    L4(new LoggedTunableNumber("Elevator/L4Height", .73)),
+    INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
+    L1(new LoggedTunableNumber("Elevator/L1Height", 0.15)),
+    L2(new LoggedTunableNumber("Elevator/L2Height", 0.23)),
+    L3(new LoggedTunableNumber("Elevator/L3Height", .4)),
+    L4(new LoggedTunableNumber("Elevator/L4Height", .657)),
     MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),
     MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0));
 

@@ -159,8 +159,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> driveController.getLeftY(),
-            () -> driveController.getLeftX(),
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
             () -> -driveController.getRightX()));
 
     // Lock to 0° when A button is held
@@ -169,8 +169,8 @@ public class RobotContainer {
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> driveController.getLeftY(),
-                () -> driveController.getLeftX(),
+                () -> -driveController.getLeftY(),
+                () -> -driveController.getLeftX(),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
@@ -226,9 +226,6 @@ public class RobotContainer {
     operatorController
         .leftBumper()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
-    operatorController
-        .rightBumper()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Vision
     vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision));
