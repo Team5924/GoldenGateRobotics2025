@@ -70,22 +70,10 @@ public class VisionIOLimelight implements VisionIO {
     // }
     // } else {
     LimelightHelpers.SetRobotOrientation(
-        "limelight-front",
-        RobotState.getInstance().getYawPosition().getDegrees(),
-        0,
-        0,
-        0,
-        0,
-        0);
+        "limelight-front", RobotState.getInstance().getYawPosition().getDegrees(), 0, 0, 0, 0, 0);
 
     LimelightHelpers.SetRobotOrientation(
-        "limelight-back",
-        RobotState.getInstance().getYawPosition().getDegrees(),
-        0,
-        0,
-        0,
-        0,
-        0);
+        "limelight-back", RobotState.getInstance().getYawPosition().getDegrees(), 0, 0, 0, 0, 0);
     // }
   }
 
