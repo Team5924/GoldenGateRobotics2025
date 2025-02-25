@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025.subsystems.vision;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.util.FiducialObservation;
@@ -62,12 +63,12 @@ public class VisionIOLimelight implements VisionIO {
         Constants.BACK_LIMELIGHT_OFF_PITCH,
         Constants.BACK_LIMELIGHT_OFF_YAW);
 
-    // if (!DriverStation.isDisabled()) {
-    //   LimelightHelpers.SetIMUMode("limelight-front", 2);
-    //   LimelightHelpers.SetIMUMode("limelight-back", 2);
+    if (!DriverStation.isDisabled()) {
+      LimelightHelpers.SetIMUMode("limelight-front", 4);
+      LimelightHelpers.SetIMUMode("limelight-back", 4);
 
-    //   RobotState.getInstance().setLimelightImuMode(2);
-    // }
+      RobotState.getInstance().setLimelightImuMode(4);
+    }
     // } else {
     LimelightHelpers.SetRobotOrientation(
         "limelight-front", RobotState.getInstance().getYawPosition().getDegrees(), 0, 0, 0, 0, 0);
