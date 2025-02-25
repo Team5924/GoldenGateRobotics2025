@@ -30,18 +30,18 @@ import org.team5924.frc2025.Constants;
 public class Pathing {
   public static Pose2d getClosestPose(Pose2d currentPose, boolean isLeftTarget) {
     ArrayList<Pose2d> targetPoses = new ArrayList<>();
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 12; i++) {
       if (isLeftTarget) {
         targetPoses.add(Constants.SCORING_POSES_BLUE[i]);
       } else {
-        targetPoses.add(Constants.SCORING_POSES_BLUE[i + 1]);
+        targetPoses.add(Constants.SCORING_POSES_BLUE[++i]);
       }
     }
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 12; i++) {
       if (isLeftTarget) {
         targetPoses.add(Constants.SCORING_POSES_RED[i]);
       } else {
-        targetPoses.add(Constants.SCORING_POSES_RED[i + 1]);
+        targetPoses.add(Constants.SCORING_POSES_RED[++i]);
       }
     }
     return currentPose.nearest(targetPoses);
