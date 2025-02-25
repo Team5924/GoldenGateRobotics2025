@@ -16,19 +16,19 @@
 
 package org.team5924.frc2025;
 
-import com.ctre.phoenix6.signals.InvertedValue;
-import edu.wpi.first.units.measure.Distance;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 
+import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -69,6 +69,7 @@ public final class Constants {
   public static final double CORAL_IN_AND_OUT_SIM_MOI = 0.001;
   public static final int CORAL_INTAKE_LASER_CAN_ID = 10;
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
+  public static final int CORAL_EXIT_LASER_CAN_ID = 12;
 
   /* # Pivot # */
   public static final int ALGAE_PIVOT_TALON_ID = 55;

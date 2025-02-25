@@ -188,10 +188,13 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // Coral In and Out
+
+    // leftTriggerOnlyShoots when Elevator is at
     operatorController
         .leftTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+            Commands.runOnce(
+                () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L2_AND_L3)));
     operatorController
         .rightTrigger()
         .onTrue(
@@ -218,7 +221,7 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
     operatorController
         .y()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
     operatorController
         .leftBumper()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
