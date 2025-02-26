@@ -22,6 +22,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
 
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -60,8 +61,8 @@ public final class Constants {
   public static final int CLIMBER_CAN_ID = 40;
   public static final String CLIMBER_BUS = "rio";
   public static final int CLIMBER_CURRENT_LIMIT = 40;
-  public static final boolean CLIMBER_INVERT = false;
-  public static final boolean CLIMBER_BRAKE = true;
+  public static final InvertedValue CLIMBER_INVERT = InvertedValue.CounterClockwise_Positive;
+  public static final NeutralModeValue CLIMBER_NEUTRAL_MODE = NeutralModeValue.Brake;
   public static final double CLIMBER_REDUCTION = 58.3; // TODO: correct for now, check again later
   public static final double CLIMBER_SIM_MOI = 0.001;
   public static final double CLIMBER_MIN_RADS = -Math.PI / 2; // TODO: get real min

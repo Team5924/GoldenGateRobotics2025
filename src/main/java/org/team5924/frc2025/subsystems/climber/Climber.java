@@ -18,7 +18,6 @@ package org.team5924.frc2025.subsystems.climber;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import lombok.Getter;
@@ -52,14 +51,13 @@ public class Climber extends SubsystemBase {
     }
   }
 
-  // 1 = up, -1 = down
-  // private double voltageMultiplier = 1;
-
   private ClimberState goalState = ClimberState.STOW;
   private ClimberState lastState;
 
   private final Alert rotateDisconnected;
   private final Alert clampDisconnected;
+
+  private final Alert invalidStateTransition;
 
   protected final Timer stateTimer = new Timer();
 
@@ -73,8 +71,9 @@ public class Climber extends SubsystemBase {
   public Climber(ClimberIO io) {
     this.io = io;
 
-    rotateDisconnected = new Alert("Climber disconnected!", Alert.AlertType.kWarning);
+    rotateDisconnected = new Alert("Climber motor is disconnected!", Alert.AlertType.kWarning);
     clampDisconnected = new Alert("Clamp motor is disconnected!", Alert.AlertType.kWarning);
+    invalidStateTransition = new Alert("Invalid state transition!", Alert.AlertType.kWarning);
     stateTimer.start();
   }
 
@@ -86,8 +85,7 @@ public class Climber extends SubsystemBase {
     rotateDisconnected.set(!inputs.rotateMotorConnected);
 
     // If the robot's state is STOW && the cage is within range && elevator + algae pivot are both
-    // stow,
-    // then set the robot's state to READY_TO_CLIMB
+    // stow, then set the robot's state to READY_TO_CLIMB
     if (getGoalState() == ClimberState.STOW
         && isCageInClimber()
         && RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE
@@ -107,23 +105,19 @@ public class Climber extends SubsystemBase {
   /**
    * Sets the goal state of the climber.
    *
-   * @param goalState the new goal state
+   * @param newGoal the new goal state
    */
-  public void setGoalState(ClimberState goalState) {
-
-    this.goalState = goalState;
+  public void setGoalState(ClimberState newGoal) {
+    this.goalState = newGoal;
     switch (goalState) {
       case CLIMB:
+        // cannot transition from STOW, but can from REVERSE_CLIMB (going up and down) and
+        // READY_TO_CLIMB
         if (RobotState.getInstance().getClimberState().equals(ClimberState.STOW)) {
-          DriverStation.reportError(
-              "Cannot transition Climber from STOW to "
-                  + goalState.name()
-                  + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
-              new StackTraceElement[] {
-                new StackTraceElement("Climber", "setGoalState", "Climber", 106)
-              });
+          invalidStateTransition.setText(
+              "Cannot transition Climber from STOW to CLIMB.  Robot needs to be READY_TO_CLIMB before performing any climbing action.");
           break;
-        } else if (RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)) {
+        } else { // otherwise transition is valid
           RobotState.getInstance().setClimberState(ClimberState.CLIMB);
           break;
         }
@@ -131,25 +125,33 @@ public class Climber extends SubsystemBase {
       case STOW:
         RobotState.getInstance().setClimberState(ClimberState.STOW);
         break;
+
       case READY_TO_CLIMB:
         RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
         break;
 
       case REVERSE_CLIMB:
         if (RobotState.getInstance().getClimberState().equals(ClimberState.STOW)) {
-          DriverStation.reportError(
-              "Cannot transition Climber from STOW to "
-                  + goalState.name()
-                  + ".  Robot needs to be READY_TO_CLIMB before performing any climbing action",
-              new StackTraceElement[] {
-                new StackTraceElement("Climber", "setGoalState", "Climber", 106)
-              });
+          invalidStateTransition.setText(
+              "Cannot transition Climber from STOW to INVERSE_CLIMB.  Robot needs to be READY_TO_CLIMB before performing any climbing action.");
           break;
-        } else if (RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)) {
+        } else {
           RobotState.getInstance().setClimberState(ClimberState.REVERSE_CLIMB);
           break;
         }
     }
+
+    // if the goal state and the actual state are not equal, then there was an error
+    invalidStateTransition.set(RobotState.getInstance().getClimberState() != goalState);
+  }
+
+  /** Handles the the climber's state when there is no climber input */
+  public void handleNoInputState() {
+    setGoalState(
+        getGoalState() == ClimberState.STOW
+            ? ClimberState.STOW // if the robot is not climbing, stay in STOW state
+            : ClimberState
+                .READY_TO_CLIMB); // if the robot is climbing, transition to READY_TO_CLIMB
   }
 
   /**
@@ -165,7 +167,7 @@ public class Climber extends SubsystemBase {
     io.runRotateVolts(volts);
   }
 
-  public void runClampVolts(double volts){
+  public void runClampVolts(double volts) {
     io.runClampVolts(volts);
   }
 

@@ -25,8 +25,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -80,12 +78,8 @@ public class ClimberIOTalonFX implements ClimberIO {
 
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
-    config.MotorOutput.Inverted =
-        Constants.CLIMBER_INVERT
-            ? InvertedValue.Clockwise_Positive
-            : InvertedValue.CounterClockwise_Positive;
-    config.MotorOutput.NeutralMode =
-        Constants.CLIMBER_BRAKE ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    config.MotorOutput.Inverted = Constants.CLIMBER_INVERT;
+    config.MotorOutput.NeutralMode = Constants.CLIMBER_NEUTRAL_MODE;
     config.CurrentLimits.SupplyCurrentLimit = Constants.CLIMBER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     rotateTalon.getConfigurator().apply(config);
@@ -203,7 +197,7 @@ public class ClimberIOTalonFX implements ClimberIO {
       Logger.recordOutput("Climber/InvalidAngle", message);
       throw new IllegalArgumentException(message);
     }
-    rads = Math.min(Constants.CLIMBER_MIN_RADS, Math.max(rads, Constants.CLIMBER_MAX_RADS));
+    rads = Math.max(Constants.CLIMBER_MIN_RADS, Math.min(rads, Constants.CLIMBER_MAX_RADS));
     rotateTalon.setControl(positionOut.withPosition(Radians.of(rads)));
   }
 }
