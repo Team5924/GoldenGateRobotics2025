@@ -23,8 +23,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
@@ -187,9 +189,17 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    driveController.leftBumper().whileTrue(DriveCommands.driveToReef(drive, true));
+    driveController
+        .leftBumper()
+        .whileTrue(
+            new DeferredCommand(
+                () -> DriveCommands.driveToReef(drive, vision, true), Set.of(drive, vision)));
 
-    driveController.rightBumper().whileTrue(DriveCommands.driveToReef(drive, false));
+    driveController
+        .rightBumper()
+        .whileTrue(
+            new DeferredCommand(
+                () -> DriveCommands.driveToReef(drive, vision, false), Set.of(drive, vision)));
 
     // Coral In and Out
     operatorController
@@ -228,7 +238,7 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
 
     // Vision
-    vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision));
+    vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
   }
 
   /**
