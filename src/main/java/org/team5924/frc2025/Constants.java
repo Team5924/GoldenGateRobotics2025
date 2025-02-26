@@ -28,8 +28,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.RobotBase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -210,6 +215,83 @@ public final class Constants {
     for (int i = 0; i < 12; i++) {
       SCORING_POSES_RED[i] =
           SCORING_POSES_BLUE[i].rotateAround(FIELD_CENTER, new Rotation2d(Radians.of(Math.PI)));
+    }
+  }
+
+  public enum ReefLevel {
+    L1(Units.inchesToMeters(25.0), 0),
+    L2(Units.inchesToMeters(31.875 - Math.cos(Math.toRadians(35.0)) * 0.625), -35),
+    L3(Units.inchesToMeters(47.625 - Math.cos(Math.toRadians(35.0)) * 0.625), -35),
+    L4(Units.inchesToMeters(72), -90);
+
+    ReefLevel(double height, double pitch) {
+      this.height = height;
+      this.pitch = pitch; // Degrees
+    }
+
+    public static ReefLevel fromLevel(int level) {
+      return Arrays.stream(values())
+          .filter(height -> height.ordinal() == level)
+          .findFirst()
+          .orElse(L4);
+    }
+
+    public final double height;
+    public final double pitch;
+  }
+
+  public static class Reef {
+    public static final double fieldLength =
+        AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded).getFieldLength();
+    public static final double fieldWidth =
+        AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded).getFieldWidth();
+    public static final double faceLength = Units.inchesToMeters(36.792600);
+    public static final Translation2d center =
+        new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+    public static final double faceToZoneLine =
+        Units.inchesToMeters(12); // Side of the reef to the inside of the reef zone line
+
+    public static final Pose2d[] centerFaces =
+        new Pose2d[6]; // Starting facing the driver station in clockwise order
+    public static final List<Pose2d> branchRight2d = new ArrayList<>();
+    public static final List<Pose2d> branchLeft2d = new ArrayList<>();
+
+    static {
+      // Initialize branch positions
+      for (int face = 0; face < 6; face++) {
+        Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
+        Logger.recordOutput("BranchPoses/" + face, poseDirection);
+        double adjustX = Units.inchesToMeters(31); // 30.738);
+        double adjustY_shooter = Units.inchesToMeters(7); // 6.469);
+        double adjustY_pole = Units.inchesToMeters(6.469);
+
+        var rightBranchPost =
+            new Pose2d(
+                poseDirection
+                    .transformBy(
+                        new Transform2d(adjustX, adjustY_pole + adjustY_shooter, new Rotation2d()))
+                    .getX(),
+                poseDirection
+                    .transformBy(
+                        new Transform2d(adjustX, adjustY_pole + adjustY_shooter, new Rotation2d()))
+                    .getY(),
+                new Rotation2d(Math.PI).unaryMinus());
+
+        var leftBranchPost =
+            new Pose2d(
+                poseDirection
+                    .transformBy(
+                        new Transform2d(adjustX, -adjustY_pole + adjustY_shooter, new Rotation2d()))
+                    .getX(),
+                poseDirection
+                    .transformBy(
+                        new Transform2d(adjustX, -adjustY_pole + adjustY_shooter, new Rotation2d()))
+                    .getY(),
+                new Rotation2d(Math.PI).unaryMinus());
+
+        branchRight2d.add(rightBranchPost);
+        branchLeft2d.add(leftBranchPost);
+      }
     }
   }
 }

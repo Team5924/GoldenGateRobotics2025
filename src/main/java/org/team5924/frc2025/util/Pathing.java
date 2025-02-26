@@ -29,22 +29,8 @@ import org.team5924.frc2025.Constants;
 /** Add your docs here. */
 public class Pathing {
   public static Pose2d getClosestPose(Pose2d currentPose, boolean isLeftTarget) {
-    ArrayList<Pose2d> targetPoses = new ArrayList<>();
-    for (int i = 0; i < 12; i++) {
-      if (isLeftTarget) {
-        targetPoses.add(Constants.SCORING_POSES_BLUE[i]);
-      } else {
-        targetPoses.add(Constants.SCORING_POSES_BLUE[++i]);
-      }
-    }
-    for (int i = 0; i < 12; i++) {
-      if (isLeftTarget) {
-        targetPoses.add(Constants.SCORING_POSES_RED[i]);
-      } else {
-        targetPoses.add(Constants.SCORING_POSES_RED[++i]);
-      }
-    }
-    return currentPose.nearest(targetPoses);
+    if (isLeftTarget) return currentPose.nearest(Constants.Reef.branchLeft2d);
+    else return currentPose.nearest(Constants.Reef.branchRight2d);
   }
 
   // creates a path with a single waypoint which is the destination

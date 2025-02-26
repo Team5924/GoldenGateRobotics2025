@@ -17,11 +17,6 @@
 package org.team5924.frc2025.commands.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.IdealStartingState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -45,7 +40,6 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.subsystems.drive.Drive;
-import org.team5924.frc2025.subsystems.vision.Vision;
 import org.team5924.frc2025.util.Pathing;
 
 public class DriveCommands {
@@ -169,28 +163,11 @@ public class DriveCommands {
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
 
-  public static Command driveToReef(Drive drive, Vision vision, boolean isTargetLeft) {
-    PathConstraints kPathConstraints =
-        new PathConstraints(1.75, 1.75, 1 / 2 * Math.PI, 1 * Math.PI);
-    // AutoBuilder.resetOdom(drive.getPose());
-    Logger.recordOutput("Starting Pose", drive.getPose());
+  public static Command driveToReef(Drive drive, boolean isTargetLeft) {
+    AutoBuilder.resetOdom(drive.getPose());
     Pose2d destinationPose = Pathing.getClosestPose(drive.getPose(), isTargetLeft);
     Logger.recordOutput("Destination Pose", destinationPose);
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(drive.getPose(), destinationPose);
-
-    if (waypoints.get(0).anchor().getDistance(waypoints.get(1).anchor()) < 0.01) {
-      return Commands.none();
-    }
-
-    PathPlannerPath path =
-        new PathPlannerPath(
-            waypoints,
-            kPathConstraints,
-            new IdealStartingState(0.0, drive.getRotation()),
-            new GoalEndState(0.0, new Rotation2d(180)));
-
-    path.preventFlipping = true;
-    return AutoBuilder.pathfindToPose(destinationPose, kPathConstraints);
+    return AutoBuilder.followPath(Pathing.createPath(drive.getPose(), destinationPose));
   }
 
   /**

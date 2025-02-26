@@ -192,14 +192,12 @@ public class RobotContainer {
     driveController
         .leftBumper()
         .whileTrue(
-            new DeferredCommand(
-                () -> DriveCommands.driveToReef(drive, vision, true), Set.of(drive, vision)));
+            new DeferredCommand(() -> DriveCommands.driveToReef(drive, true), Set.of(drive)));
 
     driveController
         .rightBumper()
         .whileTrue(
-            new DeferredCommand(
-                () -> DriveCommands.driveToReef(drive, vision, false), Set.of(drive, vision)));
+            new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
 
     // Coral In and Out
     operatorController
