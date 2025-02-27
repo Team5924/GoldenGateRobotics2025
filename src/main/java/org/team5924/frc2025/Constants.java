@@ -130,7 +130,7 @@ public final class Constants {
         new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
 
     public static final Translation2d redCenter =
-        new Translation2d(Units.inchesToMeters(513.63), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(514.13), fieldWidth / 2.0);
 
     public static final List<List<Pose2d>> blueBranchRight2d = new ArrayList<>();
     public static final List<List<Pose2d>> blueBranchLeft2d = new ArrayList<>();
@@ -270,20 +270,20 @@ public final class Constants {
                 redCenter.getX()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter + 0, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
-                                - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter - offset)
+                                + Math.atan(
+                                    (halfIsoBaseOfBranchesAndCenter + 0)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter + 0, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
-                                - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter - offset)
+                                + Math.atan(
+                                    (halfIsoBaseOfBranchesAndCenter + 0)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
@@ -292,20 +292,20 @@ public final class Constants {
                 redCenter.getX()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - 0, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
-                                + Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                - Math.atan(
+                                    (halfIsoBaseOfBranchesAndCenter - 0)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - 0, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
-                                + Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                - Math.atan(
+                                    (halfIsoBaseOfBranchesAndCenter - 0)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
