@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
+import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 
 public class SetElevatorHeight extends Command {
   private Elevator elevator;
@@ -42,6 +43,14 @@ public class SetElevatorHeight extends Command {
   public void initialize() {
     elevator.setGoalState(goalState);
   }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {}
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
