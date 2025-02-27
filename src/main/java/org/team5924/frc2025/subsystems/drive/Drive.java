@@ -56,7 +56,6 @@ import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.Constants.Mode;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.generated.TunerConstants;
-import org.team5924.frc2025.util.Conversions;
 import org.team5924.frc2025.util.LocalADStarAK;
 import org.team5924.frc2025.util.swerve.SwerveSetpoint;
 import org.team5924.frc2025.util.swerve.SwerveSetpointGenerator;
@@ -168,38 +167,6 @@ public class Drive extends SubsystemBase {
 
     setpointGenerator = new SwerveSetpointGenerator(kinematics, getModuleTranslations());
     previousSetpoint = new SwerveSetpoint(getChassisSpeeds(), getModuleStates());
-
-    for (int i = 1; i <= 12; i++) {
-      Logger.recordOutput(
-          "Blue " + Conversions.getCharForNumber(i).toUpperCase() + " Scoring Pose",
-          Constants.SCORING_POSES_BLUE[i - 1]);
-      // System.out.println(
-      //     "Blue "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " X: "
-      //         + Constants.SCORING_POSES_BLUE[i - 1].getX());
-      // System.out.println(
-      //     "Blue "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " Y: "
-      //         + Constants.SCORING_POSES_BLUE[i - 1].getY());
-    }
-
-    for (int i = 1; i <= 12; i++) {
-      Logger.recordOutput(
-          "Red " + Conversions.getCharForNumber(i).toUpperCase() + " Scoring Pose",
-          Constants.SCORING_POSES_RED[i - 1]);
-      // System.out.println(
-      //     "Red "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " X: "
-      //         + Constants.SCORING_POSES_RED[i - 1].getX());
-      // System.out.println(
-      //     "Red "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " Y: "
-      //         + Constants.SCORING_POSES_RED[i - 1].getY());
-    }
   }
 
   @Override

@@ -16,17 +16,14 @@
 
 package org.team5924.frc2025;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
@@ -127,8 +124,8 @@ public final class Constants {
   public static final Distance ROBOT_LENGTH_WITH_BUMPERS_LEFT_TO_RIGHT = Inches.of(36.5);
   public static final Distance DELTA_X_CENTER_OF_CORAL_OUT_FROM_CENTER = Inches.of(-5.5);
 
-//   public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT =
-//       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  //   public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT =
+  //       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
   public enum ReefLevel {
     L1(Units.inchesToMeters(25.0), 0),
