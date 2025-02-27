@@ -37,9 +37,13 @@ public class RobotState {
 
   // Pose Estimation Members
   @AutoLogOutput(key = "RobotState/OdometryPose")
+  @Getter
+  @Setter
   private Pose2d odometryPose = new Pose2d();
 
   @AutoLogOutput(key = "RobotState/EstimatedPose")
+  @Getter
+  @Setter
   private Pose2d estimatedPose = new Pose2d();
 
   /* ### Climber ### */
