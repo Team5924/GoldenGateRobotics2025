@@ -262,7 +262,7 @@ public final class Constants {
         Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
         Logger.recordOutput("BranchPoses/" + face, poseDirection);
         double adjustX = Units.inchesToMeters(31); // 30.738);
-        double adjustY_shooter = Units.inchesToMeters(7); // 6.469);
+        double adjustY_shooter = Units.inchesToMeters(9.5); // 6.469);
         double adjustY_pole = Units.inchesToMeters(6.469);
 
         var rightBranchPost =
@@ -275,7 +275,7 @@ public final class Constants {
                     .transformBy(
                         new Transform2d(adjustX, adjustY_pole + adjustY_shooter, new Rotation2d()))
                     .getY(),
-                new Rotation2d(Math.PI).unaryMinus());
+                Rotation2d.fromRotations(-60 * face));
 
         var leftBranchPost =
             new Pose2d(
@@ -287,7 +287,7 @@ public final class Constants {
                     .transformBy(
                         new Transform2d(adjustX, -adjustY_pole + adjustY_shooter, new Rotation2d()))
                     .getY(),
-                new Rotation2d(Math.PI).unaryMinus());
+                Rotation2d.fromDegrees(-60 * face));
 
         branchRight2d.add(rightBranchPost);
         branchLeft2d.add(leftBranchPost);

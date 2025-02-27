@@ -22,6 +22,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.RotationTarget;
 import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import java.util.ArrayList;
 import java.util.List;
 import org.team5924.frc2025.Constants;
@@ -35,7 +37,15 @@ public class Pathing {
 
   // creates a path with a single waypoint which is the destination
   public static PathPlannerPath createPath(Pose2d currentPose, Pose2d destinationPose2d) {
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(currentPose, destinationPose2d);
+    List<Waypoint> waypoints =
+        PathPlannerPath.waypointsFromPoses(
+            currentPose,
+            destinationPose2d.transformBy(
+                new Transform2d(
+                    0.5 * Math.cos(destinationPose2d.getRotation().getRadians()),
+                    0.5 * Math.sin(destinationPose2d.getRotation().getRadians()),
+                    new Rotation2d())),
+            destinationPose2d);
     List<RotationTarget> holonomicRotations = new ArrayList<>();
     holonomicRotations.add(new RotationTarget(0.75, destinationPose2d.getRotation()));
 
