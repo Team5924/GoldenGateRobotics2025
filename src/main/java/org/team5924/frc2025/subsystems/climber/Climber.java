@@ -25,7 +25,6 @@ import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
-import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Setter
@@ -87,9 +86,10 @@ public class Climber extends SubsystemBase {
     // If the robot's state is STOW && the cage is within range && elevator + algae pivot are both
     // stow, then set the robot's state to READY_TO_CLIMB
     if (getGoalState() == ClimberState.STOW
-        && isCageInClimber()
-        && RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE
-        && RobotState.getInstance().getAlgaePivotState() == AlgaePivotState.INTAKE_FLOOR) {
+        // && isCageInClimber()
+        // && RobotState.getInstance().getAlgaePivotState() == AlgaePivotState.INTAKE_FLOOR
+        && (RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE
+            || RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE)) {
       setGoalState(ClimberState.READY_TO_CLIMB);
     }
 
