@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.087104673032407,
-        "y": 5.551553457754629
+        "x": 5.38247950819672,
+        "y": 5.193801229508197
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.537607783564814,
-        "y": 5.362008101851853
+        "x": 4.699180327868851,
+        "y": 5.829149590163936
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.964,
-        "y": 5.17649818395323
+        "x": 1.4984631147540983,
+        "y": 7.075870901639344
       },
       "prevControl": {
-        "x": 6.170022559375001,
-        "y": 5.321362123842593
+        "x": 1.9938524590163915,
+        "y": 6.797131147540983
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.773391272189349,
-      "rotationDegrees": -119.99999999999999
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -71.38484035286557
     }
   ],
   "constraintZones": [],
@@ -47,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -55.49147701233164
   },
   "reversed": false,
-  "folder": null,
+  "folder": "2 Coral Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -122.66091272167368
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

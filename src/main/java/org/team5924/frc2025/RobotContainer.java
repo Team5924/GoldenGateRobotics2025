@@ -17,6 +17,8 @@
 package org.team5924.frc2025;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -41,6 +43,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
+import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
@@ -145,6 +148,11 @@ public class RobotContainer {
     autoChooser.addOption(
         "Elevator SysId (Dynamic Reverse)",
         elevator.downSysId.dynamic(SysIdRoutine.Direction.kReverse));
+
+    NamedCommands.registerCommand("Elevator Height Intake", Commands.runOnce(()-> elevator.setGoalState(ElevatorState.INTAKE)));
+    NamedCommands.registerCommand("Elevator Height L4", Commands.runOnce(()-> elevator.setGoalState(ElevatorState.L4)));
+    NamedCommands.registerCommand("Elevator Height L3", Commands.runOnce(()-> elevator.setGoalState(ElevatorState.L3)));
+    
 
     // Configure the button bindings
     configureButtonBindings();
