@@ -139,14 +139,15 @@ public final class Constants {
     public static final List<List<Pose2d>> redBranchLeft2d = new ArrayList<>();
 
     static {
+      double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
+      double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterShoot = 0.850; // Leg 3 but different (meters)
+      double offset = -0.25;
+
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
         Pose2d poseDirection = new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         Logger.recordOutput("FacePoses/" + face, poseDirection);
-
-        double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-        double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
-        double distanceFromCenterToRoboCenterShoot = 1.276; // Leg 3 but different (meters)
 
         double radiusLineupCircle =
             Math.sqrt(
@@ -161,36 +162,44 @@ public final class Constants {
         var blueLeftBranchShoot =
             new Pose2d(
                 blueCenter.getX()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 blueCenter.getY()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
         var blueRightBranchShoot =
             new Pose2d(
                 blueCenter.getX()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 blueCenter.getY()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
@@ -246,10 +255,6 @@ public final class Constants {
         Pose2d poseDirection = new Pose2d(redCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         Logger.recordOutput("FacePoses/" + face, poseDirection);
 
-        double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-        double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
-        double distanceFromCenterToRoboCenterShoot = 1.276; // Leg 3 but different (meters)
-
         double radiusLineupCircle =
             Math.sqrt(
                 Math.pow(distanceFromCenterToRoboCenterLineup, 2)
@@ -263,36 +268,44 @@ public final class Constants {
         var redLeftBranchShoot =
             new Pose2d(
                 redCenter.getX()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
         var redRightBranchShoot =
             new Pose2d(
                 redCenter.getX()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
-                    + (radiusShootCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
@@ -335,10 +348,12 @@ public final class Constants {
         ArrayList<Pose2d> rightBranch = new ArrayList<>();
         rightBranch.add(redRightBranchLineup);
         rightBranch.add(redRightBranchShoot);
+        Logger.recordOutput("ShootPosesRight/" + face, redRightBranchShoot);
 
         ArrayList<Pose2d> leftBranch = new ArrayList<>();
         leftBranch.add(redLeftBranchLineup);
         leftBranch.add(redLeftBranchShoot);
+        Logger.recordOutput("ShootPosesLeft/" + face, redLeftBranchShoot);
 
         redBranchRight2d.add(rightBranch);
         redBranchLeft2d.add(leftBranch);
