@@ -5,21 +5,78 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Leave"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Leave"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Height L4"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Reef to CS"
+            "name": "Run Shooter"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "CS to Reef"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Reef to CS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Height Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Run Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CS to Reef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Height L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run Shooter"
           }
         }
       ]

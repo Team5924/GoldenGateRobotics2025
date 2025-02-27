@@ -47,7 +47,8 @@ public class RunIntake extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coralInAndOut.setGoalState(coralInAndOut.isCoralInIntake() ? CoralState.STORED_CORAL : CoralState.NO_CORAL);
+    coralInAndOut.setGoalState(
+        coralInAndOut.isCoralInIntake() ? CoralState.STORED_CORAL : CoralState.NO_CORAL);
   }
 
   // Returns true when the command should end.
