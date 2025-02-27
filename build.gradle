@@ -186,7 +186,7 @@ spotless {
     java {
         target fileTree(".") {
             include "**/*.java"
-            exclude "**/build/**", "**/build-*/**"
+            exclude "**/build/**", "**/build-*/**", "src/main/java/org/team5924/frc2025/util/swerve/**", "src/main/java/org/team5924/frc2025/util/GeomUtil.java", "src/main/java/org/team5924/frc2025/util/EqualsUtil.java"
         }
         importOrder()
         toggleOffOn()
