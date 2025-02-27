@@ -25,10 +25,8 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
@@ -50,15 +48,14 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.Constants.Mode;
+import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.generated.TunerConstants;
-import org.team5924.frc2025.util.Conversions;
 import org.team5924.frc2025.util.LocalADStarAK;
 import org.team5924.frc2025.util.swerve.SwerveSetpoint;
 import org.team5924.frc2025.util.swerve.SwerveSetpointGenerator;
@@ -77,8 +74,8 @@ public class Drive extends SubsystemBase {
               Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
 
   // PathPlanner config constants
-  private static final double ROBOT_MASS_KG = 74.088;
-  private static final double ROBOT_MOI = 6.883;
+  private static final double ROBOT_MASS_KG = 61.23;
+  private static final double ROBOT_MOI = 8.59;
   private static final double WHEEL_COF = 1.2;
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
@@ -103,7 +100,7 @@ public class Drive extends SubsystemBase {
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private Rotation2d rawGyroRotation = new Rotation2d();
+  private Rotation2d rawGyroRotation = new Rotation2d(180.0);
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),
@@ -168,41 +165,8 @@ public class Drive extends SubsystemBase {
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
 
-
     setpointGenerator = new SwerveSetpointGenerator(kinematics, getModuleTranslations());
     previousSetpoint = new SwerveSetpoint(getChassisSpeeds(), getModuleStates());
-
-    for (int i = 1; i <= 12; i++) {
-      Logger.recordOutput(
-          "Blue " + Conversions.getCharForNumber(i).toUpperCase() + " Scoring Pose",
-          Constants.SCORING_POSES_BLUE[i - 1]);
-      // System.out.println(
-      //     "Blue "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " X: "
-      //         + Constants.SCORING_POSES_BLUE[i - 1].getX());
-      // System.out.println(
-      //     "Blue "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " Y: "
-      //         + Constants.SCORING_POSES_BLUE[i - 1].getY());
-    }
-
-    for (int i = 1; i <= 12; i++) {
-      Logger.recordOutput(
-          "Red " + Conversions.getCharForNumber(i).toUpperCase() + " Scoring Pose",
-          Constants.SCORING_POSES_RED[i - 1]);
-      // System.out.println(
-      //     "Red "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " X: "
-      //         + Constants.SCORING_POSES_RED[i - 1].getX());
-      // System.out.println(
-      //     "Red "
-      //         + Conversions.getCharForNumber(i).toUpperCase()
-      //         + " Y: "
-      //         + Constants.SCORING_POSES_RED[i - 1].getY());
-    }
   }
 
   @Override
@@ -262,6 +226,9 @@ public class Drive extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    // Update RobotState
+    RobotState.getInstance().setOdometryPose(getPose());
   }
 
   /**
@@ -280,6 +247,25 @@ public class Drive extends SubsystemBase {
             Constants.LOOP_PERIODIC_SECONDS);
     SwerveModuleState[] setpointStates = previousSetpoint.moduleStates();
     // SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
+
+    // Log unoptimized setpoints and setpoint speeds
+    Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
+    Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+
+    // Send setpoints to modules
+    for (int i = 0; i < 4; i++) {
+      modules[i].runSetpoint(setpointStates[i]);
+    }
+
+    // Log optimized setpoints (runSetpoint mutates each state)
+    Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+  }
+
+  public void runPathVelocity(ChassisSpeeds speeds, DriveFeedforwards ff) {
+    // Calculate module setpoints
+    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
@@ -352,7 +338,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
@@ -413,16 +399,5 @@ public class Drive extends SubsystemBase {
       new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
       new Translation2d(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
     };
-  }
-
-  // creates a path with a single waypoint which is the destination
-  public PathPlannerPath createSimplePath(Pose2d destinationPose2d) {
-    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(destinationPose2d);
-
-    return new PathPlannerPath(
-        waypoints,
-        null, // insert pathconstraints here
-        null, // this can be kept as null
-        new GoalEndState(0.0, Rotation2d.fromDegrees(0))); // dummy values
   }
 }

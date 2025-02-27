@@ -16,6 +16,7 @@
 
 package org.team5924.frc2025.commands.vision;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
@@ -49,13 +50,19 @@ public class RunVisionPoseEstimation extends Command {
       return;
     }
     Logger.recordOutput("Vision Pose", estimatedPose.fieldToCamera);
-    if (isPoseValid(estimatedPose) && isVisionReliable(estimatedPose)) {
-      drive.addVisionMeasurement(
-          estimatedPose.fieldToCamera,
-          Timer.getFPGATimestamp()
-              - (estimatedPose.isFrontLimelight
-                  ? vision.getLatencySecondsFront()
-                  : vision.getLatencySecondsBack()));
+    if (isPoseValid(estimatedPose)
+        && isVisionReliable(estimatedPose)
+        && estimatedPose.avgTagDist < 1) {
+      if (DriverStation.isDisabled()) {
+        drive.setPose(estimatedPose.fieldToCamera);
+      } else {
+        drive.addVisionMeasurement(
+            estimatedPose.fieldToCamera,
+            Timer.getFPGATimestamp()
+                - (estimatedPose.isFrontLimelight
+                    ? vision.getLatencySecondsFront()
+                    : vision.getLatencySecondsBack()));
+      }
     }
   }
 
