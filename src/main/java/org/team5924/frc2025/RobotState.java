@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
@@ -44,6 +45,11 @@ public class RobotState {
   @Getter
   @Setter
   private Pose2d estimatedPose = new Pose2d();
+
+  /* ### Climber ### */
+  @Setter
+  @AutoLogOutput(key = "RobotState/ClimberState")
+  private ClimberState climberState = ClimberState.STOW;
 
   @Getter @Setter private Rotation2d yawPosition = new Rotation2d();
   @Getter @Setter private double yawVelocityRadPerSec = 0.0;
