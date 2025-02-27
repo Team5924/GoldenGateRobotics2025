@@ -246,51 +246,118 @@ public final class Constants {
     public static final double fieldWidth =
         AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded).getFieldWidth();
     public static final double faceLength = Units.inchesToMeters(36.792600);
-    public static final Translation2d center =
+    public static final Translation2d blueCenter =
         new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
     public static final double faceToZoneLine =
         Units.inchesToMeters(12); // Side of the reef to the inside of the reef zone line
 
     public static final Pose2d[] centerFaces =
         new Pose2d[6]; // Starting facing the driver station in clockwise order
-    public static final List<Pose2d> branchRight2d = new ArrayList<>();
-    public static final List<Pose2d> branchLeft2d = new ArrayList<>();
+    public static final List<List<Pose2d>> branchRight2d = new ArrayList<>();
+    public static final List<List<Pose2d>> branchLeft2d = new ArrayList<>();
 
     static {
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
-        Pose2d poseDirection = new Pose2d(center, Rotation2d.fromDegrees(180 - (60 * face)));
-        Logger.recordOutput("BranchPoses/" + face, poseDirection);
-        double adjustX = Units.inchesToMeters(31); // 30.738);
-        double adjustY_shooter = Units.inchesToMeters(9.5); // 6.469);
-        double adjustY_pole = Units.inchesToMeters(6.469);
+        Pose2d poseDirection = new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
+        Logger.recordOutput("FacePoses/" + face, poseDirection);
 
-        var rightBranchPost =
-            new Pose2d(
-                poseDirection
-                    .transformBy(
-                        new Transform2d(adjustX, adjustY_pole + adjustY_shooter, new Rotation2d()))
-                    .getX(),
-                poseDirection
-                    .transformBy(
-                        new Transform2d(adjustX, adjustY_pole + adjustY_shooter, new Rotation2d()))
-                    .getY(),
-                Rotation2d.fromRotations(-60 * face));
+        double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
+        double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
+        double distanceFromCenterToRoboCenterShoot = 1.276; // Leg 3 but different (meters)
+
+        double radiusLineupCircle =
+            Math.sqrt(
+                Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                    + Math.pow(halfIsoBaseOfBranchesAndCenter, 2));
+
+        double radiusShootCircle =
+            Math.sqrt(
+                Math.pow(distanceFromCenterToRoboCenterShoot, 2)
+                    + Math.pow(halfIsoBaseOfBranchesAndCenter, 2));
 
         var leftBranchPost =
             new Pose2d(
-                poseDirection
-                    .transformBy(
-                        new Transform2d(adjustX, -adjustY_pole + adjustY_shooter, new Rotation2d()))
-                    .getX(),
-                poseDirection
-                    .transformBy(
-                        new Transform2d(adjustX, -adjustY_pole + adjustY_shooter, new Rotation2d()))
-                    .getY(),
-                Rotation2d.fromDegrees(-60 * face));
+                blueCenter.getX()
+                    + (radiusShootCircle
+                        * Math.cos(
+                            poseDirection.getRotation().getRadians()
+                                - Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterShoot))),
+                blueCenter.getY()
+                    + (radiusShootCircle
+                        * Math.sin(
+                            poseDirection.getRotation().getRadians()
+                                - Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterShoot))),
+                Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
-        branchRight2d.add(rightBranchPost);
-        branchLeft2d.add(leftBranchPost);
+        var rightBranchPost =
+            new Pose2d(
+                blueCenter.getX()
+                    + (radiusShootCircle
+                        * Math.cos(
+                            poseDirection.getRotation().getRadians()
+                                + Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterShoot))),
+                blueCenter.getY()
+                    + (radiusShootCircle
+                        * Math.sin(
+                            poseDirection.getRotation().getRadians()
+                                + Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterShoot))),
+                Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
+
+        var leftBranchLineup =
+            new Pose2d(
+                blueCenter.getX()
+                    + (radiusLineupCircle
+                        * Math.cos(
+                            poseDirection.getRotation().getRadians()
+                                - Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterLineup))),
+                blueCenter.getY()
+                    + (radiusLineupCircle
+                        * Math.sin(
+                            poseDirection.getRotation().getRadians()
+                                - Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterLineup))),
+                Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
+
+        var rightBranchLineup =
+            new Pose2d(
+                blueCenter.getX()
+                    + (radiusLineupCircle
+                        * Math.cos(
+                            poseDirection.getRotation().getRadians()
+                                + Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterLineup))),
+                blueCenter.getY()
+                    + (radiusLineupCircle
+                        * Math.sin(
+                            poseDirection.getRotation().getRadians()
+                                + Math.atan(
+                                    halfIsoBaseOfBranchesAndCenter
+                                        / distanceFromCenterToRoboCenterLineup))),
+                Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
+
+        ArrayList<Pose2d> rightBranch = new ArrayList<>();
+        rightBranch.add(rightBranchLineup);
+        rightBranch.add(rightBranchPost);
+
+        ArrayList<Pose2d> leftBranch = new ArrayList<>();
+        leftBranch.add(leftBranchLineup);
+        leftBranch.add(leftBranchPost);
+
+        branchRight2d.add(rightBranch);
+        branchLeft2d.add(leftBranch);
       }
     }
   }

@@ -31,8 +31,23 @@ import org.team5924.frc2025.Constants;
 /** Add your docs here. */
 public class Pathing {
   public static Pose2d getClosestPose(Pose2d currentPose, boolean isLeftTarget) {
-    if (isLeftTarget) return currentPose.nearest(Constants.Reef.branchLeft2d);
-    else return currentPose.nearest(Constants.Reef.branchRight2d);
+    if (isLeftTarget) {
+      ArrayList<Pose2d> leftBranchPoses = new ArrayList<>();
+      for (var posePair : Constants.Reef.branchLeft2d) {
+        leftBranchPoses.add(posePair.get(1));
+        // Get 1 because it's the "shooting" pose
+      }
+
+      return currentPose.nearest(leftBranchPoses);
+    } else {
+      ArrayList<Pose2d> rightBranchPoses = new ArrayList<>();
+      for (var posePair : Constants.Reef.branchRight2d) {
+        rightBranchPoses.add(posePair.get(1));
+        // Get 1 because it's the "shooting" pose
+      }
+
+      return currentPose.nearest(rightBranchPoses);
+    }
   }
 
   // creates a path with a single waypoint which is the destination
