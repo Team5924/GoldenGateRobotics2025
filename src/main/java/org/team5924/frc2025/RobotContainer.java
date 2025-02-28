@@ -29,6 +29,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.subsystems.climber.Climber;
+import org.team5924.frc2025.subsystems.climber.ClimberIO;
+import org.team5924.frc2025.subsystems.climber.ClimberIOSim;
+import org.team5924.frc2025.subsystems.climber.ClimberIOTalonFX;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
 import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
@@ -52,6 +56,7 @@ import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Climber climber;
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
 
@@ -74,6 +79,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        climber = new Climber(new ClimberIOTalonFX());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
         break;
@@ -87,6 +93,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        climber = new Climber(new ClimberIOSim());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
         break;
@@ -100,6 +107,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        climber = new Climber(new ClimberIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         break;
@@ -214,6 +222,31 @@ public class RobotContainer {
     operatorController
         .leftBumper()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+
+    // Climber
+    // Dpad Down
+    driveController
+        .pov(180)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
+    // .finallyDo(() -> climber.setVoltageMultiplier(-1)));
+
+    // Dpad Up
+    driveController
+        .pov(0)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
+    // .finallyDo(() -> climber.setVoltageMultiplier(1)));
+
+    // No Dpad Up or Dpad Down
+    driveController
+        .pov(180)
+        .or(driveController.pov(0))
+        .onFalse(
+            Commands.runOnce(
+                () ->
+                    climber.setGoalState(
+                        climber.getGoalState() == Climber.ClimberState.STOW
+                            ? Climber.ClimberState.STOW
+                            : Climber.ClimberState.READY_TO_CLIMB)));
   }
 
   /**

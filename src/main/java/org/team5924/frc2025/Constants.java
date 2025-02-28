@@ -50,6 +50,20 @@ public final class Constants {
   public static final double MOTOR_MAX_TEMP = 95;
 
   /* ### Subsystems ### */
+  /* General */
+  public static final double LOOP_PERIODIC_SECONDS = 0.02;
+  /* Climber */
+  public static final int CLIMBER_CAN_ID = 40;
+  public static final String CLIMBER_BUS = "rio";
+  public static final int CLIMBER_CURRENT_LIMIT = 40;
+  public static final boolean CLIMBER_INVERT = false;
+  public static final boolean CLIMBER_BRAKE = true;
+  public static final double CLIMBER_REDUCTION = 58.3; // TODO: correct for now, check again later
+  public static final double CLIMBER_SIM_MOI = 0.001;
+  public static final double CLIMBER_MIN_RADS = -Math.PI / 2; // TODO: get real min
+  public static final double CLIMBER_MAX_RADS = Math.PI / 2; // TODO: get real max
+  public static final int CLIMBER_LASER_CAN_ID = 42;
+
   /* # Rollers # */
   /* Coral In-And-Out */
   public static final int CORAL_IN_AND_OUT_CAN_ID = 33;
