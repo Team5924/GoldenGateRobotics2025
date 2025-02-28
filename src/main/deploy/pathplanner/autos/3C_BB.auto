@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Leave Mid"
+                  "pathName": "3C Leave BB"
                 }
               },
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Reef to CS BB"
+                  "pathName": "3C Reef to CS BB1"
                 }
               },
               {
@@ -61,7 +61,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CS to Reef BB"
+                  "pathName": "3C CS to Reef BB1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Height L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run Shooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3C Reef to CS BB2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Height Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Run Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3C CS to Reef BB2"
                 }
               },
               {
@@ -83,6 +133,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "2 Coral Autos",
+  "folder": "3 Coral Autos",
   "choreoAuto": false
 }
