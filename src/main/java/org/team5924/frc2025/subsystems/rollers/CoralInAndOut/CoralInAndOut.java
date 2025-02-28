@@ -85,17 +85,13 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   }
 
   public void updateCoralState() {
-    if (isCoralInIntake()
-        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.INTAKING)
-        && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SPIT_BACK)) {
-      setGoalState(CoralState.STORED_CORAL_IN_INTAKE);
-    } else if (isCoralInShooter()
+    if (isCoralInShooter()
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)) {
       setGoalState(CoralState.STORED_CORAL_IN_SHOOTER);
-    } else if (!isCoralInIntake()
-        && !isCoralInShooter()
+    } else if (
+        !isCoralInShooter()
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)
@@ -161,10 +157,10 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   /**
    * @return true if coral is detected by intake LaserCAN
    */
-  public boolean isCoralInIntake() {
-    return coralInputs.intakeLCMeasurement.getDistance()
-        < (int) Math.floor(intakeDetectThreshold.get());
-  }
+  // public boolean isCoralInIntake() {
+  //   return coralInputs.intakeLCMeasurement.getDistance()
+  //       < (int) Math.floor(intakeDetectThreshold.get());
+  // }
 
   /**
    * @return true if coral is detected by shooter LaserCAN
@@ -177,8 +173,8 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   /**
    * @return true if coral is detected by exit LaserCAN
    */
-  public boolean hasCoralExited() {
-    return coralInputs.exitLCMeasurement.getDistance()
-        < (int) Math.floor(exitDetectThreshold.get());
-  }
+  // public boolean hasCoralExited() {
+  //   return coralInputs.exitLCMeasurement.getDistance()
+  //       < (int) Math.floor(exitDetectThreshold.get());
+  // }
 }

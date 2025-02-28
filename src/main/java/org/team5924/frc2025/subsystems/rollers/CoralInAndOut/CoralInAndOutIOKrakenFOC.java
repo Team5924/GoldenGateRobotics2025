@@ -50,23 +50,23 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
 
   private final HandoffKrakenFOC innerHandoffSystem;
 
-  private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
+  //private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
   private static final LaserCan shooterLC = new LaserCan(Constants.CORAL_SHOOTER_LASER_CAN_ID);
-  private static final LaserCan exitLC = new LaserCan(Constants.CORAL_EXIT_LASER_CAN_ID);
+  // private static final LaserCan exitLC = new LaserCan(Constants.CORAL_EXIT_LASER_CAN_ID);
 
-  private static final Alert intakeLCDisconnectAlert =
-      new Alert("Intake LaserCAN disconnected.", AlertType.kWarning);
+  // private static final Alert intakeLCDisconnectAlert =
+  //     new Alert("Intake LaserCAN disconnected.", AlertType.kWarning);
   private static final Alert shooterLCDisconnectAlert =
       new Alert("Shooter LaserCAN disconnected.", AlertType.kWarning);
-  private static final Alert exitLCDisconnectAlert =
-      new Alert("Exit LaserCAN disconnected.", AlertType.kWarning);
+  // private static final Alert exitLCDisconnectAlert =
+  //     new Alert("Exit LaserCAN disconnected.", AlertType.kWarning);
 
-  private static final Alert intakeLCInvalidMeasure =
-      new Alert("Intake LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
+  // private static final Alert intakeLCInvalidMeasure =
+  //     new Alert("Intake LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
   private static final Alert shooterLCInvalidMeasure =
       new Alert("Shooter LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
-  private static final Alert exitLCInvalidMeasure =
-      new Alert("Exit LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
+  // private static final Alert exitLCInvalidMeasure =
+  //     new Alert("Exit LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
   public CoralInAndOutIOKrakenFOC() {
     super(loadShootId, bus, currentLimitAmps, invert, loadShootBrake, reduction);
@@ -75,24 +75,24 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
   }
 
   public void updateInputs(CoralInAndOutIOInputs inputs) {
-    try {
-      inputs.intakeLCMeasurement = LaserCAN_Measurement.fromLaserCAN(intakeLC.getMeasurement());
-      inputs.intakeLCConnected = true;
-      intakeLCDisconnectAlert.set(false);
-      intakeLCInvalidMeasure.set(false);
-    } catch (SensorRuntimeException e) {
-      switch (e.getErrorType()) {
-        case DISCONNECTED -> {
-          inputs.intakeLCConnected = false;
-          intakeLCDisconnectAlert.set(true);
-        }
-        case INVALID_DATA -> intakeLCInvalidMeasure.set(true);
-        default -> {
-          if (Constants.ALLOW_ASSERTS) throw e;
-          else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
-        }
-      }
-    }
+    // try {
+    //   inputs.intakeLCMeasurement = LaserCAN_Measurement.fromLaserCAN(intakeLC.getMeasurement());
+    //   inputs.intakeLCConnected = true;
+    //   intakeLCDisconnectAlert.set(false);
+    //   intakeLCInvalidMeasure.set(false);
+    // } catch (SensorRuntimeException e) {
+    //   switch (e.getErrorType()) {
+    //     case DISCONNECTED -> {
+    //       inputs.intakeLCConnected = false;
+    //       intakeLCDisconnectAlert.set(true);
+    //     }
+    //     case INVALID_DATA -> intakeLCInvalidMeasure.set(true);
+    //     default -> {
+    //       if (Constants.ALLOW_ASSERTS) throw e;
+    //       else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
+    //     }
+    //   }
+    // }
 
     try {
       inputs.shooterLCMeasurement = LaserCAN_Measurement.fromLaserCAN(shooterLC.getMeasurement());
@@ -113,24 +113,24 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
       }
     }
 
-    try {
-      inputs.exitLCMeasurement = LaserCAN_Measurement.fromLaserCAN(exitLC.getMeasurement());
-      inputs.exitLCConnected = true;
-      exitLCDisconnectAlert.set(false);
-      exitLCInvalidMeasure.set(false);
-    } catch (SensorRuntimeException e) {
-      switch (e.getErrorType()) {
-        case DISCONNECTED -> {
-          inputs.exitLCConnected = false;
-          exitLCDisconnectAlert.set(true);
-        }
-        case INVALID_DATA -> exitLCInvalidMeasure.set(true);
-        default -> {
-          if (Constants.ALLOW_ASSERTS) throw e;
-          else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
-        }
-      }
-    }
+    // try {
+    //   inputs.exitLCMeasurement = LaserCAN_Measurement.fromLaserCAN(exitLC.getMeasurement());
+    //   inputs.exitLCConnected = true;
+    //   exitLCDisconnectAlert.set(false);
+    //   exitLCInvalidMeasure.set(false);
+    // } catch (SensorRuntimeException e) {
+    //   switch (e.getErrorType()) {
+    //     case DISCONNECTED -> {
+    //       inputs.exitLCConnected = false;
+    //       exitLCDisconnectAlert.set(true);
+    //     }
+    //     case INVALID_DATA -> exitLCInvalidMeasure.set(true);
+    //     default -> {
+    //       if (Constants.ALLOW_ASSERTS) throw e;
+    //       else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
+    //     }
+    //   }
+    // }
 
     super.updateInputs(inputs);
   }

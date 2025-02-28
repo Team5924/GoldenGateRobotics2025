@@ -25,16 +25,16 @@ public interface CoralInAndOutIO extends GenericRollerSystemIO {
   @AutoLog
   abstract class CoralInAndOutIOInputs extends GenericRollerSystemIOInputs {
     // Intake LaserCAN
-    public LaserCAN_Measurement intakeLCMeasurement = new LaserCAN_Measurement();
-    public boolean intakeLCConnected = false;
+    // public LaserCAN_Measurement intakeLCMeasurement = new LaserCAN_Measurement();
+    // public boolean intakeLCConnected = false;
 
     // Shooter LaserCAN
     public LaserCAN_Measurement shooterLCMeasurement = new LaserCAN_Measurement();
     public boolean shooterLCConnected = false;
 
     // Exit LaserCAN
-    public LaserCAN_Measurement exitLCMeasurement = new LaserCAN_Measurement();
-    public boolean exitLCConnected = false;
+    // public LaserCAN_Measurement exitLCMeasurement = new LaserCAN_Measurement();
+    // public boolean exitLCConnected = false;
   }
 
   /** Run roller at volts */
