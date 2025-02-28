@@ -142,7 +142,7 @@ public final class Constants {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
       double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
       double distanceFromCenterToRoboCenterShoot = 0.850; // Leg 3 but different (meters)
-      double offset = -0.25;
+      double offset = -.2;
 
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {

@@ -71,15 +71,19 @@ public class Pathing {
     List<RotationTarget> holonomicRotations = new ArrayList<>();
     holonomicRotations.add(new RotationTarget(0.75, destinationPoses.get(1).getRotation()));
 
-    return new PathPlannerPath(
-        waypoints,
-        holonomicRotations,
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new PathConstraints(1.5, 1, 180, 180), // insert pathconstraints here
-        null, // null for on-the-fly path
-        new GoalEndState(0.0, destinationPoses.get(1).getRotation()),
-        false);
+    PathPlannerPath path =
+        new PathPlannerPath(
+            waypoints,
+            holonomicRotations,
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new PathConstraints(1.5, 1, 180, 180), // insert pathconstraints here
+            null, // null for on-the-fly path
+            new GoalEndState(0.0, destinationPoses.get(1).getRotation()),
+            false);
+
+    path.preventFlipping = true;
+    return path;
   }
 }
