@@ -25,6 +25,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import java.util.Optional;
 import java.util.Queue;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.generated.TunerConstants;
@@ -42,7 +45,19 @@ public class GyroIOPigeon2 implements GyroIO {
 
   public GyroIOPigeon2() {
     pigeon.getConfigurator().apply(new Pigeon2Configuration());
-    pigeon.getConfigurator().setYaw(180.0);
+
+    if (DriverStation.getAlliance().isPresent()) {
+      Optional<Alliance> alliance = DriverStation.getAlliance();
+      if (alliance.get() == DriverStation.Alliance.Red) {
+        pigeon.getConfigurator().setYaw(0.0);
+      } else {
+        pigeon.getConfigurator().setYaw(180.0);
+      }
+
+    } else {
+      pigeon.getConfigurator().setYaw(180.0);
+    }
+
     yaw.setUpdateFrequency(Drive.ODOMETRY_FREQUENCY);
     yawVelocity.setUpdateFrequency(50.0);
     pigeon.optimizeBusUtilization();

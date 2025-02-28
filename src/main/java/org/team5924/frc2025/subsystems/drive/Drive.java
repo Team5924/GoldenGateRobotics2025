@@ -48,6 +48,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -100,7 +101,15 @@ public class Drive extends SubsystemBase {
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private Rotation2d rawGyroRotation = new Rotation2d(180.0);
+  private Rotation2d rawGyroRotation = new Rotation2d(Math.PI);
+
+  // if (DriverStation.getAlliance().isPresent()) {
+  //   Optional<Alliance> alliance = DriverStation.getAlliance();
+  //   if (alliance.get() == DriverStation.Alliance.Red) {
+  //     rawGyroRotation = Rotation2d.fromDegrees(0.0);
+  //   }
+  // }
+
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),
@@ -167,6 +176,13 @@ public class Drive extends SubsystemBase {
 
     setpointGenerator = new SwerveSetpointGenerator(kinematics, getModuleTranslations());
     previousSetpoint = new SwerveSetpoint(getChassisSpeeds(), getModuleStates());
+
+    if (DriverStation.getAlliance().isPresent()) {
+      Optional<Alliance> alliance = DriverStation.getAlliance();
+      if (alliance.get() == DriverStation.Alliance.Red) {
+        rawGyroRotation = Rotation2d.fromDegrees(0.0);
+      }
+    }
   }
 
   @Override

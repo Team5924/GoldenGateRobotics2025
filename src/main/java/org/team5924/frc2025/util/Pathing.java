@@ -32,6 +32,11 @@ import org.team5924.frc2025.Constants;
 /** Add your docs here. */
 public class Pathing {
   public static List<Pose2d> getClosestPose(Pose2d currentPose, boolean isLeftTarget) {
+    if (!DriverStation.getAlliance().isPresent()) {
+      List<Pose2d> empty = new ArrayList<>();
+      return empty;
+    }
+
     Optional<Alliance> alliance = DriverStation.getAlliance();
     List<List<Pose2d>> rightAllianceBranchPairs =
         (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
