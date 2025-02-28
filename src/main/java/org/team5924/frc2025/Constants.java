@@ -16,13 +16,11 @@
 
 package org.team5924.frc2025;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -63,7 +61,7 @@ public final class Constants {
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Climber */
   public static final int CLIMBER_CAN_ID = 40;
-  public static final String CLIMBER_BUS = "rio";
+  public static final String CLIMBER_BUS = "Drive CANivore";
   public static final int CLIMBER_CURRENT_LIMIT = 40;
   public static final InvertedValue CLIMBER_INVERT = InvertedValue.CounterClockwise_Positive;
   public static final NeutralModeValue CLIMBER_NEUTRAL_MODE = NeutralModeValue.Brake;

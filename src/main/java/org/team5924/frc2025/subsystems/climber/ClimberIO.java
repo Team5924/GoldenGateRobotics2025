@@ -31,14 +31,6 @@ public interface ClimberIO {
     public double rotateTorqueCurrentAmps = 0.0;
     public double rotateTempCelsius = 0.0;
 
-    public boolean clampMotorConnected = true;
-    public double clampPositionRads = 0.0;
-    public double clampVelocityRadsPerSec = 0.0;
-    public double clampAppliedVoltage = 0.0;
-    public double clampSupplyCurrentAmps = 0.0;
-    public double clampTorqueCurrentAmps = 0.0;
-    public double clampTempCelsius = 0.0;
-
     // Climber LaserCAN
     public LaserCAN_Measurement laserCanMeasurement = new LaserCAN_Measurement();
     public boolean laserCanConnected = true;
@@ -56,9 +48,7 @@ public interface ClimberIO {
    *
    * @param volts Voltage to apply
    */
-  public default void runRotateVolts(double volts) {}
-
-  public default void runClampVolts(double volts) {}
+  public default void runVolts(double volts) {}
 
   /**
    * Sets the target angle for the climber

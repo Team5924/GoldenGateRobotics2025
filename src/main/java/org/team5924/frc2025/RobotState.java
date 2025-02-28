@@ -55,6 +55,7 @@ public class RobotState {
   @Getter @Setter private double yawVelocityRadPerSec = 0.0;
 
   @Getter @Setter private ElevatorState elevatorState = ElevatorState.MANUAL;
+  @Getter @Setter private double elevatorPositionMeters = 0;
 
   /* ### Coral In and Out ### */
   @Getter @Setter private CoralState coralInAndOutState = CoralState.NO_CORAL;

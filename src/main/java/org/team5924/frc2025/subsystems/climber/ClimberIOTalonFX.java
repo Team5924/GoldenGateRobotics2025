@@ -36,7 +36,6 @@ import org.team5924.frc2025.Constants;
 /** Add your docs here. */
 public class ClimberIOTalonFX implements ClimberIO {
   private final TalonFX rotateTalon;
-  private final TalonFX clampTalon;
 
   private final StatusSignal<Angle> rotatePosition;
   private final StatusSignal<AngularVelocity> rotateVelocity;
@@ -44,13 +43,6 @@ public class ClimberIOTalonFX implements ClimberIO {
   private final StatusSignal<Current> rotateSupplyCurrent;
   private final StatusSignal<Current> rotateTorqueCurrent;
   private final StatusSignal<Temperature> rotateTempCelsius;
-
-  private final StatusSignal<Angle> clampPosition;
-  private final StatusSignal<AngularVelocity> clampVelocity;
-  private final StatusSignal<Voltage> clampAppliedVoltage;
-  private final StatusSignal<Current> clampSupplyCurrent;
-  private final StatusSignal<Current> clampTorqueCurrent;
-  private final StatusSignal<Temperature> clampTempCelsius;
 
   // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true).withUpdateFreqHz(0);
@@ -69,7 +61,6 @@ public class ClimberIOTalonFX implements ClimberIO {
   public ClimberIOTalonFX() {
     reduction = Constants.CLIMBER_REDUCTION;
     rotateTalon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
-    clampTalon = new TalonFX(0, Constants.CLIMBER_BUS);
 
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -78,7 +69,6 @@ public class ClimberIOTalonFX implements ClimberIO {
     config.CurrentLimits.SupplyCurrentLimit = Constants.CLIMBER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     rotateTalon.getConfigurator().apply(config);
-    clampTalon.getConfigurator().apply(config);
 
     // Get select status signals and set update frequency
     rotatePosition = rotateTalon.getPosition();
@@ -88,13 +78,6 @@ public class ClimberIOTalonFX implements ClimberIO {
     rotateTorqueCurrent = rotateTalon.getTorqueCurrent();
     rotateTempCelsius = rotateTalon.getDeviceTemp();
 
-    clampPosition = clampTalon.getPosition();
-    clampVelocity = clampTalon.getVelocity();
-    clampAppliedVoltage = clampTalon.getMotorVoltage();
-    clampSupplyCurrent = clampTalon.getSupplyCurrent();
-    clampTorqueCurrent = clampTalon.getTorqueCurrent();
-    clampTempCelsius = clampTalon.getDeviceTemp();
-
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
         rotatePosition,
@@ -102,17 +85,10 @@ public class ClimberIOTalonFX implements ClimberIO {
         rotateAppliedVoltage,
         rotateSupplyCurrent,
         rotateTorqueCurrent,
-        rotateTempCelsius,
-        clampPosition,
-        clampVelocity,
-        clampAppliedVoltage,
-        clampSupplyCurrent,
-        clampTorqueCurrent,
-        clampTempCelsius);
+        rotateTempCelsius);
 
     // Disables status signals not called for update above
     rotateTalon.optimizeBusUtilization(0, 1.0);
-    clampTalon.optimizeBusUtilization(0, 1.0);
   }
 
   @Override
@@ -154,33 +130,11 @@ public class ClimberIOTalonFX implements ClimberIO {
     inputs.rotateSupplyCurrentAmps = rotateSupplyCurrent.getValueAsDouble();
     inputs.rotateTorqueCurrentAmps = rotateTorqueCurrent.getValueAsDouble();
     inputs.rotateTempCelsius = rotateTempCelsius.getValueAsDouble();
-
-    inputs.clampMotorConnected =
-        BaseStatusSignal.refreshAll(
-                clampPosition,
-                clampVelocity,
-                clampAppliedVoltage,
-                clampSupplyCurrent,
-                clampTorqueCurrent,
-                clampTempCelsius)
-            .isOK();
-    inputs.clampPositionRads =
-        Units.rotationsToRadians(clampPosition.getValueAsDouble()) / reduction;
-    inputs.clampVelocityRadsPerSec =
-        Units.rotationsToRadians(clampVelocity.getValueAsDouble()) / reduction;
-    inputs.clampAppliedVoltage = clampAppliedVoltage.getValueAsDouble();
-    inputs.clampSupplyCurrentAmps = clampSupplyCurrent.getValueAsDouble();
-    inputs.clampTorqueCurrentAmps = clampTorqueCurrent.getValueAsDouble();
-    inputs.clampTempCelsius = clampTempCelsius.getValueAsDouble();
   }
 
   @Override
-  public void runRotateVolts(double volts) {
+  public void runVolts(double volts) {
     rotateTalon.setControl(voltageOut.withOutput(volts));
-  }
-
-  public void runClampVolts(double volts) {
-    clampTalon.setControl(voltageOut.withOutput(volts));
   }
 
   @Override

@@ -25,6 +25,7 @@ import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
+import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
 
 @Setter
@@ -54,7 +55,6 @@ public class Climber extends SubsystemBase {
   private ClimberState lastState;
 
   private final Alert rotateDisconnected;
-  private final Alert clampDisconnected;
 
   private final Alert invalidStateTransition;
 
@@ -71,7 +71,6 @@ public class Climber extends SubsystemBase {
     this.io = io;
 
     rotateDisconnected = new Alert("Climber motor is disconnected!", Alert.AlertType.kWarning);
-    clampDisconnected = new Alert("Clamp motor is disconnected!", Alert.AlertType.kWarning);
     invalidStateTransition = new Alert("Invalid state transition!", Alert.AlertType.kWarning);
     stateTimer.start();
   }
@@ -83,13 +82,13 @@ public class Climber extends SubsystemBase {
 
     rotateDisconnected.set(!inputs.rotateMotorConnected);
 
-    // If the robot's state is STOW && the cage is within range && elevator + algae pivot are both
-    // stow, then set the robot's state to READY_TO_CLIMB
+    // If the robot's state is STOW && the cage is within range && algae pivot is STOW &&
+    // elevator height is below L1 elevator height, then set the robot's state to READY_TO_CLIMB
     if (getGoalState() == ClimberState.STOW
-        // && isCageInClimber()
-        // && RobotState.getInstance().getAlgaePivotState() == AlgaePivotState.INTAKE_FLOOR
-        && (RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE
-            || RobotState.getInstance().getElevatorState() == ElevatorState.INTAKE)) {
+        && isCageInClimber()
+        && RobotState.getInstance().getAlgaePivotState() == AlgaePivotState.INTAKE_FLOOR
+        && RobotState.getInstance().getElevatorPositionMeters()
+            <= (ElevatorState.L1).getHeightMeters().getAsDouble() + 0.02) {
       setGoalState(ClimberState.READY_TO_CLIMB);
     }
 
@@ -98,7 +97,7 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-    io.runRotateVolts(goalState.volts.getAsDouble());
+    io.runVolts(goalState.volts.getAsDouble());
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
 
@@ -163,12 +162,8 @@ public class Climber extends SubsystemBase {
             < (int) Math.floor(laserCanDetectThreshold.get());
   }
 
-  public void runrotateVolts(double volts) {
-    io.runRotateVolts(volts);
-  }
-
-  public void runClampVolts(double volts) {
-    io.runClampVolts(volts);
+  public void runVolts(double volts) {
+    io.runVolts(volts);
   }
 
   public void setAngle(double rads) {
