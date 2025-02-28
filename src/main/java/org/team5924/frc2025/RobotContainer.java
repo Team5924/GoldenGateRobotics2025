@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.team5924.frc2025.commands.coral.Shoot;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
@@ -202,21 +203,22 @@ public class RobotContainer {
     // Coral In and Out
     operatorController
         .leftTrigger()
-        .onTrue(
-            Commands.runOnce(
-                () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L1)));
+        .onTrue(Commands.runOnce(() -> new Shoot(elevator, coralInAndOut)));
     operatorController
         .rightTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
-    operatorController
-        .leftTrigger()
-        .onFalse(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-    operatorController
-        .rightTrigger()
-        .onFalse(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING))
+                .finallyDo(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    // operatorController
+    //     .leftTrigger()
+    //     .onFalse(
+    //         Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    // operatorController
+    //     .rightTrigger()
+    //     .onFalse(
+    //         Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
