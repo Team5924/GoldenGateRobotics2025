@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Leave BB"
+                  "pathName": "Leave RB"
                 }
               },
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Reef to CS BB"
+                  "pathName": "Reef to CS RB"
                 }
               },
               {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CS to Reef BB"
+                  "pathName": "CS to Reef RB"
                 }
               },
               {
