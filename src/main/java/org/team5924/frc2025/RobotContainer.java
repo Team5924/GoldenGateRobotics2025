@@ -189,7 +189,7 @@ public class RobotContainer {
 
     // Coral In and Out
 
-    // leftTriggerOnlyShoots when Elevator is at
+    // leftTrigger only shoots when Elevator is at L2 or L3
     operatorController
         .leftTrigger()
         .onTrue(
@@ -201,10 +201,7 @@ public class RobotContainer {
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
     operatorController
         .leftTrigger()
-        .onFalse(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-    operatorController
-        .rightTrigger()
+        .or(operatorController.rightTrigger())
         .onFalse(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 

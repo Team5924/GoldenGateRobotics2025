@@ -50,7 +50,7 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
 
   private final HandoffKrakenFOC innerHandoffSystem;
 
-  //private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
+  // private static final LaserCan intakeLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
   private static final LaserCan shooterLC = new LaserCan(Constants.CORAL_SHOOTER_LASER_CAN_ID);
   // private static final LaserCan exitLC = new LaserCan(Constants.CORAL_EXIT_LASER_CAN_ID);
 
@@ -65,6 +65,7 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
   //     new Alert("Intake LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
   private static final Alert shooterLCInvalidMeasure =
       new Alert("Shooter LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
+
   // private static final Alert exitLCInvalidMeasure =
   //     new Alert("Exit LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
@@ -89,7 +90,8 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     //     case INVALID_DATA -> intakeLCInvalidMeasure.set(true);
     //     default -> {
     //       if (Constants.ALLOW_ASSERTS) throw e;
-    //       else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
+    //       else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " +
+    // e.getMessage());
     //     }
     //   }
     // }
@@ -127,7 +129,8 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     //     case INVALID_DATA -> exitLCInvalidMeasure.set(true);
     //     default -> {
     //       if (Constants.ALLOW_ASSERTS) throw e;
-    //       else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " + e.getMessage());
+    //       else System.err.println("FIX NOW: Unhandled SensorRuntimeException: " +
+    // e.getMessage());
     //     }
     //   }
     // }

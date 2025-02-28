@@ -50,14 +50,14 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
     SHOOTING_L2_AND_L3(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 12),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingL2AndL3Voltage", 12),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingL2AndL3Voltage", 0.0)),
     SHOOTING_L4(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 4),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingL4Voltage", 4),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingL4Voltage", 0.0)),
     SHOOTING_L1(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingL1Voltage", 2),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingL1Voltage", 0.0)),
     SPIT_BACK(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", -12.0));
@@ -71,14 +71,14 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   protected final CoralInAndOutIOInputsAutoLogged coralInputs =
       new CoralInAndOutIOInputsAutoLogged();
 
-  private static final LoggedTunableNumber intakeDetectThreshold =
-      new LoggedTunableNumber("CoralInAndOutKrakenFOC/IntakeLaserCAN/DetectThreshold", 20);
+  // private static final LoggedTunableNumber intakeDetectThreshold =
+  //     new LoggedTunableNumber("CoralInAndOutKrakenFOC/IntakeLaserCAN/DetectThreshold", 20);
 
   private static final LoggedTunableNumber shooterDetectThreshold =
       new LoggedTunableNumber("CoralInAndOutKrakenFOC/ShooterLaserCAN/DetectThreshold", 20);
 
-  private static final LoggedTunableNumber exitDetectThreshold =
-      new LoggedTunableNumber("CoralInAndOutKrakenFOC/ExitLaserCAN/DetectThreshold", 20);
+  // private static final LoggedTunableNumber exitDetectThreshold =
+  //     new LoggedTunableNumber("CoralInAndOutKrakenFOC/ExitLaserCAN/DetectThreshold", 20);
 
   public CoralInAndOut(CoralInAndOutIO io) {
     super("CoralInAndOut", io);
@@ -90,8 +90,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)) {
       setGoalState(CoralState.STORED_CORAL_IN_SHOOTER);
-    } else if (
-        !isCoralInShooter()
+    } else if (!isCoralInShooter()
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L1)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L2_AND_L3)
         && !RobotState.getInstance().getCoralInAndOutState().equals(CoralState.SHOOTING_L4)
