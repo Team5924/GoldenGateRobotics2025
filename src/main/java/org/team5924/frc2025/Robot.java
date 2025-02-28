@@ -19,6 +19,9 @@ package org.team5924.frc2025;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -105,6 +108,12 @@ public class Robot extends LoggedRobot {
       }
     }
 
+    // Elastic Configuration
+    WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+
+    // Camera stream for Elastic
+    CameraServer.startAutomaticCapture();
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
@@ -145,7 +154,7 @@ public class Robot extends LoggedRobot {
       autonomousCommand.schedule();
     }
 
-    Elastic.selectTab("Auto");
+    Elastic.selectTab("Autonomous");
   }
 
   /** This function is called periodically during autonomous. */
@@ -163,7 +172,7 @@ public class Robot extends LoggedRobot {
       autonomousCommand.cancel();
     }
 
-    Elastic.selectTab("Teleop");
+    Elastic.selectTab("Teleoperated");
   }
 
   /** This function is called periodically during operator control. */
