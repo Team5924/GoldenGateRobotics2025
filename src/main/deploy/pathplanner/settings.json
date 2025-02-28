@@ -5,7 +5,11 @@
   "pathFolders": [
     "2 Coral Auto"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "2 Coral Autos",
+    "3 Coral Autos",
+    "Leave Auto"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
