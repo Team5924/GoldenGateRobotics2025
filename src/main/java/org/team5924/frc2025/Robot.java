@@ -30,6 +30,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.util.Elastic;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -143,6 +144,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
+
+    Elastic.selectTab("Auto");
   }
 
   /** This function is called periodically during autonomous. */
@@ -159,6 +162,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    Elastic.selectTab("Teleop");
   }
 
   /** This function is called periodically during operator control. */
