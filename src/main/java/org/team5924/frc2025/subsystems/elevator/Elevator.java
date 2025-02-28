@@ -66,14 +66,22 @@ public class Elevator extends SubsystemBase {
   private final Alert leftMotorDisconnected;
   private final Alert rightMotorDisconnected;
 
+  private final Alert leftMotorOverTemp;
+  private final Alert rightMotorOverTemp;
+
   public Elevator(ElevatorIO io) {
     this.io = io;
     this.goalState = ElevatorState.MANUAL;
     RobotState.getInstance().setElevatorState(this.goalState);
     this.leftMotorDisconnected =
-        new Alert("Left elevator motor disconnected!", Alert.AlertType.kWarning);
+        new Alert("Left elevator motor disconnected!", Alert.AlertType.kError);
     this.rightMotorDisconnected =
-        new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
+        new Alert("Right elevator motor disconnected!", Alert.AlertType.kError);
+
+    this.leftMotorOverTemp =
+        new Alert("Left elevator motor over temperature!", Alert.AlertType.kWarning);
+    this.rightMotorOverTemp =
+        new Alert("Right elevator motor over temperature!", Alert.AlertType.kWarning);
 
     upSysId =
         new SysIdRoutine(
@@ -106,6 +114,9 @@ public class Elevator extends SubsystemBase {
 
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
+
+    leftMotorOverTemp.set(inputs.leftTempCelsius > Constants.MOTOR_MAX_TEMP);
+    rightMotorOverTemp.set(inputs.rightTempCelsius > Constants.MOTOR_MAX_TEMP);
 
     io.periodicUpdates();
   }
