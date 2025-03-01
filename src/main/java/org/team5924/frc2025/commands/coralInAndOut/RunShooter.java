@@ -28,6 +28,7 @@ public class RunShooter extends Command {
   /** Creates a new RunIntake. */
   public RunShooter(CoralInAndOut coralInAndOut) {
     this.coralInAndOut = coralInAndOut;
+    this.timer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(coralInAndOut);

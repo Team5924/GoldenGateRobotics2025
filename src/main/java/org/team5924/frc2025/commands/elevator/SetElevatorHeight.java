@@ -30,6 +30,7 @@ public class SetElevatorHeight extends Command {
   public SetElevatorHeight(Elevator elevator, ElevatorState goalState) {
     this.elevator = elevator;
     this.goalState = goalState;
+    this.timer = new Timer();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
