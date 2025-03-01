@@ -20,6 +20,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -57,8 +58,18 @@ public final class Constants {
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
+  /* Climber */
+  public static final int CLIMBER_CAN_ID = 40;
+  public static final String CLIMBER_BUS = "Drive CANivore";
+  public static final int CLIMBER_CURRENT_LIMIT = 40;
+  public static final InvertedValue CLIMBER_INVERT = InvertedValue.CounterClockwise_Positive;
+  public static final NeutralModeValue CLIMBER_NEUTRAL_MODE = NeutralModeValue.Brake;
+  public static final double CLIMBER_REDUCTION = 58.3; // TODO: correct for now, check again later
+  public static final double CLIMBER_SIM_MOI = 0.001;
+  public static final double CLIMBER_MIN_RADS = -Math.PI / 2; // TODO: get real min
+  public static final double CLIMBER_MAX_RADS = Math.PI / 2; // TODO: get real max
+  public static final int CLIMBER_LASER_CAN_ID = 42;
 
-  /* ### Subsystems ### */
   /* # Rollers # */
   /* Coral In-And-Out */
   public static final int CORAL_IN_AND_OUT_CAN_ID = 33;
