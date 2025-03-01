@@ -16,6 +16,8 @@
 
 package org.team5924.frc2025;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Set;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.team5924.frc2025.commands.coral.Shoot;
+import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
@@ -201,24 +203,23 @@ public class RobotContainer {
             new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
 
     // Coral In and Out
+
     operatorController
         .leftTrigger()
-        .onTrue(Commands.runOnce(() -> new Shoot(elevator, coralInAndOut)));
+        .onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    operatorController
+        .leftTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+
     operatorController
         .rightTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING))
-                .finallyDo(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-    // operatorController
-    //     .leftTrigger()
-    //     .onFalse(
-    //         Commands.runOnce(() ->
-    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-    // operatorController
-    //     .rightTrigger()
-    //     .onFalse(
-    //         Commands.runOnce(() ->
-    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
+    operatorController
+        .rightTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));

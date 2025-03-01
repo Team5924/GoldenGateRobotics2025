@@ -144,7 +144,7 @@ public class Elevator extends SubsystemBase {
           DriverStation.reportError(
               "MOVING is an intermediate state and cannot be set as a goal state!", null);
       default -> {
-        RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
+        RobotState.getInstance().setElevatorState(goalState);
         io.setHeight(goalState.heightMeters.getAsDouble());
       }
     }
