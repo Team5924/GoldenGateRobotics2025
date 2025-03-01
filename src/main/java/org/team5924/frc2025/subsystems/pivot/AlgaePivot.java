@@ -23,7 +23,6 @@ import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
-import org.team5924.frc2025.util.Elastic;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 import org.team5924.frc2025.util.LoggedTunableNumber;
@@ -81,8 +80,8 @@ public class AlgaePivot extends SubsystemBase {
 
     AlgaePivotMotorDisconnected.set(!inputs.algaePivotMotorConnected);
 
-    if (!inputs.algaePivotMotorConnected)
-      Elastic.sendNotification(algaePivotMotorDisconnectedNotification);
+    // if (!inputs.algaePivotMotorConnected)
+    //   Elastic.sendNotification(algaePivotMotorDisconnectedNotification);
   }
 
   private double getAlgaePivotPositionRads() {

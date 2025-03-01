@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2Leave RB"
+            "pathName": "2Leave BB"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Leave Auto",
+  "folder": null,
   "choreoAuto": false
 }

@@ -220,10 +220,8 @@ public class RobotContainer {
 
     // Coral In and Out
 
-    operatorController
-        .leftTrigger()
-        .onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
-    operatorController
+    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    driveController
         .leftTrigger()
         .onFalse(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));

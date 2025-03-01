@@ -30,7 +30,6 @@ import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
-import org.team5924.frc2025.util.Elastic;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 import org.team5924.frc2025.util.LoggedTunableNumber;
@@ -122,8 +121,9 @@ public class Elevator extends SubsystemBase {
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
-    if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
-    if (!inputs.rightMotorConnected) Elastic.sendNotification(rightMotorDisconnectedNotification);
+    // if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
+    // if (!inputs.rightMotorConnected)
+    // Elastic.sendNotification(rightMotorDisconnectedNotification);
 
     io.periodicUpdates();
   }

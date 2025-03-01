@@ -133,6 +133,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "3 Coral Autos",
+  "folder": null,
   "choreoAuto": false
 }

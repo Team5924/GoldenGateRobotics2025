@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3C Leave BB"
+                  "pathName": "2Leave BB"
                 }
               },
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3C Reef to CS BB1"
+                  "pathName": "2Reef to CS BB"
                 }
               },
               {
@@ -61,57 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3C CS to Reef BB1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Height L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Run Shooter"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "3C Reef to CS BB2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Height Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Run Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "3C CS to Reef BB2"
+                  "pathName": "2CS to Reef BB"
                 }
               },
               {
@@ -133,6 +83,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "3 Coral Autos",
+  "folder": null,
   "choreoAuto": false
 }

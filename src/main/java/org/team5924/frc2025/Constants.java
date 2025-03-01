@@ -127,10 +127,10 @@ public final class Constants {
     public static final double fieldWidth =
         AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded).getFieldWidth();
     public static final Translation2d blueCenter =
-        new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(176.75), Units.inchesToMeters(159.28));
 
     public static final Translation2d redCenter =
-        new Translation2d(Units.inchesToMeters(514.13), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(513.88), Units.inchesToMeters(159.03));
 
     public static final List<List<Pose2d>> branchRight2d = new ArrayList<>();
     public static final List<List<Pose2d>> branchLeft2d = new ArrayList<>();
@@ -140,9 +140,9 @@ public final class Constants {
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-      double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
       double distanceFromCenterToRoboCenterShoot = 0.850; // Leg 3 but different (meters)
-      double offset = -.25;
+      double offset = -.243;
 
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
