@@ -60,7 +60,10 @@ import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.Constants.Mode;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.util.Elastic;
 import org.team5924.frc2025.util.LocalADStarAK;
+import org.team5924.frc2025.util.Elastic.Notification;
+import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 import org.team5924.frc2025.util.swerve.SwerveSetpoint;
 import org.team5924.frc2025.util.swerve.SwerveSetpointGenerator;
 
@@ -102,6 +105,9 @@ public class Drive extends SubsystemBase {
   private final SysIdRoutine sysId;
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+  
+  private final Notification gyroDisconnectedNotification = new Notification(
+    NotificationLevel.ERROR, "Gyro Disconnected", "Disconnected gyro, using kinematics as fallback.");
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d(180.0);
@@ -265,6 +271,9 @@ public class Drive extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    if (!gyroInputs.connected && Constants.currentMode != Mode.SIM)
+      Elastic.sendNotification(gyroDisconnectedNotification);
 
     // Update RobotState
     RobotState.getInstance().setOdometryPose(getPose());
