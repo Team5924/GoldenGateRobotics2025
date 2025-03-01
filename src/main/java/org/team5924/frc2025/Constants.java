@@ -132,11 +132,11 @@ public final class Constants {
     public static final Translation2d redCenter =
         new Translation2d(Units.inchesToMeters(514.13), fieldWidth / 2.0);
 
-    public static final List<List<Pose2d>> blueBranchRight2d = new ArrayList<>();
-    public static final List<List<Pose2d>> blueBranchLeft2d = new ArrayList<>();
+    public static final List<List<Pose2d>> branchRight2d = new ArrayList<>();
+    public static final List<List<Pose2d>> branchLeft2d = new ArrayList<>();
 
-    public static final List<List<Pose2d>> redBranchRight2d = new ArrayList<>();
-    public static final List<List<Pose2d>> redBranchLeft2d = new ArrayList<>();
+    // public static final List<List<Pose2d>> redBranchRight2d = new ArrayList<>();
+    // public static final List<List<Pose2d>> redBranchLeft2d = new ArrayList<>();
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
@@ -249,8 +249,8 @@ public final class Constants {
         leftBranch.add(blueLeftBranchShoot);
         Logger.recordOutput("ShootPosesLeft/" + face, blueLeftBranchShoot);
 
-        blueBranchRight2d.add(rightBranch);
-        blueBranchLeft2d.add(leftBranch);
+        branchRight2d.add(rightBranch);
+        branchLeft2d.add(leftBranch);
       }
 
       for (int face = 0; face < 6; face++) {
@@ -357,8 +357,8 @@ public final class Constants {
         leftBranch.add(redLeftBranchShoot);
         Logger.recordOutput("ShootPosesLeft/" + face, redLeftBranchShoot);
 
-        redBranchRight2d.add(rightBranch);
-        redBranchLeft2d.add(leftBranch);
+        branchRight2d.add(rightBranch);
+        branchLeft2d.add(leftBranch);
       }
     }
   }
