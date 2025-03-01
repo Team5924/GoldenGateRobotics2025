@@ -52,8 +52,8 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = true;
-  public static final boolean ALLOW_ASSERTS = true;
+  public static final boolean TUNING_MODE = false;
+  public static final boolean ALLOW_ASSERTS = false;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
