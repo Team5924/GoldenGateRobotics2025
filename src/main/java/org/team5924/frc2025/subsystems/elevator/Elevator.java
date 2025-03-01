@@ -58,7 +58,7 @@ public class Elevator extends SubsystemBase {
     MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0)),
     STOW(new LoggedTunableNumber("Elevator/StowHeight", 0));
 
-    private final LoggedTunableNumber heightMeters;
+    @Getter private final LoggedTunableNumber heightMeters;
 
     ElevatorState(LoggedTunableNumber heightMeters) {
       this.heightMeters = heightMeters;
@@ -77,6 +77,7 @@ public class Elevator extends SubsystemBase {
     this.io = io;
     this.goalState = ElevatorState.MANUAL;
     RobotState.getInstance().setElevatorState(this.goalState);
+    RobotState.getInstance().setElevatorPositionMeters(getElevatorPositionMeters());
     this.leftMotorDisconnected =
         new Alert("Left elevator motor disconnected!", Alert.AlertType.kWarning);
     this.rightMotorDisconnected =
@@ -124,6 +125,8 @@ public class Elevator extends SubsystemBase {
 
     if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
     if (!inputs.rightMotorConnected) Elastic.sendNotification(rightMotorDisconnectedNotification);
+
+    RobotState.getInstance().setElevatorPositionMeters(getElevatorPositionMeters());
 
     io.periodicUpdates();
   }
