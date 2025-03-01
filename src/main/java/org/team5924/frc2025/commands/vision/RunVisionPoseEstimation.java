@@ -80,8 +80,8 @@ public class RunVisionPoseEstimation extends Command {
             ? vision.getLowestTagAmbiguityFront()
             : vision.getLowestTagAmbiguityBack();
 
-    return (fiducialsSpotted == 1 && lowestAmbiguity < 0.15)
-        || (fiducialsSpotted >= 2 && lowestAmbiguity < 0.4);
+    return (fiducialsSpotted == 1 && lowestAmbiguity < 0.1)
+        || (fiducialsSpotted >= 2 && lowestAmbiguity < 0.3);
   }
 
   // Called once the command ends or is interrupted.
