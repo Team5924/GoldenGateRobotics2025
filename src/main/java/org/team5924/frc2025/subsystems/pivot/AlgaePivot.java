@@ -24,9 +24,9 @@ import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.util.Elastic;
-import org.team5924.frc2025.util.LoggedTunableNumber;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 public class AlgaePivot extends SubsystemBase {
 
@@ -64,9 +64,10 @@ public class AlgaePivot extends SubsystemBase {
     this.goalState = AlgaePivotState.INTAKE_FLOOR;
     this.AlgaePivotMotorDisconnected =
         new Alert("Algae pivot motor disconnected!", Alert.AlertType.kWarning);
-    
-    algaePivotMotorDisconnectedNotification = new Notification(
-      NotificationLevel.WARNING, "Algae Pivot Warning", "Algae Pivot motor disconnected!");
+
+    algaePivotMotorDisconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, "Algae Pivot Warning", "Algae Pivot motor disconnected!");
   }
 
   @Override

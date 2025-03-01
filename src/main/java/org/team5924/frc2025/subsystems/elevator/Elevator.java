@@ -31,9 +31,9 @@ import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.util.Elastic;
-import org.team5924.frc2025.util.LoggedTunableNumber;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
+import org.team5924.frc2025.util.LoggedTunableNumber;
 
 public class Elevator extends SubsystemBase {
   // Tolerance for position control (in meters)
@@ -49,13 +49,14 @@ public class Elevator extends SubsystemBase {
   public final SysIdRoutine downSysId;
 
   public enum ElevatorState {
-    INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", 0)),
+    INTAKE(new LoggedTunableNumber("Elevator/IntakeHeight", .059)),
     L1(new LoggedTunableNumber("Elevator/L1Height", 0.15)),
-    L2(new LoggedTunableNumber("Elevator/L2Height", 0.23)),
+    L2(new LoggedTunableNumber("Elevator/L2Height", 0.212)),
     L3(new LoggedTunableNumber("Elevator/L3Height", .4)),
-    L4(new LoggedTunableNumber("Elevator/L4Height", .657)),
+    L4(new LoggedTunableNumber("Elevator/L4Height", .70)),
     MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),
-    MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0));
+    MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0)),
+    STOW(new LoggedTunableNumber("Elevator/StowHeight", 0));
 
     private final LoggedTunableNumber heightMeters;
 
@@ -70,7 +71,7 @@ public class Elevator extends SubsystemBase {
   private final Alert rightMotorDisconnected;
 
   private final Notification leftMotorDisconnectedNotification;
-    private final Notification rightMotorDisconnectedNotification;
+  private final Notification rightMotorDisconnectedNotification;
 
   public Elevator(ElevatorIO io) {
     this.io = io;
@@ -81,11 +82,13 @@ public class Elevator extends SubsystemBase {
     this.rightMotorDisconnected =
         new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
 
-    leftMotorDisconnectedNotification = new Notification(
-      NotificationLevel.WARNING, "Elevator Warning", "Left elevator motor disconnected!");
-    
-    rightMotorDisconnectedNotification = new Notification(
-      NotificationLevel.WARNING, "Elevator Warning", "Right elevator motor disconnected!");
+    leftMotorDisconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, "Elevator Warning", "Left elevator motor disconnected!");
+
+    rightMotorDisconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, "Elevator Warning", "Right elevator motor disconnected!");
 
     upSysId =
         new SysIdRoutine(
@@ -119,10 +122,8 @@ public class Elevator extends SubsystemBase {
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
-    if (!inputs.leftMotorConnected)
-      Elastic.sendNotification(leftMotorDisconnectedNotification);
-    if (!inputs.rightMotorConnected)
-      Elastic.sendNotification(rightMotorDisconnectedNotification);
+    if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
+    if (!inputs.rightMotorConnected) Elastic.sendNotification(rightMotorDisconnectedNotification);
 
     io.periodicUpdates();
   }

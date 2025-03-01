@@ -57,9 +57,10 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
     this.io = io;
 
     disconnected = new Alert(name + " motor disconnected!", Alert.AlertType.kWarning);
-    
-    disconnectedNotification = new Notification(
-      NotificationLevel.WARNING, name + " Warning", name + " motor disconnected!");
+
+    disconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, name + " Warning", name + " motor disconnected!");
 
     stateTimer.start();
   }
@@ -70,8 +71,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
     Logger.processInputs(name, genericInputs);
     disconnected.set(!genericInputs.motorConnected);
 
-    if (!genericInputs.motorConnected)
-      Elastic.sendNotification(disconnectedNotification);
+    if (!genericInputs.motorConnected) Elastic.sendNotification(disconnectedNotification);
 
     if (getGoalState() != lastState) {
       stateTimer.reset();

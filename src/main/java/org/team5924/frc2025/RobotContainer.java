@@ -203,7 +203,8 @@ public class RobotContainer {
     operatorController
         .leftTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+            Commands.runOnce(
+                () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L1)));
     operatorController
         .rightTrigger()
         .onTrue(
@@ -221,7 +222,7 @@ public class RobotContainer {
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
     operatorController
         .a()
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L1)));
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.STOW)));
     operatorController
         .b()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
@@ -234,6 +235,9 @@ public class RobotContainer {
     operatorController
         .leftBumper()
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+    operatorController
+        .rightBumper()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Vision
     vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
