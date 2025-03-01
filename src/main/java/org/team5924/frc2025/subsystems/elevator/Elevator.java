@@ -30,7 +30,6 @@ import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
-import org.team5924.frc2025.util.Elastic;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 import org.team5924.frc2025.util.LoggedTunableNumber;
@@ -53,7 +52,7 @@ public class Elevator extends SubsystemBase {
     L1(new LoggedTunableNumber("Elevator/L1Height", 0.15)),
     L2(new LoggedTunableNumber("Elevator/L2Height", 0.212)),
     L3(new LoggedTunableNumber("Elevator/L3Height", .4)),
-    L4(new LoggedTunableNumber("Elevator/L4Height", .70)),
+    L4(new LoggedTunableNumber("Elevator/L4Height", .72)),
     MOVING(new LoggedTunableNumber("Elevator/MovingHeight", 0)),
     MANUAL(new LoggedTunableNumber("Elevator/ManualHeight", 0)),
     STOW(new LoggedTunableNumber("Elevator/StowHeight", 0));
@@ -123,8 +122,9 @@ public class Elevator extends SubsystemBase {
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
-    if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
-    if (!inputs.rightMotorConnected) Elastic.sendNotification(rightMotorDisconnectedNotification);
+    // if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
+    // if (!inputs.rightMotorConnected)
+    // Elastic.sendNotification(rightMotorDisconnectedNotification);
 
     RobotState.getInstance().setElevatorPositionMeters(getElevatorPositionMeters());
 
@@ -164,7 +164,7 @@ public class Elevator extends SubsystemBase {
           DriverStation.reportError(
               "MOVING is an intermediate state and cannot be set as a goal state!", null);
       default -> {
-        RobotState.getInstance().setElevatorState(ElevatorState.MOVING);
+        RobotState.getInstance().setElevatorState(goalState);
         io.setHeight(goalState.heightMeters.getAsDouble());
       }
     }

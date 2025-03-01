@@ -53,8 +53,8 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = true;
-  public static final boolean ALLOW_ASSERTS = true;
+  public static final boolean TUNING_MODE = false;
+  public static final boolean ALLOW_ASSERTS = false;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -138,22 +138,22 @@ public final class Constants {
     public static final double fieldWidth =
         AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded).getFieldWidth();
     public static final Translation2d blueCenter =
-        new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(176.75), Units.inchesToMeters(159.28));
 
     public static final Translation2d redCenter =
-        new Translation2d(Units.inchesToMeters(514.13), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(513.88), Units.inchesToMeters(159.03));
 
-    public static final List<List<Pose2d>> blueBranchRight2d = new ArrayList<>();
-    public static final List<List<Pose2d>> blueBranchLeft2d = new ArrayList<>();
+    public static final List<List<Pose2d>> branchRight2d = new ArrayList<>();
+    public static final List<List<Pose2d>> branchLeft2d = new ArrayList<>();
 
-    public static final List<List<Pose2d>> redBranchRight2d = new ArrayList<>();
-    public static final List<List<Pose2d>> redBranchLeft2d = new ArrayList<>();
+    // public static final List<List<Pose2d>> redBranchRight2d = new ArrayList<>();
+    // public static final List<List<Pose2d>> redBranchLeft2d = new ArrayList<>();
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-      double distanceFromCenterToRoboCenterLineup = 1.75; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
       double distanceFromCenterToRoboCenterShoot = 0.850; // Leg 3 but different (meters)
-      double offset = -.2;
+      double offset = -.243;
 
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
@@ -260,8 +260,8 @@ public final class Constants {
         leftBranch.add(blueLeftBranchShoot);
         Logger.recordOutput("ShootPosesLeft/" + face, blueLeftBranchShoot);
 
-        blueBranchRight2d.add(rightBranch);
-        blueBranchLeft2d.add(leftBranch);
+        branchRight2d.add(rightBranch);
+        branchLeft2d.add(leftBranch);
       }
 
       for (int face = 0; face < 6; face++) {
@@ -368,8 +368,8 @@ public final class Constants {
         leftBranch.add(redLeftBranchShoot);
         Logger.recordOutput("ShootPosesLeft/" + face, redLeftBranchShoot);
 
-        redBranchRight2d.add(rightBranch);
-        redBranchLeft2d.add(leftBranch);
+        branchRight2d.add(rightBranch);
+        branchLeft2d.add(leftBranch);
       }
     }
   }
