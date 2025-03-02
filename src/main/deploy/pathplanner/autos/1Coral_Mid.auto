@@ -9,6 +9,18 @@
           "data": {
             "pathName": "2Leave Mid"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Height L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run Shooter"
+          }
         }
       ]
     }
