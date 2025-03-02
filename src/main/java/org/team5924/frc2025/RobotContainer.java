@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Set;
+import org.team5924.frc2025.commands.climb.RunClimberVoltage;
 import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
 import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
 import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
@@ -280,20 +281,23 @@ public class RobotContainer {
 
     // Climber
     // Dpad Down
-    driveController
-        .pov(180)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
+    // driveController
+    //     .pov(180)
+    //     .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
 
-    // Dpad Up
-    driveController
-        .pov(0)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
+    // // Dpad Up
+    // driveController
+    //     .pov(0)
+    //     .onTrue(Commands.runOnce(() ->
+    // climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
 
-    // No Dpad Up or Dpad Down
-    driveController
-        .pov(180)
-        .or(driveController.pov(0))
-        .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+    // // No Dpad Up or Dpad Down
+    // driveController
+    //     .pov(180)
+    //     .or(driveController.pov(0))
+    //     .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+
+    climber.setDefaultCommand(new RunClimberVoltage(climber, operatorController::getRightY));
   }
 
   /**
