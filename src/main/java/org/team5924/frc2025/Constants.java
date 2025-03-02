@@ -59,9 +59,10 @@ public final class Constants {
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Climber */
-  public static final int CLIMBER_CAN_ID = 40;
+  public static final int LEFT_CLIMBER_CAN_ID = 40;
+  public static final int RIGHT_CLIMBER_CAN_ID = 40;
   public static final String CLIMBER_BUS = "Drive CANivore";
-  public static final int CLIMBER_CURRENT_LIMIT = 40;
+  public static final int CLIMBER_CURRENT_LIMIT = 100;
   public static final InvertedValue CLIMBER_INVERT = InvertedValue.CounterClockwise_Positive;
   public static final NeutralModeValue CLIMBER_NEUTRAL_MODE = NeutralModeValue.Brake;
   public static final double CLIMBER_REDUCTION = 58.3; // TODO: correct for now, check again later

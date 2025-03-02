@@ -152,7 +152,7 @@ public class RobotContainer {
     autoChooser =
         AutoBuilder.buildAutoChooserWithOptionsModifier(
             (stream) ->
-                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
+                isCompetition ? stream.filter(auto -> auto.getName().startsWith("Leave")) : stream);
 
     // Set up SysId routines
     autoChooser.addOption(
