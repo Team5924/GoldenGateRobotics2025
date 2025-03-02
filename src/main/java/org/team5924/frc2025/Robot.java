@@ -149,7 +149,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
 
-    autonomousCommand.toString();
+    // autonomousCommand.toString();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

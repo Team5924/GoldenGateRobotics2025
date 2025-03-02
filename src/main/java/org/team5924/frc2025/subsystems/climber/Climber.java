@@ -42,7 +42,8 @@ public class Climber extends SubsystemBase {
     READY_TO_CLIMB(new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0)),
 
     // Lowering robot
-    REVERSE_CLIMB(new LoggedTunableNumber("Climber/ReverseClimbingVoltage", -12.0));
+    // Set voltage to 0, since mechanically we can't reverse it
+    REVERSE_CLIMB(new LoggedTunableNumber("Climber/ReverseClimbingVoltage", 0));
 
     private final LoggedTunableNumber volts;
 
