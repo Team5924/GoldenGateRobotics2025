@@ -54,7 +54,9 @@ public class Climber extends SubsystemBase {
   private ClimberState goalState = ClimberState.STOW;
   private ClimberState lastState;
 
-  private final Alert rotateDisconnected;
+  private final Alert leftDisconnected;
+
+  private final Alert rightDisconnected;
 
   private final Alert invalidStateTransition;
 
@@ -70,7 +72,8 @@ public class Climber extends SubsystemBase {
   public Climber(ClimberIO io) {
     this.io = io;
 
-    rotateDisconnected = new Alert("Climber motor is disconnected!", Alert.AlertType.kWarning);
+    leftDisconnected = new Alert("Climber motor is disconnected!", Alert.AlertType.kWarning);
+    rightDisconnected = new Alert("Climber motor is disconnected!", Alert.AlertType.kWarning);
     invalidStateTransition = new Alert("Invalid state transition!", Alert.AlertType.kWarning);
     stateTimer.start();
   }
@@ -80,7 +83,7 @@ public class Climber extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
 
-    rotateDisconnected.set(!inputs.rotateMotorConnected);
+    leftDisconnected.set(!inputs.leftMotorConnected);
 
     // If the robot's state is STOW && the cage is within range && algae pivot is STOW &&
     // elevator height is below L1 elevator height, then set the robot's state to READY_TO_CLIMB
