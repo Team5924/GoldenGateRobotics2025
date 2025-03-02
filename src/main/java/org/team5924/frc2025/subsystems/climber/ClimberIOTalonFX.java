@@ -21,6 +21,7 @@ import static edu.wpi.first.units.Units.Radians;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -35,14 +36,21 @@ import org.team5924.frc2025.Constants;
 
 /** Add your docs here. */
 public class ClimberIOTalonFX implements ClimberIO {
-  private final TalonFX rotateTalon;
+  private final TalonFX leftTalon;
+  private final TalonFX rightTalon;
 
-  private final StatusSignal<Angle> rotatePosition;
-  private final StatusSignal<AngularVelocity> rotateVelocity;
-  private final StatusSignal<Voltage> rotateAppliedVoltage;
-  private final StatusSignal<Current> rotateSupplyCurrent;
-  private final StatusSignal<Current> rotateTorqueCurrent;
-  private final StatusSignal<Temperature> rotateTempCelsius;
+  private final StatusSignal<Angle> leftPosition;
+  private final StatusSignal<AngularVelocity> leftVelocity;
+  private final StatusSignal<Voltage> leftAppliedVoltage;
+  private final StatusSignal<Current> leftSupplyCurrent;
+  private final StatusSignal<Current> leftTorqueCurrent;
+  private final StatusSignal<Temperature> leftTempCelsius;
+  private final StatusSignal<Angle> rightPosition;
+  private final StatusSignal<AngularVelocity> rightVelocity;
+  private final StatusSignal<Voltage> rightAppliedVoltage;
+  private final StatusSignal<Current> rightSupplyCurrent;
+  private final StatusSignal<Current> rightTorqueCurrent;
+  private final StatusSignal<Temperature> rightTempCelsius;
 
   // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true).withUpdateFreqHz(0);
@@ -60,35 +68,51 @@ public class ClimberIOTalonFX implements ClimberIO {
 
   public ClimberIOTalonFX() {
     reduction = Constants.CLIMBER_REDUCTION;
-    rotateTalon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
-
+    leftTalon = new TalonFX(Constants.LEFT_CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
+    rightTalon = new TalonFX(Constants.RIGHT_CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.Inverted = Constants.CLIMBER_INVERT;
     config.MotorOutput.NeutralMode = Constants.CLIMBER_NEUTRAL_MODE;
     config.CurrentLimits.SupplyCurrentLimit = Constants.CLIMBER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    rotateTalon.getConfigurator().apply(config);
+    leftTalon.getConfigurator().apply(config);
+    rightTalon.getConfigurator().apply(config);
 
     // Get select status signals and set update frequency
-    rotatePosition = rotateTalon.getPosition();
-    rotateVelocity = rotateTalon.getVelocity();
-    rotateAppliedVoltage = rotateTalon.getMotorVoltage();
-    rotateSupplyCurrent = rotateTalon.getSupplyCurrent();
-    rotateTorqueCurrent = rotateTalon.getTorqueCurrent();
-    rotateTempCelsius = rotateTalon.getDeviceTemp();
+    leftPosition = leftTalon.getPosition();
+    leftVelocity = leftTalon.getVelocity();
+    leftAppliedVoltage = leftTalon.getMotorVoltage();
+    leftSupplyCurrent = leftTalon.getSupplyCurrent();
+    leftTorqueCurrent = leftTalon.getTorqueCurrent();
+    leftTempCelsius = leftTalon.getDeviceTemp();
+    rightPosition = rightTalon.getPosition();
+    rightVelocity = rightTalon.getVelocity();
+    rightAppliedVoltage = rightTalon.getMotorVoltage();
+    rightSupplyCurrent = rightTalon.getSupplyCurrent();
+    rightTorqueCurrent = rightTalon.getTorqueCurrent();
+    rightTempCelsius = rightTalon.getDeviceTemp();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
-        rotatePosition,
-        rotateVelocity,
-        rotateAppliedVoltage,
-        rotateSupplyCurrent,
-        rotateTorqueCurrent,
-        rotateTempCelsius);
+        leftPosition,
+        leftVelocity,
+        leftAppliedVoltage,
+        leftSupplyCurrent,
+        leftTorqueCurrent,
+        leftTempCelsius,
+        rightPosition,
+        rightVelocity,
+        rightAppliedVoltage,
+        rightSupplyCurrent,
+        rightTorqueCurrent,
+        rightTempCelsius);
 
     // Disables status signals not called for update above
-    rotateTalon.optimizeBusUtilization(0, 1.0);
+    leftTalon.optimizeBusUtilization(0, 1.0);
+    rightTalon.optimizeBusUtilization(0, 1.0);
+
+    rightTalon.setControl(new Follower(leftTalon.getDeviceID(), true));
   }
 
   @Override
@@ -113,28 +137,45 @@ public class ClimberIOTalonFX implements ClimberIO {
     //   }
     // }
 
-    inputs.rotateMotorConnected =
+    inputs.leftMotorConnected =
         BaseStatusSignal.refreshAll(
-                rotatePosition,
-                rotateVelocity,
-                rotateAppliedVoltage,
-                rotateSupplyCurrent,
-                rotateTorqueCurrent,
-                rotateTempCelsius)
+                leftPosition,
+                leftVelocity,
+                leftAppliedVoltage,
+                leftSupplyCurrent,
+                leftTorqueCurrent,
+                leftTempCelsius)
             .isOK();
-    inputs.rotatePositionRads =
-        Units.rotationsToRadians(rotatePosition.getValueAsDouble()) / reduction;
-    inputs.rotateVelocityRadsPerSec =
-        Units.rotationsToRadians(rotateVelocity.getValueAsDouble()) / reduction;
-    inputs.rotateAppliedVoltage = rotateAppliedVoltage.getValueAsDouble();
-    inputs.rotateSupplyCurrentAmps = rotateSupplyCurrent.getValueAsDouble();
-    inputs.rotateTorqueCurrentAmps = rotateTorqueCurrent.getValueAsDouble();
-    inputs.rotateTempCelsius = rotateTempCelsius.getValueAsDouble();
+    inputs.leftPositionRads = Units.rotationsToRadians(leftPosition.getValueAsDouble()) / reduction;
+    inputs.leftVelocityRadsPerSec =
+        Units.rotationsToRadians(leftVelocity.getValueAsDouble()) / reduction;
+    inputs.leftAppliedVoltage = leftAppliedVoltage.getValueAsDouble();
+    inputs.leftSupplyCurrentAmps = leftSupplyCurrent.getValueAsDouble();
+    inputs.leftTorqueCurrentAmps = leftTorqueCurrent.getValueAsDouble();
+    inputs.leftTempCelsius = leftTempCelsius.getValueAsDouble();
+
+    inputs.rightMotorConnected =
+        BaseStatusSignal.refreshAll(
+                rightPosition,
+                rightVelocity,
+                rightAppliedVoltage,
+                rightSupplyCurrent,
+                rightTorqueCurrent,
+                rightTempCelsius)
+            .isOK();
+    inputs.rightPositionRads =
+        Units.rotationsToRadians(rightPosition.getValueAsDouble()) / reduction;
+    inputs.rightVelocityRadsPerSec =
+        Units.rotationsToRadians(rightVelocity.getValueAsDouble()) / reduction;
+    inputs.rightAppliedVoltage = rightAppliedVoltage.getValueAsDouble();
+    inputs.rightSupplyCurrentAmps = rightSupplyCurrent.getValueAsDouble();
+    inputs.rightTorqueCurrentAmps = rightTorqueCurrent.getValueAsDouble();
+    inputs.rightTempCelsius = rightTempCelsius.getValueAsDouble();
   }
 
   @Override
   public void runVolts(double volts) {
-    rotateTalon.setControl(voltageOut.withOutput(volts));
+    leftTalon.setControl(voltageOut.withOutput(volts));
   }
 
   @Override
@@ -148,6 +189,6 @@ public class ClimberIOTalonFX implements ClimberIO {
       throw new IllegalArgumentException(message);
     }
     rads = Math.max(Constants.CLIMBER_MIN_RADS, Math.min(rads, Constants.CLIMBER_MAX_RADS));
-    rotateTalon.setControl(positionOut.withPosition(Radians.of(rads)));
+    leftTalon.setControl(positionOut.withPosition(Radians.of(rads)));
   }
 }
