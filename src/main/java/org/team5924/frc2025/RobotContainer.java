@@ -24,13 +24,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Set;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
 import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
 import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
@@ -78,7 +79,7 @@ public class RobotContainer {
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -143,7 +144,15 @@ public class RobotContainer {
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    boolean isCompetition = true;
+
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    // As an example, this will only show autos that start with "comp" while at
+    // competition as defined by the programmer
+    autoChooser =
+        AutoBuilder.buildAutoChooserWithOptionsModifier(
+            (stream) ->
+                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -172,6 +181,8 @@ public class RobotContainer {
     autoChooser.addOption(
         "Elevator SysId (Dynamic Reverse)",
         elevator.downSysId.dynamic(SysIdRoutine.Direction.kReverse));
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -291,6 +302,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return autoChooser.getSelected();
   }
 }
