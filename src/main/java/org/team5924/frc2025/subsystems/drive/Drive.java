@@ -113,7 +113,7 @@ public class Drive extends SubsystemBase {
           "Disconnected gyro, using kinematics as fallback.");
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private Rotation2d rawGyroRotation = new Rotation2d(180.0);
+  private Rotation2d rawGyroRotation = new Rotation2d(Math.PI);
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),

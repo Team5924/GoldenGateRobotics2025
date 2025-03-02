@@ -149,12 +149,14 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
 
+    autonomousCommand.toString();
+
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
 
-    Elastic.selectTab("Autonomous");
+    // Elastic.selectTab("Autonomous");
   }
 
   /** This function is called periodically during autonomous. */
