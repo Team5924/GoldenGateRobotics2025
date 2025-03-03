@@ -36,6 +36,8 @@ public interface ClimberIO {
     public boolean laserCanConnected = true;
   }
 
+  public default void resetEncoder(double angleRotations) {}
+
   /**
    * Updates the inputs object with the latest data from hardware
    *

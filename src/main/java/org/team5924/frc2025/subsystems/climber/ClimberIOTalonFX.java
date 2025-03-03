@@ -49,6 +49,7 @@ public class ClimberIOTalonFX implements ClimberIO {
   private final PositionVoltage positionOut =
       new PositionVoltage(0).withUpdateFreqHz(0.0).withEnableFOC(true);
 
+  // TODO: Need to update this
   private final double reduction;
 
   // private static final LaserCan laserCan = new LaserCan(Constants.CLIMBER_LASER_CAN_ID);
@@ -130,6 +131,11 @@ public class ClimberIOTalonFX implements ClimberIO {
     inputs.rotateSupplyCurrentAmps = rotateSupplyCurrent.getValueAsDouble();
     inputs.rotateTorqueCurrentAmps = rotateTorqueCurrent.getValueAsDouble();
     inputs.rotateTempCelsius = rotateTempCelsius.getValueAsDouble();
+  }
+
+  @Override
+  public void resetEncoder(double angleRotations) {
+    rotateTalon.setPosition(angleRotations);
   }
 
   @Override

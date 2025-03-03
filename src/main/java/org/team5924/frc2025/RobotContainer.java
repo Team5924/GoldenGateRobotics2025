@@ -18,6 +18,7 @@ package org.team5924.frc2025;
 
 import static edu.wpi.first.units.Units.Seconds;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -41,10 +42,8 @@ import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
 import org.team5924.frc2025.generated.TunerConstants;
-import org.team5924.frc2025.subsystems.climber.Climber;
-import org.team5924.frc2025.subsystems.climber.ClimberIO;
-import org.team5924.frc2025.subsystems.climber.ClimberIOSim;
-import org.team5924.frc2025.subsystems.climber.ClimberIOTalonFX;
+import org.team5924.frc2025.subsystems.SimpleClimber;
+import org.team5924.frc2025.subsystems.SimpleClimber.SimpleClimberState;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
 import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
@@ -71,11 +70,12 @@ import org.team5924.frc2025.subsystems.vision.VisionIOLimelight;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Climber climber;
+  //   private final Climber climber;
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
   private final Vision vision;
-
+  private final SimpleClimber simpleClimber =
+      new SimpleClimber(new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS));
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
@@ -96,7 +96,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
-        climber = new Climber(new ClimberIOTalonFX());
+        // climber = new Climber(new ClimberIOTalonFX());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
         vision = new Vision(new VisionIOLimelight());
@@ -111,7 +111,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        climber = new Climber(new ClimberIOSim());
+        // climber = new Climber(new ClimberIOSim());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
@@ -126,7 +126,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        climber = new Climber(new ClimberIO() {});
+        // climber = new Climber(new ClimberIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
@@ -256,6 +256,8 @@ public class RobotContainer {
         .onFalse(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
+    SmartDashboard.putData("DEBUG/ZeroClimber", Commands.runOnce(simpleClimber::zeroEncoder));
+
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
     operatorController
@@ -280,22 +282,40 @@ public class RobotContainer {
     // Vision
     vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
 
-    // Climber
-    // Dpad Down
     driveController
-        .pov(180)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
+        .povUp()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  if (simpleClimber.getSimpleClimberState() == SimpleClimberState.LINEUP) {
+                    simpleClimber.setState(SimpleClimberState.CLIMB);
+                  }
+                }));
+    driveController
+        .povDown()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  simpleClimber.setState(SimpleClimberState.LINEUP);
+                }));
 
-    // Dpad Up
-    driveController
-        .pov(0)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
+    // // Climber
+    // // Dpad Down
+    // driveController
+    //     .pov(180)
+    //     .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
+
+    // // Dpad Up
+    // driveController
+    //     .pov(0)
+    //     .onTrue(Commands.runOnce(() ->
+    // climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
 
     // No Dpad Up or Dpad Down
-    driveController
-        .pov(180)
-        .or(driveController.pov(0))
-        .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+    // driveController
+    //     .pov(180)
+    //     .or(driveController.pov(0))
+    //     .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
   }
 
   /**
@@ -304,25 +324,40 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-    // return Commands.sequence(
-    //     DriveCommands.joystickDrive(
-    //             drive,
-    //             () -> {
-    //               var isRed = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red;
+    // return autoChooser.getSelected();
+    return Commands.sequence(
+        Commands.runOnce(
+            () -> {
+              var isRed = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red;
+              if (isRed) {
+                drive.setPose(new Pose2d(7.859, 4.045, Rotation2d.fromDegrees(180)));
 
-    //               // This if statement probably doesn't matter since it's driver perspective
-    //               // relative
-    //               if (isRed) {
-    //                 return -0.4;
-    //               }
+              } else {
+                drive.setPose(new Pose2d(10.004, 4.045, Rotation2d.fromDegrees(0)));
+              }
 
-    //               return -0.4;
-    //             },
-    //             () -> 0,
-    //             () -> 0)
-    //         .withTimeout(4),
-    //     DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0),
-    //     new RunShooter(coralInAndOut));
+              // Reset climber encoder to 0
+              simpleClimber.zeroEncoder();
+            }),
+        DriveCommands.joystickDrive(
+                drive,
+                () -> {
+                  var isRed = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red;
+
+                  // This if statement probably doesn't matter since it's driver perspective
+                  // relative
+                  if (isRed) {
+                    return 0.6;
+                  }
+
+                  return 0.6;
+                },
+                () -> 0,
+                () -> 0)
+            .withTimeout(4),
+        DriveCommands.joystickDrive(drive, () -> 0, () -> 0, () -> 0)
+        // TODO: no more shooter
+        // new RunShooter(coralInAndOut)
+        );
   }
 }
