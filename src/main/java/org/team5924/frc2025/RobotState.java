@@ -25,6 +25,7 @@ import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
+import org.team5924.frc2025.util.VisionFieldPoseEstimate;
 
 @Getter
 public class RobotState {
@@ -41,10 +42,11 @@ public class RobotState {
   @Setter
   private Pose2d odometryPose = new Pose2d();
 
+  /* Vision Pose */
   @AutoLogOutput(key = "RobotState/EstimatedPose")
   @Getter
   @Setter
-  private Pose2d estimatedPose = new Pose2d();
+  private VisionFieldPoseEstimate estimatedPose = new VisionFieldPoseEstimate();
 
   /* ### Climber ### */
   @Setter

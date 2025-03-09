@@ -56,6 +56,13 @@ public final class Constants {
   public static final boolean TUNING_MODE = false;
   public static final boolean ALLOW_ASSERTS = false;
 
+  /* Field */
+  public static final double FIELD_BORDER_MARGIN = 0.5;
+  public static final AprilTagFieldLayout field =
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  public static final double FIELD_WIDTH = field.getFieldWidth();
+  public static final double FIELD_LENGTH = field.getFieldLength();
+
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Climber */

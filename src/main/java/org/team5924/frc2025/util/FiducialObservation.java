@@ -26,6 +26,7 @@ public class FiducialObservation implements StructSerializable {
     public double txnc;
     public double tync;
     public double ambiguity;
+    public double distance;
 
     @Override
     public Class<FiducialObservation> getTypeClass() {
@@ -39,12 +40,12 @@ public class FiducialObservation implements StructSerializable {
 
     @Override
     public int getSize() {
-      return kSizeInt32 + 3 * kSizeDouble;
+      return kSizeInt32 + 4 * kSizeDouble;
     }
 
     @Override
     public String getSchema() {
-      return "int id;double txnc;double tync;double ambiguity";
+      return "int id;double txnc;double tync;double ambiguity;double distance";
     }
 
     @Override
@@ -54,6 +55,7 @@ public class FiducialObservation implements StructSerializable {
       rv.txnc = bb.getDouble();
       rv.tync = bb.getDouble();
       rv.ambiguity = bb.getDouble();
+      rv.distance = bb.getDouble();
       return rv;
     }
 
@@ -63,6 +65,7 @@ public class FiducialObservation implements StructSerializable {
       bb.putDouble(value.txnc);
       bb.putDouble(value.tync);
       bb.putDouble(value.ambiguity);
+      bb.putDouble(value.distance);
     }
 
     @Override
@@ -75,6 +78,7 @@ public class FiducialObservation implements StructSerializable {
   public double txnc;
   public double tync;
   public double ambiguity;
+  public double distance;
 
   public FiducialObservation() {}
 
@@ -84,6 +88,7 @@ public class FiducialObservation implements StructSerializable {
     rv.txnc = fiducial.txnc;
     rv.tync = fiducial.tync;
     rv.ambiguity = fiducial.ambiguity;
+    rv.distance = fiducial.distToCamera;
 
     return rv;
   }
