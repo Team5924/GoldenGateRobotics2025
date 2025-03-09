@@ -18,6 +18,7 @@ package org.team5924.frc2025;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -45,6 +46,23 @@ public class RobotState {
   @Getter
   @Setter
   private Pose2d estimatedPose = new Pose2d();
+
+  @Getter
+  @AutoLogOutput(key = "RobotState/RobotVelocity")
+  private ChassisSpeeds robotVelocity = new ChassisSpeeds();
+
+  public void addDriveSpeeds(ChassisSpeeds speeds) {
+    robotVelocity = speeds;
+  }
+
+  public Rotation2d getRotation() {
+    return estimatedPose.getRotation();
+  }
+
+  @AutoLogOutput(key = "RobotState/FieldVelocity")
+  public ChassisSpeeds getFieldVelocity() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(robotVelocity, getRotation());
+  }
 
   /* ### Climber ### */
   @Setter

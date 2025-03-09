@@ -282,6 +282,8 @@ public class Drive extends SubsystemBase {
     RobotState.getInstance().setOdometryPose(getPose());
 
     field.setRobotPose(getPose());
+
+    RobotState.getInstance().addDriveSpeeds(getChassisSpeeds());
   }
 
   /**
