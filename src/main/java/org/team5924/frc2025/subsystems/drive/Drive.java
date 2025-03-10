@@ -116,8 +116,11 @@ public class Drive extends SubsystemBase {
           "Gyro Disconnected",
           "Disconnected gyro, using kinematics as fallback.");
 
+  boolean isFlipped =
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
+
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private Rotation2d rawGyroRotation = new Rotation2d();
+  private Rotation2d rawGyroRotation = new Rotation2d(isFlipped ? 0 : Math.PI);
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),

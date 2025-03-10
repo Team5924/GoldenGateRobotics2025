@@ -94,6 +94,9 @@ public class Vision extends SubsystemBase {
       MegatagPoseEstimate poseEstimate) {
     Pose2d loggedRobotPose = RobotState.getInstance().getOdometryPose();
     Pose2d measuredPose = poseEstimate.pose;
+    if (poseEstimate.avgTagDist > 1.2) {
+      return Optional.empty();
+    }
 
     double poseDelta = measuredPose.getTranslation().getDistance(loggedRobotPose.getTranslation());
 
@@ -120,7 +123,7 @@ public class Vision extends SubsystemBase {
       } else if (poseEstimate.fiducialIds.length > 1) {
         xyStdDev = 1.2;
       } else {
-        xyStdDev = 2.0;
+        xyStdDev = 2.4;
       }
 
       Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);

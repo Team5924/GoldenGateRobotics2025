@@ -100,7 +100,7 @@ public class VisionIOLimelight implements VisionIO {
 
     if (inputs.frontLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2Front =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
 
       inputs.megatag2PoseEstimateFront = MegatagPoseEstimate.fromLimelight(megatag2Front, true);
       if (megatag2Front != null) {
@@ -128,7 +128,7 @@ public class VisionIOLimelight implements VisionIO {
 
     if (inputs.backLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2Back =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-back");
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
 
       inputs.megatag2PoseEstimateBack = MegatagPoseEstimate.fromLimelight(megatag2Back, false);
       if (megatag2Back != null) {
