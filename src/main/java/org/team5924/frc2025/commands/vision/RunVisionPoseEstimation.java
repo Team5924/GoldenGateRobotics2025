@@ -16,6 +16,10 @@
 
 package org.team5924.frc2025.commands.vision;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,25 +53,27 @@ public class RunVisionPoseEstimation extends Command {
       Logger.recordOutput("Vision Error", "Failed to get pose estimate");
       return;
     }
-    Logger.recordOutput("Vision Pose", estimatedPose.fieldToCamera);
+    Logger.recordOutput("Vision Pose", estimatedPose.pose);
     if (isPoseValid(estimatedPose)
         && isVisionReliable(estimatedPose)
         && estimatedPose.avgTagDist < 1) {
       if (DriverStation.isDisabled()) {
-        drive.setPose(estimatedPose.fieldToCamera);
+        drive.setPose(estimatedPose.pose);
       } else {
+        Matrix<N3, N1> visionMeasurement = new Matrix<>(Nat.N3(), Nat.N1());
         drive.addVisionMeasurement(
-            estimatedPose.fieldToCamera,
+            estimatedPose.pose,
             Timer.getFPGATimestamp()
                 - (estimatedPose.isFrontLimelight
                     ? vision.getLatencySecondsFront()
-                    : vision.getLatencySecondsBack()));
+                    : vision.getLatencySecondsBack()),
+            visionMeasurement);
       }
     }
   }
 
   private boolean isPoseValid(MegatagPoseEstimate pose) {
-    return pose.fieldToCamera.getX() != 0 && pose.fieldToCamera.getY() != 0;
+    return pose.pose.getX() != 0 && pose.pose.getY() != 0;
   }
 
   private boolean isVisionReliable(MegatagPoseEstimate pose) {

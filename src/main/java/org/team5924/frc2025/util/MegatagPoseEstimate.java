@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 
 public class MegatagPoseEstimate implements StructSerializable {
   public static class MegatagPoseEstimateStruct implements Struct<MegatagPoseEstimate> {
-    public Pose2d fieldToCamera = MathHelpers.kPose2dZero;
+    public Pose2d pose = MathHelpers.kPose2dZero;
     public double timestampSeconds;
     public double latency;
     public int tagCount;
@@ -55,7 +55,7 @@ public class MegatagPoseEstimate implements StructSerializable {
 
     @Override
     public String getSchema() {
-      return "Pose2d fieldToCamera;double timestampSeconds;double latency;int tagCount;double tagSpan;double avgTagDist;double avgTagArea;bool isFrontLimelight;";
+      return "Pose2d pose;double timestampSeconds;double latency;int tagCount;double tagSpan;double avgTagDist;double avgTagArea;bool isFrontLimelight;";
     }
 
     @Override
@@ -69,7 +69,7 @@ public class MegatagPoseEstimate implements StructSerializable {
         throw new BufferUnderflowException();
       }
       MegatagPoseEstimate rv = new MegatagPoseEstimate();
-      rv.fieldToCamera = Pose2d.struct.unpack(bb);
+      rv.pose = Pose2d.struct.unpack(bb);
       rv.timestampSeconds = bb.getDouble();
       rv.latency = bb.getDouble();
       rv.tagCount = bb.getInt();
@@ -82,7 +82,7 @@ public class MegatagPoseEstimate implements StructSerializable {
 
     @Override
     public void pack(ByteBuffer bb, MegatagPoseEstimate value) {
-      Pose2d.struct.pack(bb, value.fieldToCamera);
+      Pose2d.struct.pack(bb, value.pose);
       bb.putDouble(value.timestampSeconds);
       bb.putDouble(value.latency);
       bb.putInt(value.tagCount);
@@ -93,7 +93,7 @@ public class MegatagPoseEstimate implements StructSerializable {
     }
   }
 
-  public Pose2d fieldToCamera = MathHelpers.kPose2dZero;
+  public Pose2d pose = MathHelpers.kPose2dZero;
   public double timestampSeconds;
   public double latency;
   public int tagCount;
@@ -101,6 +101,7 @@ public class MegatagPoseEstimate implements StructSerializable {
   public double avgTagDist;
   public double avgTagArea;
   public boolean isFrontLimelight;
+  public int[] fiducialIds;
 
   public MegatagPoseEstimate() {}
 
@@ -112,8 +113,8 @@ public class MegatagPoseEstimate implements StructSerializable {
     }
 
     MegatagPoseEstimate rv = new MegatagPoseEstimate();
-    rv.fieldToCamera = poseEstimate.pose;
-    if (rv.fieldToCamera == null) rv.fieldToCamera = MathHelpers.kPose2dZero;
+    rv.pose = poseEstimate.pose;
+    if (rv.pose == null) rv.pose = MathHelpers.kPose2dZero;
     rv.timestampSeconds = poseEstimate.timestampSeconds;
     rv.latency = poseEstimate.latency;
     rv.tagCount = poseEstimate.tagCount;
@@ -121,6 +122,11 @@ public class MegatagPoseEstimate implements StructSerializable {
     rv.avgTagDist = poseEstimate.avgTagDist;
     rv.avgTagArea = poseEstimate.avgTagArea;
     rv.isFrontLimelight = isFrontLimelight;
+
+    rv.fiducialIds = new int[poseEstimate.rawFiducials.length];
+    for (int i = 0; i < rv.fiducialIds.length; ++i) {
+      rv.fiducialIds[i] = poseEstimate.rawFiducials[i].id;
+    }
 
     return rv;
   }

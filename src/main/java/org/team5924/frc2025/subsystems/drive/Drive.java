@@ -31,6 +31,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -40,6 +41,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -64,6 +67,7 @@ import org.team5924.frc2025.util.Elastic;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 import org.team5924.frc2025.util.LocalADStarAK;
+import org.team5924.frc2025.util.VisionFieldPoseEstimate;
 import org.team5924.frc2025.util.swerve.SwerveSetpoint;
 import org.team5924.frc2025.util.swerve.SwerveSetpointGenerator;
 
@@ -112,8 +116,11 @@ public class Drive extends SubsystemBase {
           "Gyro Disconnected",
           "Disconnected gyro, using kinematics as fallback.");
 
+  boolean isFlipped =
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
+
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
-  private Rotation2d rawGyroRotation = new Rotation2d(Math.PI);
+  private Rotation2d rawGyroRotation = new Rotation2d(isFlipped ? 0 : Math.PI);
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
         new SwerveModulePosition(),
@@ -282,6 +289,12 @@ public class Drive extends SubsystemBase {
     RobotState.getInstance().setOdometryPose(getPose());
 
     field.setRobotPose(getPose());
+
+    VisionFieldPoseEstimate visionPose = RobotState.getInstance().getEstimatedPose();
+    addVisionMeasurement(
+        visionPose.getVisionRobotPoseMeters(),
+        visionPose.getTimestampSeconds(),
+        visionPose.getVisionMeasurementStdDevs());
   }
 
   /**
@@ -430,8 +443,12 @@ public class Drive extends SubsystemBase {
   }
 
   /** Adds a new timestamped vision measurement. */
-  public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
-    poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+  public void addVisionMeasurement(
+      Pose2d visionRobotPoseMeters,
+      double timestampSeconds,
+      Matrix<N3, N1> visionMeasurementStdDevs) {
+    poseEstimator.addVisionMeasurement(
+        visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
   }
 
   /** Returns the maximum linear speed in meters per sec. */

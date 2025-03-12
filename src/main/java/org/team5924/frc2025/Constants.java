@@ -56,6 +56,13 @@ public final class Constants {
   public static final boolean TUNING_MODE = false;
   public static final boolean ALLOW_ASSERTS = false;
 
+  /* Field */
+  public static final double FIELD_BORDER_MARGIN = 0.5;
+  public static final AprilTagFieldLayout field =
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  public static final double FIELD_WIDTH = field.getFieldWidth();
+  public static final double FIELD_LENGTH = field.getFieldLength();
+
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Climber */
@@ -152,8 +159,9 @@ public final class Constants {
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
       double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 0.850; // Leg 3 but different (meters)
-      double offset = -.243;
+      double distanceFromCenterToRoboCenterShoot = 1.22; // Leg 3 but different (meters)
+      double offset = -.205;
+      double offsetCorrection = 0.09; // Correction for the offset just in case!!
 
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
@@ -175,20 +183,22 @@ public final class Constants {
                 blueCenter.getX()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 blueCenter.getY()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 

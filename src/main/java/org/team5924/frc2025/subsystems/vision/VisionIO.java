@@ -17,6 +17,7 @@
 package org.team5924.frc2025.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.AutoLog;
 import org.team5924.frc2025.util.FiducialObservation;
 import org.team5924.frc2025.util.MegatagPoseEstimate;
@@ -49,6 +50,9 @@ public interface VisionIO {
 
     public double backAprilTagPipelineLatencySeconds = 0.0;
     public double backAprilTagCaptureLatencySeconds = 0.0;
+
+    public Pose3d frontAprilTagDistance = new Pose3d();
+    public double backAprilTagDistance = 0.0;
   }
 
   /** Updates the set of loggable inputs. */

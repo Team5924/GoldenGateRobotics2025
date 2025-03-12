@@ -64,17 +64,29 @@ public class VisionIOLimelight implements VisionIO {
         Constants.BACK_LIMELIGHT_OFF_YAW);
 
     if (!DriverStation.isDisabled()) {
-      LimelightHelpers.SetIMUMode("limelight-front", 4);
-      LimelightHelpers.SetIMUMode("limelight-back", 4);
+      LimelightHelpers.SetIMUMode("limelight-front", 2);
+      LimelightHelpers.SetIMUMode("limelight-back", 2);
 
-      RobotState.getInstance().setLimelightImuMode(4);
+      RobotState.getInstance().setLimelightImuMode(2);
     }
     // } else {
     LimelightHelpers.SetRobotOrientation(
-        "limelight-front", RobotState.getInstance().getYawPosition().getDegrees(), 0, 0, 0, 0, 0);
+        "limelight-front",
+        RobotState.getInstance().getYawPosition().getDegrees(),
+        RobotState.getInstance().getYawVelocityRadPerSec(),
+        0,
+        0,
+        0,
+        0);
 
     LimelightHelpers.SetRobotOrientation(
-        "limelight-back", RobotState.getInstance().getYawPosition().getDegrees(), 0, 0, 0, 0, 0);
+        "limelight-back",
+        RobotState.getInstance().getYawPosition().getDegrees(),
+        RobotState.getInstance().getYawVelocityRadPerSec(),
+        0,
+        0,
+        0,
+        0);
     // }
   }
 
@@ -98,14 +110,20 @@ public class VisionIOLimelight implements VisionIO {
         inputs.megatag2PoseEstimateFrontAvgTagArea = megatag2Front.avgTagArea;
       }
 
+      double frontDistToCameraTotal = 0.0;
       for (FiducialObservation rawFiducial : inputs.frontFiducials) {
         double frontTagAmbiguity = rawFiducial.ambiguity;
         if (frontTagAmbiguity < lowestTagAmbiguityFront) {
           lowestTagAmbiguityFront = frontTagAmbiguity;
         }
+
+        frontDistToCameraTotal += rawFiducial.distance;
       }
 
+      inputs.frontAprilTagDistance = LimelightHelpers.getBotPose3d_TargetSpace("limelight-front");
+
       inputs.lowestTagAmbiguityFront = lowestTagAmbiguityFront;
+      // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;
     }
 
     if (inputs.backLimelightSeesTarget) {
@@ -128,6 +146,7 @@ public class VisionIOLimelight implements VisionIO {
       }
 
       inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
+      inputs.backAprilTagDistance = megatag2Back.avgTagDist;
     }
 
     inputs.frontAprilTagPipelineLatencySeconds =
