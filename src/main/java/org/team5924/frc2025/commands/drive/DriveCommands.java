@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.util.Pathing;
 
@@ -306,5 +307,50 @@ public class DriveCommands {
     double[] positions = new double[4];
     Rotation2d lastAngle = new Rotation2d();
     double gyroDelta = 0.0;
+  }
+
+  public static Command turnToRightCoralStation(Drive drive) {
+    return Commands.run(
+        () -> {
+
+          // logic for the auto align for heading
+          double omega = 0;
+          // default value
+          ChassisSpeeds speeds;
+
+          Rotation2d rightCoralStationRotation2d =
+              new Rotation2d(Constants.CORAL_STATION_RADIANS_NORMAL);
+          // Rotation2d leftCoralStationRotation2d = new
+          // Rotation2d(-Constants.CORAL_STATION_RADIANS_NORMAL);
+
+          if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
+              && drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
+                  > -.0872665) {
+            omega = 0;
+
+          } else if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
+              > .0872665) {
+            omega = .5;
+
+          } else if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
+              < -.0872665) {
+            omega = -.5;
+          }
+
+          speeds = new ChassisSpeeds(0, 0, omega);
+
+          // Convert to field relative speeds & send command
+
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          drive.runVelocity(
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  speeds,
+                  isFlipped
+                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                      : drive.getRotation()));
+        },
+        drive);
   }
 }
