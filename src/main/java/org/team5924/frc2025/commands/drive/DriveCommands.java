@@ -315,6 +315,7 @@ public class DriveCommands {
 
           // logic for the auto align for heading
           double omega = 0;
+          // default value
           ChassisSpeeds speeds;
 
           Rotation2d rightCoralStationRotation2d =
@@ -325,18 +326,18 @@ public class DriveCommands {
           if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
               && drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
                   > -.0872665) {
-            speeds = new ChassisSpeeds(0, 0, 0);
+            omega = 0;
 
           } else if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
               > .0872665) {
-            speeds = new ChassisSpeeds(0, 0, .5);
+            omega = .5;
 
           } else if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
               < -.0872665) {
-            speeds = new ChassisSpeeds(0, 0, -.5);
-          } else {
-            speeds = new ChassisSpeeds(0, 0, 0);
+            omega = -.5;
           }
+
+          speeds = new ChassisSpeeds(0, 0, omega);
 
           // Convert to field relative speeds & send command
 
