@@ -14,7 +14,7 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.Lights;
+package org.team5924.frc2025.subsystems.lights;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
