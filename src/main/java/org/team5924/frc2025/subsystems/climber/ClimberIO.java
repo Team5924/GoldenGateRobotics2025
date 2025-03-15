@@ -23,13 +23,13 @@ import org.team5924.frc2025.util.LaserCAN_Measurement;
 public interface ClimberIO {
   @AutoLog
   public static class ClimberIOInputs {
-    public boolean rotateMotorConnected = true;
-    public double rotatePositionRads = 0.0;
-    public double rotateVelocityRadsPerSec = 0.0;
-    public double rotateAppliedVoltage = 0.0;
-    public double rotateSupplyCurrentAmps = 0.0;
-    public double rotateTorqueCurrentAmps = 0.0;
-    public double rotateTempCelsius = 0.0;
+    public boolean motorConnected = true;
+    public double positionRads = 0.0;
+    public double velocityRadsPerSec = 0.0;
+    public double appliedVoltage = 0.0;
+    public double supplyCurrentAmps = 0.0;
+    public double torqueCurrentAmps = 0.0;
+    public double tempCelsius = 0.0;
 
     // Climber LaserCAN
     public LaserCAN_Measurement laserCanMeasurement = new LaserCAN_Measurement();
@@ -50,14 +50,19 @@ public interface ClimberIO {
    */
   public default void runVolts(double volts) {}
 
+  // /**
+  //  * Sets the target angle for the climber
+  //  *
+  //  * @param rads Target angle in radians, must be between {@link Constants}.CLIMBER_MIN_RADS and
+  //  *     {@link Constants}.CLIMBER_MAX_RADS
+  //  * @throws IllegalArgumentException if value does not fall in range
+  //  */
+  // public default void setAngle(double rads) {}
+
   /**
-   * Sets the target angle for the climber
-   *
-   * @param rads Target angle in radians, must be between {@link Constants}.CLIMBER_MIN_RADS and
-   *     {@link Constants}.CLIMBER_MAX_RADS
-   * @throws IllegalArgumentException if value does not fall in range
+   * Zeroes the climber motor's encoder
    */
-  public default void setAngle(double rads) {}
+  public default void zeroEncoder() {}
 
   /** stops the motor */
   default void stop() {}

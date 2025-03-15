@@ -71,11 +71,13 @@ public final class Constants {
   public static final int CLIMBER_CURRENT_LIMIT = 40;
   public static final InvertedValue CLIMBER_INVERT = InvertedValue.CounterClockwise_Positive;
   public static final NeutralModeValue CLIMBER_NEUTRAL_MODE = NeutralModeValue.Brake;
-  public static final double CLIMBER_REDUCTION = 58.3; // TODO: correct for now, check again later
+  public static final double CLIMBER_REDUCTION = 125.0 / 1.0 * (42.0 / 16.0); // TODO: Elims climber ratio changed, need to update this
   public static final double CLIMBER_SIM_MOI = 0.001;
   public static final double CLIMBER_MIN_RADS = -Math.PI / 2; // TODO: get real min
   public static final double CLIMBER_MAX_RADS = Math.PI / 2; // TODO: get real max
   public static final int CLIMBER_LASER_CAN_ID = 42;
+  // max difference between target rotation and current rotation for the climber motor to be considered at the target rotation
+  public static final double CLIMBER_THRESHOLD_DEG = 1.0; 
 
   /* # Rollers # */
   /* Coral In-And-Out */

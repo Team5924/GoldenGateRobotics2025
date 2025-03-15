@@ -35,14 +35,14 @@ import org.team5924.frc2025.Constants;
 
 /** Add your docs here. */
 public class ClimberIOTalonFX implements ClimberIO {
-  private final TalonFX rotateTalon;
+  private final TalonFX talon;
 
-  private final StatusSignal<Angle> rotatePosition;
-  private final StatusSignal<AngularVelocity> rotateVelocity;
-  private final StatusSignal<Voltage> rotateAppliedVoltage;
-  private final StatusSignal<Current> rotateSupplyCurrent;
-  private final StatusSignal<Current> rotateTorqueCurrent;
-  private final StatusSignal<Temperature> rotateTempCelsius;
+  private final StatusSignal<Angle> position;
+  private final StatusSignal<AngularVelocity> velocity;
+  private final StatusSignal<Voltage> appliedVoltage;
+  private final StatusSignal<Current> supplyCurrent;
+  private final StatusSignal<Current> torqueCurrent;
+  private final StatusSignal<Temperature> tempCelsius;
 
   // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true).withUpdateFreqHz(0);
@@ -60,7 +60,7 @@ public class ClimberIOTalonFX implements ClimberIO {
 
   public ClimberIOTalonFX() {
     reduction = Constants.CLIMBER_REDUCTION;
-    rotateTalon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
+    talon = new TalonFX(Constants.CLIMBER_CAN_ID, Constants.CLIMBER_BUS);
 
     // Configure TalonFX
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -68,27 +68,27 @@ public class ClimberIOTalonFX implements ClimberIO {
     config.MotorOutput.NeutralMode = Constants.CLIMBER_NEUTRAL_MODE;
     config.CurrentLimits.SupplyCurrentLimit = Constants.CLIMBER_CURRENT_LIMIT;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    rotateTalon.getConfigurator().apply(config);
+    talon.getConfigurator().apply(config);
 
     // Get select status signals and set update frequency
-    rotatePosition = rotateTalon.getPosition();
-    rotateVelocity = rotateTalon.getVelocity();
-    rotateAppliedVoltage = rotateTalon.getMotorVoltage();
-    rotateSupplyCurrent = rotateTalon.getSupplyCurrent();
-    rotateTorqueCurrent = rotateTalon.getTorqueCurrent();
-    rotateTempCelsius = rotateTalon.getDeviceTemp();
+    position = talon.getPosition();
+    velocity = talon.getVelocity();
+    appliedVoltage = talon.getMotorVoltage();
+    supplyCurrent = talon.getSupplyCurrent();
+    torqueCurrent = talon.getTorqueCurrent();
+    tempCelsius = talon.getDeviceTemp();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
         50.0,
-        rotatePosition,
-        rotateVelocity,
-        rotateAppliedVoltage,
-        rotateSupplyCurrent,
-        rotateTorqueCurrent,
-        rotateTempCelsius);
+        position,
+        velocity,
+        appliedVoltage,
+        supplyCurrent,
+        torqueCurrent,
+        tempCelsius);
 
     // Disables status signals not called for update above
-    rotateTalon.optimizeBusUtilization(0, 1.0);
+    talon.optimizeBusUtilization(0, 1.0);
   }
 
   @Override
@@ -113,41 +113,46 @@ public class ClimberIOTalonFX implements ClimberIO {
     //   }
     // }
 
-    inputs.rotateMotorConnected =
+    inputs.motorConnected =
         BaseStatusSignal.refreshAll(
-                rotatePosition,
-                rotateVelocity,
-                rotateAppliedVoltage,
-                rotateSupplyCurrent,
-                rotateTorqueCurrent,
-                rotateTempCelsius)
+                position,
+                velocity,
+                appliedVoltage,
+                supplyCurrent,
+                torqueCurrent,
+                tempCelsius)
             .isOK();
-    inputs.rotatePositionRads =
-        Units.rotationsToRadians(rotatePosition.getValueAsDouble()) / reduction;
-    inputs.rotateVelocityRadsPerSec =
-        Units.rotationsToRadians(rotateVelocity.getValueAsDouble()) / reduction;
-    inputs.rotateAppliedVoltage = rotateAppliedVoltage.getValueAsDouble();
-    inputs.rotateSupplyCurrentAmps = rotateSupplyCurrent.getValueAsDouble();
-    inputs.rotateTorqueCurrentAmps = rotateTorqueCurrent.getValueAsDouble();
-    inputs.rotateTempCelsius = rotateTempCelsius.getValueAsDouble();
+    inputs.positionRads =
+        Units.rotationsToRadians(position.getValueAsDouble()) / reduction;
+    inputs.velocityRadsPerSec =
+        Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction;
+    inputs.appliedVoltage = appliedVoltage.getValueAsDouble();
+    inputs.supplyCurrentAmps = supplyCurrent.getValueAsDouble();
+    inputs.torqueCurrentAmps = torqueCurrent.getValueAsDouble();
+    inputs.tempCelsius = tempCelsius.getValueAsDouble();
   }
 
   @Override
   public void runVolts(double volts) {
-    rotateTalon.setControl(voltageOut.withOutput(volts));
+    talon.setControl(voltageOut.withOutput(volts));
   }
 
   @Override
-  public void setAngle(double rads) throws IllegalArgumentException {
-    if (rads < Constants.CLIMBER_MIN_RADS || rads > Constants.CLIMBER_MAX_RADS) {
-      String message =
-          "Cannot set climber angle to "
-              + rads
-              + " rads.  This value extends past the climber angle boundary.";
-      Logger.recordOutput("Climber/InvalidAngle", message);
-      throw new IllegalArgumentException(message);
-    }
-    rads = Math.max(Constants.CLIMBER_MIN_RADS, Math.min(rads, Constants.CLIMBER_MAX_RADS));
-    rotateTalon.setControl(positionOut.withPosition(Radians.of(rads)));
+  public void zeroEncoder() {
+    talon.setPosition(0);
   }
+
+  // @Override
+  // public void setAngle(double rads) throws IllegalArgumentException {
+  //   if (rads < Constants.CLIMBER_MIN_RADS || rads > Constants.CLIMBER_MAX_RADS) {
+  //     String message =
+  //         "Cannot set climber angle to "
+  //             + rads
+  //             + " rads.  This value extends past the climber angle boundary.";
+  //     Logger.recordOutput("Climber/InvalidAngle", message);
+  //     throw new IllegalArgumentException(message);
+  //   }
+  //   rads = Math.max(Constants.CLIMBER_MIN_RADS, Math.min(rads, Constants.CLIMBER_MAX_RADS));
+  //   talon.setControl(positionOut.withPosition(Radians.of(rads)));
+  // }
 }
