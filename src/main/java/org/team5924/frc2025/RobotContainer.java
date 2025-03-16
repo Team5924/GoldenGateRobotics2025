@@ -52,6 +52,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
+import org.team5924.frc2025.subsystems.lights.Lights;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
@@ -73,6 +74,7 @@ public class RobotContainer {
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
   private final Vision vision;
+  private final Lights lights;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -98,6 +100,7 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
         vision = new Vision(new VisionIOLimelight());
+        lights = new Lights();
         break;
 
       case SIM:
@@ -113,6 +116,7 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        lights = new Lights();
         break;
 
       default:
@@ -128,6 +132,7 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        lights = new Lights();
         break;
     }
 
@@ -294,6 +299,8 @@ public class RobotContainer {
         .pov(180)
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+
+    lights.defaultCommand();
   }
 
   /**
