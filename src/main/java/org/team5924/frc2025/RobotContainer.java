@@ -237,6 +237,9 @@ public class RobotContainer {
         .whileTrue(
             new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
 
+    driveController.rightTrigger().whileTrue(DriveCommands.turnToRightCoralStation(drive));
+    
+    driveController.leftTrigger().whileTrue(DriveCommands.turnToLeftCoralStation(drive));
     // Coral In and Out
 
     driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
