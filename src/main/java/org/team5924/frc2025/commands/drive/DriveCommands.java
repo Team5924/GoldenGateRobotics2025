@@ -314,7 +314,7 @@ public class DriveCommands {
       Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     return Commands.run(
         () -> {
-          PIDController pid = new PIDController(5, 0, 0);
+          PIDController pid = new PIDController(2, 0, 0);
           // logic for the auto align for heading
           double omega = 0;
           double heading;
