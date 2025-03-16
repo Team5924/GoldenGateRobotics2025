@@ -16,8 +16,6 @@
 
 package org.team5924.frc2025.subsystems.climber;
 
-import static edu.wpi.first.units.Units.Radians;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -30,7 +28,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 
 /** Add your docs here. */
@@ -79,13 +76,7 @@ public class ClimberIOTalonFX implements ClimberIO {
     tempCelsius = talon.getDeviceTemp();
 
     BaseStatusSignal.setUpdateFrequencyForAll(
-        50.0,
-        position,
-        velocity,
-        appliedVoltage,
-        supplyCurrent,
-        torqueCurrent,
-        tempCelsius);
+        50.0, position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius);
 
     // Disables status signals not called for update above
     talon.optimizeBusUtilization(0, 1.0);
@@ -115,17 +106,10 @@ public class ClimberIOTalonFX implements ClimberIO {
 
     inputs.motorConnected =
         BaseStatusSignal.refreshAll(
-                position,
-                velocity,
-                appliedVoltage,
-                supplyCurrent,
-                torqueCurrent,
-                tempCelsius)
+                position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius)
             .isOK();
-    inputs.positionRads =
-        Units.rotationsToRadians(position.getValueAsDouble()) / reduction;
-    inputs.velocityRadsPerSec =
-        Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction;
+    inputs.positionRads = Units.rotationsToRadians(position.getValueAsDouble()) / reduction;
+    inputs.velocityRadsPerSec = Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction;
     inputs.appliedVoltage = appliedVoltage.getValueAsDouble();
     inputs.supplyCurrentAmps = supplyCurrent.getValueAsDouble();
     inputs.torqueCurrentAmps = torqueCurrent.getValueAsDouble();

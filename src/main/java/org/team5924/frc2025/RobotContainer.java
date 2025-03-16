@@ -279,21 +279,21 @@ public class RobotContainer {
     vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
 
     // Climber
-    // Dpad Down
+    // Dpad Up -> lineup
+    driveController
+        .pov(0)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.LINEUP)));
+
+    // Dpad Down -> climb
     driveController
         .pov(180)
         .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
 
-    // Dpad Up
-    driveController
-        .pov(0)
-        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
-
-    // No Dpad Up or Dpad Down
-    driveController
-        .pov(180)
-        .or(driveController.pov(0))
-        .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+    // // No Dpad Up or Dpad Down
+    // driveController
+    //     .pov(180)
+    //     .or(driveController.pov(0))
+    //     .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
   }
 
   /**

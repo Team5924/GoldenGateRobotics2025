@@ -36,24 +36,28 @@ public class Climber extends SubsystemBase {
   public enum ClimberState {
 
     // Default state, will be here most of the match
-    STOW(new LoggedTunableNumber("Climber/StowVoltage", 0.0),
-      new LoggedTunableNumber("Climber/StowPosition", 0.0)),
+    STOW(
+        new LoggedTunableNumber("Climber/StowVoltage", 0.0),
+        new LoggedTunableNumber("Climber/StowPosition", 0.0)),
 
     // Lining up climber to cage
-    LINEUP(new LoggedTunableNumber("Climber/LineupVoltage", 12.0),
-      new LoggedTunableNumber("Climber/LineupPosition", 50 + 90 - 35)),
+    LINEUP(
+        new LoggedTunableNumber("Climber/LineupVoltage", 12.0),
+        new LoggedTunableNumber("Climber/LineupPosition", 50 + 90 - 35)),
 
     // Ready to climb
-    READY_TO_CLIMB(new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0),
-      new LoggedTunableNumber("Climber/ReadyToClimbPosition", 50 + 90 - 35)),
+    READY_TO_CLIMB(
+        new LoggedTunableNumber("Climber/ReadyToClimbVoltage", 0.0),
+        new LoggedTunableNumber("Climber/ReadyToClimbPosition", 50 + 90 - 35)),
 
     // Pulling onto cage, lifting robot
-    CLIMB(new LoggedTunableNumber("Climber/ClimbVoltage", 12.0),
-      new LoggedTunableNumber("Climber/ClimbPosition", 50 + 90 + 90 + 35));
+    CLIMB(
+        new LoggedTunableNumber("Climber/ClimbVoltage", 12.0),
+        new LoggedTunableNumber("Climber/ClimbPosition", 50 + 90 + 90 + 35));
 
     private final LoggedTunableNumber volts;
     private LoggedTunableNumber targetPositionDegrees;
-    
+
     ClimberState(LoggedTunableNumber volts, LoggedTunableNumber targetPositionDegrees) {
       this.volts = volts;
       this.targetPositionDegrees = targetPositionDegrees;
@@ -91,16 +95,14 @@ public class Climber extends SubsystemBase {
 
     disconnected.set(!inputs.motorConnected);
 
-
     if (isCageInClimber()
         && RobotState.getInstance().getAlgaePivotState() == AlgaePivotState.INTAKE_FLOOR
         && RobotState.getInstance().getElevatorPositionMeters()
             <= (ElevatorState.L1).getHeightMeters().getAsDouble() + 0.02) {
-      
+
       // If the robot's state is STOW && the cage is within range && algae pivot is STOW &&
       // elevator height is below L1 elevator height, then set the robot's state to READY_TO_CLIMB
-      if (getGoalState() == ClimberState.STOW)
-          setGoalState(ClimberState.READY_TO_CLIMB);
+      if (getGoalState() == ClimberState.STOW) setGoalState(ClimberState.READY_TO_CLIMB);
     } else if (getGoalState() == ClimberState.READY_TO_CLIMB) {
       // If the requirements for READY_TO_CLIMB are not met and the robot's state is READY_TO_CLIMB,
       // then set the robot's state to STOW
@@ -112,14 +114,15 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-
     double currentPositionDegrees = Units.radiansToDegrees(inputs.positionRads);
-    double rotationDifference = goalState.targetPositionDegrees.getAsDouble() - currentPositionDegrees;
+    double rotationDifference =
+        goalState.targetPositionDegrees.getAsDouble() - currentPositionDegrees;
     if (rotationDifference < Constants.CLIMBER_THRESHOLD_DEG) {
       // run the motor in the direction of the target position
       io.runVolts(Math.signum(rotationDifference) * goalState.volts.getAsDouble());
+    } else {
+      io.stop();
     }
-
 
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
@@ -137,8 +140,8 @@ public class Climber extends SubsystemBase {
         break;
 
       case LINEUP:
-          RobotState.getInstance().setClimberState(ClimberState.LINEUP);
-          break;
+        RobotState.getInstance().setClimberState(ClimberState.LINEUP);
+        break;
 
       case READY_TO_CLIMB:
         RobotState.getInstance().setClimberState(ClimberState.READY_TO_CLIMB);
@@ -149,26 +152,28 @@ public class Climber extends SubsystemBase {
         // READY_TO_CLIMB
         if (!RobotState.getInstance().getClimberState().equals(ClimberState.READY_TO_CLIMB)) {
           invalidStateTransition.setText(
-              "Cannot transition Climber from " + RobotState.getInstance().getClimberState().name() +  " to CLIMB.  Robot needs to be READY_TO_CLIMB before performing any climbing action.");
+              "Cannot transition Climber from "
+                  + RobotState.getInstance().getClimberState().name()
+                  + " to CLIMB.  Robot needs to be READY_TO_CLIMB before performing any climbing action.");
           break;
         } else { // otherwise transition is valid
           RobotState.getInstance().setClimberState(ClimberState.CLIMB);
           break;
         }
-      }
+    }
 
     // if the goal state and the actual state are not equal, then there was an error
     invalidStateTransition.set(RobotState.getInstance().getClimberState() != goalState);
   }
 
-  /** Handles the the climber's state when there is no climber input */
-  public void handleNoInputState() {
-    setGoalState(
-        getGoalState() == ClimberState.STOW
-            ? ClimberState.STOW // if the robot is not climbing, stay in STOW state
-            : ClimberState
-                .READY_TO_CLIMB); // if the robot is climbing, transition to READY_TO_CLIMB
-  }
+  // /** Handles the the climber's state when there is no climber input */
+  // public void handleNoInputState() {
+  //   setGoalState(
+  //       getGoalState() == ClimberState.STOW
+  //           ? ClimberState.STOW // if the robot is not climbing, stay in STOW state
+  //           : ClimberState
+  //               .READY_TO_CLIMB); // if the robot is climbing, transition to READY_TO_CLIMB
+  // }
 
   /**
    * @return true if cage is detected by climber LaserCAN

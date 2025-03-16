@@ -17,7 +17,6 @@
 package org.team5924.frc2025.subsystems.climber;
 
 import org.littletonrobotics.junction.AutoLog;
-import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
 
 public interface ClimberIO {
@@ -59,9 +58,7 @@ public interface ClimberIO {
   //  */
   // public default void setAngle(double rads) {}
 
-  /**
-   * Zeroes the climber motor's encoder
-   */
+  /** Zeroes the climber motor's encoder */
   public default void zeroEncoder() {}
 
   /** stops the motor */
