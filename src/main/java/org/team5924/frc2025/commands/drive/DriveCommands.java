@@ -18,6 +18,7 @@ package org.team5924.frc2025.commands.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -309,41 +310,38 @@ public class DriveCommands {
     double gyroDelta = 0.0;
   }
 
-  public static Command turnToRightCoralStation(Drive drive) {
+  public static Command turnToRightCoralStation(Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     return Commands.run(
         () -> {
 
+          PIDController pid = new PIDController(5, 0, 0);
           // logic for the auto align for heading
           double omega = 0;
           // default value
           ChassisSpeeds speeds;
 
-          // Rotation2d rightCoralStationRotation2d =
-          //     new Rotation2d(Constants.CORAL_STATION_RADIANS_NORMAL);
-          // Rotation2d leftCoralStationRotation2d = new
-          // Rotation2d(-Constants.CORAL_STATION_RADIANS_NORMAL);
-
-          if (MathUtil.angleModulus(drive.getRotation().getRadians()) - Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
-              && drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
-                  > -.0872665) {
-            omega = 0;
-
-          } else if (MathUtil.angleModulus(drive.getRotation().getRadians()) - Constants.CORAL_STATION_RADIANS_NORMAL
-              > .0872665) {
-            omega = .5;
-
-          } else if (MathUtil.angleModulus(drive.getRotation().getRadians()) - Constants.CORAL_STATION_RADIANS_NORMAL
-              < -.0872665) {
-            omega = -.5;
-          }
-
-          speeds = new ChassisSpeeds(0, 0, omega);
-
-          // Convert to field relative speeds & send command
+          Translation2d linearVelocity =
+              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
+
+          if(!isFlipped){
+            pid.calculate(MathUtil.angleModulus(drive.getRotation().getRadians()), Constants.CORAL_STATION_RADIANS_NORMAL);
+          }
+          else{
+            pid.calculate(MathUtil.angleModulus(drive.getRotation().getRadians()), Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI);
+          }
+          
+
+          speeds = new ChassisSpeeds(
+            linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+            linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+            omega);
+
+          // Convert to field relative speeds & send command
+
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,
@@ -369,11 +367,11 @@ public class DriveCommands {
 
           } else if (drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL
               > .0872665) {
-            omega = .5;
+            omega = -.5;
 
           } else if (drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL
               < -.0872665) {
-            omega = -.5;
+            omega = .5;
           }
 
           speeds = new ChassisSpeeds(0, 0, omega);
