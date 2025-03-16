@@ -317,6 +317,7 @@ public class DriveCommands {
           PIDController pid = new PIDController(5, 0, 0);
           // logic for the auto align for heading
           double omega = 0;
+          double heading;
           // default value
           ChassisSpeeds speeds;
 
@@ -327,15 +328,26 @@ public class DriveCommands {
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
-          if (!isFlipped) {
-            omega = pid.calculate(
-                MathUtil.angleModulus(drive.getRotation().getRadians()),
-                Constants.CORAL_STATION_RADIANS_NORMAL);
-          } else {
-            omega = pid.calculate(
-                MathUtil.angleModulus(drive.getRotation().getRadians()),
-                Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI);
+          if(!isFlipped){
+            heading = Constants.CORAL_STATION_RADIANS_NORMAL;
           }
+          else{
+            heading = Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI;
+          }
+          
+          boolean inPIDMargin = 
+              Math.abs(drive.getRotation().getRadians() - heading) > 0.0523599;
+
+          
+          if(inPIDMargin){
+            omega = pid.calculate(
+                  MathUtil.angleModulus(drive.getRotation().getRadians()),
+                  heading);
+          }
+          else{
+            omega = 0;
+          }
+          
 
           speeds =
               new ChassisSpeeds(
