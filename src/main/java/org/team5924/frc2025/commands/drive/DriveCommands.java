@@ -318,21 +318,21 @@ public class DriveCommands {
           // default value
           ChassisSpeeds speeds;
 
-          Rotation2d rightCoralStationRotation2d =
-              new Rotation2d(Constants.CORAL_STATION_RADIANS_NORMAL);
+          // Rotation2d rightCoralStationRotation2d =
+          //     new Rotation2d(Constants.CORAL_STATION_RADIANS_NORMAL);
           // Rotation2d leftCoralStationRotation2d = new
           // Rotation2d(-Constants.CORAL_STATION_RADIANS_NORMAL);
 
-          if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
+          if (MathUtil.angleModulus(drive.getRotation().getRadians()) - Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
               && drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
                   > -.0872665) {
             omega = 0;
 
-          } else if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
+          } else if (MathUtil.angleModulus(drive.getRotation().getRadians()) - Constants.CORAL_STATION_RADIANS_NORMAL
               > .0872665) {
             omega = .5;
 
-          } else if (drive.getRotation().getRadians() - Constants.CORAL_STATION_RADIANS_NORMAL
+          } else if (MathUtil.angleModulus(drive.getRotation().getRadians()) - Constants.CORAL_STATION_RADIANS_NORMAL
               < -.0872665) {
             omega = -.5;
           }
@@ -360,13 +360,7 @@ public class DriveCommands {
 
           // logic for the auto align for heading
           double omega = 0;
-          // default value
           ChassisSpeeds speeds;
-
-          // Rotation2d rightCoralStationRotation2d =
-          //     new Rotation2d(Constants.CORAL_STATION_RADIANS_NORMAL);
-          // Rotation2d leftCoralStationRotation2d = new
-          // Rotation2d(-Constants.CORAL_STATION_RADIANS_NORMAL);
 
           if (drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
               && drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL
