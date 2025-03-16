@@ -33,8 +33,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.team5924.frc2025.generated.TunerConstants;
-import org.team5924.frc2025.subsystems.Lights.Lights;
-import org.team5924.frc2025.subsystems.Lights.Lights.LEDSegment;
+import org.team5924.frc2025.subsystems.lights.Lights;
+import org.team5924.frc2025.subsystems.lights.Lights.LEDSegment;
 import org.team5924.frc2025.util.Elastic;
 
 /**

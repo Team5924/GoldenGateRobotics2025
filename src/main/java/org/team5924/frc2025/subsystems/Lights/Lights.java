@@ -14,7 +14,7 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.Lights;
+package org.team5924.frc2025.subsystems.lights;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
@@ -31,22 +31,10 @@ import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.team5924.frc2025.Constants;
+import org.team5924.frc2025.util.Color;
 
 public class Lights extends SubsystemBase {
   private static final CANdle candle = new CANdle(Constants.CANDLE_ID);
-
-  /* Creating a Color class to read in some colors */
-  public static class Color {
-    public int red;
-    public int green;
-    public int blue;
-
-    public Color(int red, int green, int blue) {
-      this.red = red;
-      this.green = green;
-      this.blue = blue;
-    }
-  }
 
   /* Standard Colors */
   public static final Color white = new Color(255, 230, 220);
@@ -106,7 +94,7 @@ public class Lights extends SubsystemBase {
 
     public void setColor(Color color) {
       clearAnimation();
-      candle.setLEDs(color.red, color.green, color.blue, 0, startIndex, segmentSize);
+      candle.setLEDs(color.getRed(), color.getGreen(), color.getBlue(), 0, startIndex, segmentSize);
     }
 
     private void setAnimation(Animation animation) {
@@ -129,9 +117,9 @@ public class Lights extends SubsystemBase {
     public void setFlowAnimation(Color color, double speed) {
       setAnimation(
           new ColorFlowAnimation(
-              color.red,
-              color.green,
-              color.blue,
+              color.getRed(),
+              color.getGreen(),
+              color.getBlue(),
               0,
               speed,
               segmentSize,
@@ -142,15 +130,21 @@ public class Lights extends SubsystemBase {
     public void setFadeAnimation(Color color, double speed) {
       setAnimation(
           new SingleFadeAnimation(
-              color.red, color.green, color.blue, 0, speed, segmentSize, startIndex));
+              color.getRed(),
+              color.getGreen(),
+              color.getBlue(),
+              0,
+              speed,
+              segmentSize,
+              startIndex));
     }
 
     public void setBandAnimation(Color color, double speed) {
       setAnimation(
           new LarsonAnimation(
-              color.red,
-              color.green,
-              color.blue,
+              color.getRed(),
+              color.getGreen(),
+              color.getBlue(),
               0,
               speed,
               segmentSize,
@@ -162,7 +156,13 @@ public class Lights extends SubsystemBase {
     public void setStrobeAnimation(Color color, double speed) {
       setAnimation(
           new StrobeAnimation(
-              color.red, color.green, color.blue, 0, speed, segmentSize, startIndex));
+              color.getRed(),
+              color.getGreen(),
+              color.getBlue(),
+              0,
+              speed,
+              segmentSize,
+              startIndex));
     }
 
     public void setRainbowAnimation(double speed) {

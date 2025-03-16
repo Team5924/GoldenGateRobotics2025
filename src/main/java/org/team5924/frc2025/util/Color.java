@@ -1,5 +1,5 @@
 /*
- * LightsIO.java
+ * Color.java
  */
 
 /* 
@@ -14,11 +14,30 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.lights;
+package org.team5924.frc2025.util;
 
-public interface LightsIO {
-  /* Pfft I have no clue what goes here :D */
-  public default void setBrightness() {}
+/** Add your docs here. */
+public class Color {
 
-  public default void setColor() {}
+  private int red;
+  private int blue;
+  private int green;
+
+  public Color(int red, int blue, int green) {
+    this.red = red;
+    this.green = green;
+    this.blue = blue;
+  }
+
+  public int getRed() {
+    return red;
+  }
+
+  public int getGreen() {
+    return green;
+  }
+
+  public int getBlue() {
+    return blue;
+  }
 }
