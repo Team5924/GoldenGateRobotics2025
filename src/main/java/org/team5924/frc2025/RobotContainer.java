@@ -237,7 +237,11 @@ public class RobotContainer {
         .whileTrue(
             new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
 
-    driveController.rightTrigger().whileTrue(DriveCommands.turnToRightCoralStation(drive));
+    driveController.rightTrigger().whileTrue(DriveCommands.turnToRightCoralStation(
+        drive, 
+        () -> -driveController.getLeftY(),
+        () -> -driveController.getLeftX()
+        ));
     
     driveController.leftTrigger().whileTrue(DriveCommands.turnToLeftCoralStation(drive));
     // Coral In and Out
