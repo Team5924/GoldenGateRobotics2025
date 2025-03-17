@@ -314,7 +314,7 @@ public class DriveCommands {
       Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     return Commands.run(
         () -> {
-          PIDController pid = new PIDController(2, 0, 0);
+          PIDController pid = new PIDController(3, 0, 0);
           // logic for the auto align for heading
           double omega = 0;
           double heading;
@@ -324,30 +324,31 @@ public class DriveCommands {
           Translation2d linearVelocity =
               getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
+
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
-          if(!isFlipped){
+          //flips the heading based off of alliance 
+          if (!isFlipped) {
             heading = Constants.CORAL_STATION_RADIANS_NORMAL;
+          } else {
+            heading = Constants.CORAL_STATION_RADIANS_NORMAL - Math.PI;
           }
-          else{
-            heading = Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI;
-          }
-          
-          boolean inPIDMargin = 
-              Math.abs(drive.getRotation().getRadians() - heading) > 0.0523599;
 
-          
-          if(inPIDMargin){
-            omega = pid.calculate(
-                  MathUtil.angleModulus(drive.getRotation().getRadians()),
-                  heading);
-          }
-          else{
+          // make a +-3 degree tolerance
+          boolean inPIDMargin = Math.abs(drive.getRotation().getRadians() - heading) > 0.0523599;
+
+          if (inPIDMargin) {
+            omega = pid.calculate(MathUtil.angleModulus(drive.getRotation().getRadians()), heading);
+            omega =
+                MathUtil.clamp(
+                    omega,
+                    -drive.getMaxAngularSpeedRadPerSec(),
+                    drive.getMaxAngularSpeedRadPerSec());
+          } else {
             omega = 0;
           }
-          
 
           speeds =
               new ChassisSpeeds(
@@ -367,35 +368,51 @@ public class DriveCommands {
         drive);
   }
 
-  public static Command turnToLeftCoralStation(Drive drive) {
+  public static Command turnToLeftCoralStation(
+      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     return Commands.run(
         () -> {
-
+          PIDController pid = new PIDController(3, 0, 0);
           // logic for the auto align for heading
           double omega = 0;
+          double heading;
+          // default value
           ChassisSpeeds speeds;
 
-          if (drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL < .0872665
-              && drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL
-                  > -.0872665) {
-            omega = 0;
-
-          } else if (drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL
-              > .0872665) {
-            omega = -.5;
-
-          } else if (drive.getRotation().getRadians() + Constants.CORAL_STATION_RADIANS_NORMAL
-              < -.0872665) {
-            omega = .5;
-          }
-
-          speeds = new ChassisSpeeds(0, 0, omega);
-
-          // Convert to field relative speeds & send command
+          Translation2d linearVelocity =
+              getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
+
+          if (!isFlipped) {
+            heading = -Constants.CORAL_STATION_RADIANS_NORMAL;
+          } else {
+            heading = -Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI;
+          }
+
+          boolean inPIDMargin = Math.abs(drive.getRotation().getRadians() - heading) > 0.0523599;
+
+          if (inPIDMargin) {
+            omega = pid.calculate(MathUtil.angleModulus(drive.getRotation().getRadians()), heading);
+            omega =
+                MathUtil.clamp(
+                    omega,
+                    -drive.getMaxAngularSpeedRadPerSec(),
+                    drive.getMaxAngularSpeedRadPerSec());
+          } else {
+            omega = 0;
+          }
+
+          speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                  omega);
+
+          // Convert to field relative speeds & send command
+
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,

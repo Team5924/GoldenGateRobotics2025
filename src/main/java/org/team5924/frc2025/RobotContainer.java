@@ -241,12 +241,16 @@ public class RobotContainer {
         .rightTrigger()
         .whileTrue(
             DriveCommands.turnToRightCoralStation(
-                drive, () -> -driveController.getLeftX(), () -> -driveController.getLeftY()));
+                drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
 
-    driveController.leftTrigger().whileTrue(DriveCommands.turnToLeftCoralStation(drive));
+    driveController
+        .leftTrigger()
+        .whileTrue(
+            DriveCommands.turnToLeftCoralStation(
+                drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
     // Coral In and Out
 
-    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    driveController.y().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
     driveController
         .leftTrigger()
         .onFalse(
