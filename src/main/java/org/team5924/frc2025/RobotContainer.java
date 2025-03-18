@@ -35,6 +35,7 @@ import java.util.Set;
 import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
 import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
 import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
+import org.team5924.frc2025.commands.coralInAndOut.RunCoralInAndOutStateMachine;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
@@ -131,7 +132,7 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
+    NamedCommands.registerCommand("Run Shooter", new RunCoralInAndOutStateMachine(coralInAndOut, () -> elevator.getGoalState()));
     NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
     NamedCommands.registerCommand(
         "Elevator Height L4",
@@ -239,7 +240,10 @@ public class RobotContainer {
 
     // Coral In and Out
 
-    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    // driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    driveController
+        .y()
+        .onTrue(new RunCoralInAndOutStateMachine(coralInAndOut, () -> elevator.getGoalState()));
     driveController
         .leftTrigger()
         .onFalse(
