@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Elevator Height L4",
+      "waypointRelativePos": 0.7811016144349522,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -45,7 +52,7 @@
     "rotation": 120.1413855520754
   },
   "reversed": false,
-  "folder": "2C_BA_RB",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
