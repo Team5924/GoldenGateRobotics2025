@@ -136,6 +136,8 @@ public class Drive extends SubsystemBase {
 
   private final Field2d field = new Field2d();
 
+  private VisionFieldPoseEstimate oldVisionPose = new VisionFieldPoseEstimate();
+
   public Drive(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -290,11 +292,16 @@ public class Drive extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    VisionFieldPoseEstimate visionPose = RobotState.getInstance().getEstimatedPose();
-    addVisionMeasurement(
-        visionPose.getVisionRobotPoseMeters(),
-        visionPose.getTimestampSeconds(),
-        visionPose.getVisionMeasurementStdDevs());
+    VisionFieldPoseEstimate newVisionPose = RobotState.getInstance().getEstimatedPose();
+
+    if (oldVisionPose.getTimestampSeconds() != newVisionPose.getTimestampSeconds()) {
+      addVisionMeasurement(
+          newVisionPose.getVisionRobotPoseMeters(),
+          newVisionPose.getTimestampSeconds(),
+          newVisionPose.getVisionMeasurementStdDevs());
+
+      oldVisionPose = newVisionPose;
+    }
   }
 
   /**

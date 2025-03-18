@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -87,6 +88,13 @@ public class Vision extends SubsystemBase {
           RobotState.getInstance().setEstimatedPose(megatag2Estimate.get());
         }
       }
+    } else {
+      RobotState.getInstance()
+          .setEstimatedPose(
+              new VisionFieldPoseEstimate(
+                  RobotState.getInstance().getOdometryPose(),
+                  Timer.getFPGATimestamp(),
+                  VecBuilder.fill(2.0, 2.0, Units.degreesToRadians(50.0))));
     }
   }
 
@@ -133,9 +141,10 @@ public class Vision extends SubsystemBase {
       Matrix<N3, N1> visionMeasurementStdDevs =
           VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
       measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
+
       return Optional.of(
           new VisionFieldPoseEstimate(
-              measuredPose, poseEstimate.timestampSeconds, visionMeasurementStdDevs));
+              measuredPose, Timer.getFPGATimestamp(), visionMeasurementStdDevs));
     }
 
     return Optional.empty();

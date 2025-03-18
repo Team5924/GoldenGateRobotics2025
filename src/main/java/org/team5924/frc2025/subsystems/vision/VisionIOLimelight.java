@@ -106,7 +106,8 @@ public class VisionIOLimelight implements VisionIO {
       if (megatag2Front != null) {
         inputs.frontFiducials = FiducialObservation.fromLimelight(megatag2Front.rawFiducials);
         inputs.megatag2PoseEstimateFrontPose2d = megatag2Front.pose;
-        inputs.megatag2PoseEstimateFrontTagCount = megatag2Front.tagCount;
+        inputs.megatag2PoseEstimateFrontTagCount =
+            LimelightHelpers.getTargetCount("limelight-front");
         inputs.megatag2PoseEstimateFrontAvgTagArea = megatag2Front.avgTagArea;
       }
 
@@ -134,7 +135,7 @@ public class VisionIOLimelight implements VisionIO {
       if (megatag2Back != null) {
         inputs.backFiducials = FiducialObservation.fromLimelight(megatag2Back.rawFiducials);
         inputs.megatag2PoseEstimateBackPose2d = megatag2Back.pose;
-        inputs.megatag2PoseEstimateBackTagCount = megatag2Back.tagCount;
+        inputs.megatag2PoseEstimateBackTagCount = LimelightHelpers.getTargetCount("limelight-back");
         inputs.megatag2PoseEstimateBackAvgTagArea = megatag2Back.avgTagArea;
       }
 
