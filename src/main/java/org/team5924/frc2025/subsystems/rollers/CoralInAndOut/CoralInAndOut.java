@@ -50,13 +50,13 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
     SHOOTING_L2_AND_L3(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 3.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/L2AndL3ShootingVoltage", 3.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 5.0)),
     SHOOTING_L4(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 6.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/L4ShootingVoltage", 6.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 5.0)),
     SHOOTING_L1(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/L1ShootingVoltage", 2.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", -12.0),
@@ -167,6 +167,29 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
   public boolean isCoralInShooter() {
     return coralInputs.shooterLCMeasurement.getDistance()
         < (int) Math.floor(shooterDetectThreshold.get());
+  }
+
+  public void handleStateFromElevatorState(ElevatorState elevatorState) {
+
+    // Set the volatge of the Coral In and Out based on the elevator state
+    switch (elevatorState) {
+      case L1:
+        setGoalState(CoralState.SHOOTING_L1);
+        break;
+
+      case L2:
+      case L3:
+        setGoalState(CoralState.SHOOTING_L1);
+        break;
+
+      case L4:
+        setGoalState(CoralState.SHOOTING_L4);
+        break;
+
+      default:
+        setGoalState(CoralState.SPIT_BACK);
+        break;
+    }
   }
 
   /**

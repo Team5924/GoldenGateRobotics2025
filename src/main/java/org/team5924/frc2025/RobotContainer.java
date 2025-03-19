@@ -16,8 +16,6 @@
 
 package org.team5924.frc2025;
 
-import static edu.wpi.first.units.Units.Seconds;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,10 +30,8 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Set;
-import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
 import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
-import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
-import org.team5924.frc2025.commands.coralInAndOut.RunCoralInAndOutStateMachine;
+import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
@@ -132,7 +128,7 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand("Run Shooter", new RunCoralInAndOutStateMachine(coralInAndOut, () -> elevator.getGoalState()));
+    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
     NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
     NamedCommands.registerCommand(
         "Elevator Height L4",
@@ -240,12 +236,20 @@ public class RobotContainer {
 
     // Coral In and Out
 
-    // driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    // driveController.leftTrigger().onTrue(new
+    // TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    // driveController
+    //     .leftTrigger()
+    //     .onFalse(
+    //         Commands.runOnce(() ->
+    // coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
     driveController
         .y()
-        .onTrue(new RunCoralInAndOutStateMachine(coralInAndOut, () -> elevator.getGoalState()));
+        .onTrue(
+            Commands.runOnce(
+                () -> coralInAndOut.handleStateFromElevatorState(elevator.getGoalState())));
     driveController
-        .leftTrigger()
+        .y()
         .onFalse(
             Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
@@ -256,7 +260,10 @@ public class RobotContainer {
     operatorController
         .rightTrigger()
         .onFalse(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+            Commands.runOnce(() ->
+    coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+
+    // TODO: fix logic here, shooter should not work because no right trigger or (instead of and) no y turns it off
 
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
