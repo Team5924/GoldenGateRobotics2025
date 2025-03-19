@@ -35,6 +35,8 @@ public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
   private final VisionIO io;
 
+  private double lastVisionTimestamp = 0;
+
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
   // private final BooleanSubscriber allianceSubscriber =
@@ -87,7 +89,7 @@ public class Vision extends SubsystemBase {
           RobotState.getInstance().setEstimatedPose(megatag2Estimate.get());
         }
       }
-    }
+    } 
   }
 
   private Optional<VisionFieldPoseEstimate> processMegatag2PoseEstimate(
@@ -133,6 +135,7 @@ public class Vision extends SubsystemBase {
       Matrix<N3, N1> visionMeasurementStdDevs =
           VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
       measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
+      lastVisionTimestamp = poseEstimate.timestampSeconds;
       return Optional.of(
           new VisionFieldPoseEstimate(
               measuredPose, poseEstimate.timestampSeconds, visionMeasurementStdDevs));
