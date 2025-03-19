@@ -38,13 +38,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Elevator Height Intake",
+      "name": "Elevator_Height_Intake",
       "waypointRelativePos": 0.11633428300095057,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Run Intake",
+      "name": "Run_Intake",
       "waypointRelativePos": 0.6956315289648607,
       "endWaypointRelativePos": null,
       "command": null

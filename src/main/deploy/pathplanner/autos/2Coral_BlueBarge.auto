@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2LeaveBB_WithAutoAlign"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Align_Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run_Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2Reef to CS BB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2CS_to_ReefBB_WithAutoAlign"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto_Align_Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run_Shooter"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

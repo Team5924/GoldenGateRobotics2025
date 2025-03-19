@@ -131,17 +131,16 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
-    NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
+    NamedCommands.registerCommand("Run_Shooter", new RunShooter(coralInAndOut));
+    NamedCommands.registerCommand("Run_Intake", new RunIntake(coralInAndOut));
     NamedCommands.registerCommand(
-        "Elevator Height L4",
+        "Elevator_Height_L4",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
     NamedCommands.registerCommand(
-        "Elevator Height L3",
-        Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
-    NamedCommands.registerCommand(
-        "Elevator Height Intake",
+        "Elevator_Height_Intake",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+    NamedCommands.registerCommand("Auto_Align_Left", new DeferredCommand(() -> DriveCommands.driveToReef(drive, true), Set.of(drive)));
+    NamedCommands.registerCommand("Auto_Align_Right", new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
 
     // Set up auto routines
     boolean isCompetition = true;

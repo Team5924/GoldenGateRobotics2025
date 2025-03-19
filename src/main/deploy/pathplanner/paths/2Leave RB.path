@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Elevator Height L4",
+      "name": "Elevator_Height_L4",
       "waypointRelativePos": 0.7811016144349522,
       "endWaypointRelativePos": null,
       "command": null
