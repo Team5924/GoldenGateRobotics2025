@@ -324,12 +324,11 @@ public class DriveCommands {
           Translation2d linearVelocity =
               getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
-
           boolean isFlipped =
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
-          //flips the heading based off of alliance 
+          // flips the heading based off of alliance
           if (!isFlipped) {
             heading = Constants.CORAL_STATION_RADIANS_NORMAL;
           } else {

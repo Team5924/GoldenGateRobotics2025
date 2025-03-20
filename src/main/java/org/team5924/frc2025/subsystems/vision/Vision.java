@@ -22,7 +22,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -70,6 +69,7 @@ public class Vision extends SubsystemBase {
       FiducialObservation[] cameraFiducialObservations,
       MegatagPoseEstimate megatag2PoseEstimate) {
     if (megatag2PoseEstimate != null) {
+      // System.out.println("Megatag2PoseEstimate is not null");
       boolean filterOut =
           megatag2PoseEstimate.pose.getX() < -Constants.FIELD_BORDER_MARGIN
               || megatag2PoseEstimate.pose.getX()
@@ -78,6 +78,7 @@ public class Vision extends SubsystemBase {
               || megatag2PoseEstimate.pose.getY()
                   > Constants.FIELD_WIDTH + Constants.FIELD_BORDER_MARGIN;
       if (cameraSeesTarget && !filterOut) {
+        System.out.println("Processing Megatag Pose Estimate");
         Optional<VisionFieldPoseEstimate> megatag2Estimate =
             processMegatag2PoseEstimate(megatag2PoseEstimate);
 
@@ -85,16 +86,11 @@ public class Vision extends SubsystemBase {
           Logger.recordOutput(
               "Vision/Front/" + "Megatag2Estimate",
               megatag2Estimate.get().getVisionRobotPoseMeters());
+          System.out.println("Robot Has New Estimated Pose");
+          System.out.println(megatag2PoseEstimate.timestampSeconds);
           RobotState.getInstance().setEstimatedPose(megatag2Estimate.get());
         }
       }
-    } else {
-      RobotState.getInstance()
-          .setEstimatedPose(
-              new VisionFieldPoseEstimate(
-                  RobotState.getInstance().getOdometryPose(),
-                  Timer.getFPGATimestamp(),
-                  VecBuilder.fill(2.0, 2.0, Units.degreesToRadians(50.0))));
     }
   }
 
@@ -103,6 +99,7 @@ public class Vision extends SubsystemBase {
     Pose2d loggedRobotPose = RobotState.getInstance().getOdometryPose();
     Pose2d measuredPose = poseEstimate.pose;
     if (poseEstimate.avgTagDist > 1.2) {
+      System.out.println("Returning optional.empty");
       return Optional.empty();
     }
 
@@ -111,43 +108,50 @@ public class Vision extends SubsystemBase {
     // TODO: Tag filtering?
 
     double xyStdDev;
-    if (poseEstimate.fiducialIds.length > 0) {
-      // multiple targets detected
-      if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
-        xyStdDev = 0.2;
-      }
-      // we detect at least one of our speaker tags and we're close to it.
-      else if (
-      /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
-        xyStdDev = 0.5;
-      }
-      // 1 target with large area and close to estimated pose
-      else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
-        xyStdDev = 0.5;
-      }
-      // 1 target farther away and estimated pose is close
-      else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
-        xyStdDev = 1.0;
-      } else if (poseEstimate.fiducialIds.length > 1) {
-        xyStdDev = 1.2;
-      } else {
-        xyStdDev = 2.4;
-      }
-
-      Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);
-      Logger.recordOutput("Vision/Front/" + "Megatag2AvgTagArea", poseEstimate.avgTagArea);
-      Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
-
-      Matrix<N3, N1> visionMeasurementStdDevs =
-          VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
-      measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
-
-      return Optional.of(
-          new VisionFieldPoseEstimate(
-              measuredPose, Timer.getFPGATimestamp(), visionMeasurementStdDevs));
+    // if (poseEstimate.fiducialIds.length > 0) {
+    // multiple targets detected
+    if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
+      System.out.println("setting new stdev");
+      xyStdDev = 0.2;
+    }
+    // we detect at least one of our speaker tags and we're close to it.
+    else if (
+    /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
+      System.out.println("setting new stdev");
+      xyStdDev = 0.5;
+    }
+    // 1 target with large area and close to estimated pose
+    else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
+      xyStdDev = 0.5;
+      System.out.println("setting new stdev");
+    }
+    // 1 target farther away and estimated pose is close
+    else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
+      System.out.println("setting new stdev");
+      xyStdDev = 1.0;
+    } else if (poseEstimate.fiducialIds.length > 1) {
+      System.out.println("setting new stdev");
+      xyStdDev = 1.2;
+    } else {
+      System.out.println("setting new stdev");
+      xyStdDev = 2.4;
     }
 
-    return Optional.empty();
+    Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);
+    Logger.recordOutput("Vision/Front/" + "Megatag2AvgTagArea", poseEstimate.avgTagArea);
+    Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
+
+    Matrix<N3, N1> visionMeasurementStdDevs =
+        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
+    measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
+
+    return Optional.of(
+        new VisionFieldPoseEstimate(
+            measuredPose, poseEstimate.timestampSeconds, visionMeasurementStdDevs));
+    // }
+
+    // System.out.println("Returning optional.empty");
+    // return Optional.empty();
   }
 
   public MegatagPoseEstimate getBotPose2dBlue() {
