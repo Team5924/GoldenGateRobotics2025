@@ -38,7 +38,7 @@ import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
-import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.generated.TunerConstantsGamma;
 import org.team5924.frc2025.subsystems.climber.Climber;
 import org.team5924.frc2025.subsystems.climber.ClimberIO;
 import org.team5924.frc2025.subsystems.climber.ClimberIOSim;
@@ -51,7 +51,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOSim;
 import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
-import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFXGamma;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
@@ -90,13 +90,13 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
+                new ModuleIOTalonFX(TunerConstantsGamma.FrontLeft),
+                new ModuleIOTalonFX(TunerConstantsGamma.FrontRight),
+                new ModuleIOTalonFX(TunerConstantsGamma.BackLeft),
+                new ModuleIOTalonFX(TunerConstantsGamma.BackRight));
         climber = new Climber(new ClimberIOTalonFX());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
-        elevator = new Elevator(new ElevatorIOTalonFX() {});
+        elevator = new Elevator(new ElevatorIOTalonFXGamma() {});
         vision = new Vision(new VisionIOLimelight());
         break;
 
@@ -105,10 +105,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new ModuleIOSim(TunerConstantsGamma.FrontLeft),
+                new ModuleIOSim(TunerConstantsGamma.FrontRight),
+                new ModuleIOSim(TunerConstantsGamma.BackLeft),
+                new ModuleIOSim(TunerConstantsGamma.BackRight));
         climber = new Climber(new ClimberIOSim());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
@@ -305,7 +305,6 @@ public class RobotContainer {
         .pov(180)
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
-
   }
 
   /**

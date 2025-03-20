@@ -1,5 +1,5 @@
 /*
- * ElevatorIOTalonFX.java
+ * ElevatorIOTalonFXGamma.java
  */
 
 /* 
@@ -66,7 +66,7 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 /** TODO: Need to rezero elevator on min height. */
 
 /** Add your docs here. */
-public class ElevatorIOTalonFX implements ElevatorIO {
+public class ElevatorIOTalonFXGamma implements ElevatorIO {
   /* Motor Hardware */
   private final TalonFX leftTalon;
   private final TalonFX rightTalon;
@@ -141,7 +141,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private final Alert candiPin2FloatAlert =
       new Alert("Elevator CANdiPin2 is floating. Check connection.", Alert.AlertType.kWarning);
 
-  public ElevatorIOTalonFX() {
+  public ElevatorIOTalonFXGamma() {
     leftTalon = new TalonFX(Constants.ELEVATOR_LEFT_TALON_ID);
     rightTalon = new TalonFX(Constants.ELEVATOR_RIGHT_TALON_ID);
     elevatorCANCoder = new CANcoder(Constants.ELEVATOR_CANCODER_ID);
