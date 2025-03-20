@@ -23,14 +23,16 @@ import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
 import com.ctre.phoenix.led.TwinkleOffAnimation.TwinkleOffPercent;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import lombok.Setter;
 import org.team5924.frc2025.Constants;
 
 public class CANdleSystem extends SubsystemBase {
-  private final CANdle m_candle = new CANdle(Constants.CANdleID, "rio");
+  private final CANdle m_candle = new CANdle(Constants.CANDLE_ID, "rio");
   private final int LedCount = 300;
-  private XboxController joystick;
+
+  @Setter private CommandXboxController joystick;
 
   private Animation m_toAnimate = null;
 
@@ -49,8 +51,7 @@ public class CANdleSystem extends SubsystemBase {
 
   private AnimationTypes m_currentAnimation;
 
-  public CANdleSystem(XboxController joy) {
-    this.joystick = joy;
+  public CANdleSystem() {
     changeAnimation(AnimationTypes.SetAll);
     CANdleConfiguration configAll = new CANdleConfiguration();
     configAll.statusLedOffWhenActive = true;

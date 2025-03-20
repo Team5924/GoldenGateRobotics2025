@@ -117,6 +117,9 @@ public final class Constants {
   public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
 
   /* # Vision # */
+  public static final int CANDLE_ID = 99; // TODO: update id
+
+  /* # Vision # */
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-front";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
