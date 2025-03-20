@@ -32,4 +32,7 @@ public interface CoralInAndOutIO extends GenericRollerSystemIO {
     public LaserCAN_Measurement shooterLCMeasurement = new LaserCAN_Measurement();
     public boolean shooterLCConnected = true;
   }
+
+  /** Run roller at volts */
+  default void runVolts(double voltsIntakeAndShooter, double voltsHandoff) {}
 }

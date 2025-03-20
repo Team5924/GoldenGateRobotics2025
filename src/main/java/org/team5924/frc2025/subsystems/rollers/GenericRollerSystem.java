@@ -20,15 +20,20 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.util.Elastic.Notification;
+import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 
 @RequiredArgsConstructor
 public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageState>
     extends SubsystemBase {
   public interface VoltageState {
     DoubleSupplier getVoltageSupplier();
+
+    default DoubleSupplier getHandoffVoltage() {
+      return getVoltageSupplier();
+    }
   }
 
   public abstract G getGoalState();
@@ -37,33 +42,42 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
   private final String name;
 
-  @Getter private final GenericRollerSystemIO genericIo;
+  protected final GenericRollerSystemIO io;
   protected final GenericRollerSystemIOInputsAutoLogged genericInputs =
       new GenericRollerSystemIOInputsAutoLogged();
 
   private final Alert disconnected;
   protected final Timer stateTimer = new Timer();
 
+  private final Notification disconnectedNotification;
+
   public GenericRollerSystem(String name, GenericRollerSystemIO io) {
     this.name = name;
-    this.genericIo = io;
+    this.io = io;
 
     disconnected = new Alert(name + " motor disconnected!", Alert.AlertType.kWarning);
+
+    disconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, name + " Warning", name + " motor disconnected!");
+
     stateTimer.start();
   }
 
   @Override
   public void periodic() {
-    genericIo.updateInputs(genericInputs);
+    io.updateInputs(genericInputs);
     Logger.processInputs(name, genericInputs);
     disconnected.set(!genericInputs.motorConnected);
+
+    // if (!genericInputs.motorConnected) Elastic.sendNotification(disconnectedNotification);
 
     if (getGoalState() != lastState) {
       stateTimer.reset();
       lastState = getGoalState();
     }
 
-    genericIo.runVolts(getGoalState().getVoltageSupplier().getAsDouble());
+    io.runVolts(getGoalState().getVoltageSupplier().getAsDouble());
     Logger.recordOutput("Rollers/" + name + "Goal", getGoalState().toString());
   }
 }

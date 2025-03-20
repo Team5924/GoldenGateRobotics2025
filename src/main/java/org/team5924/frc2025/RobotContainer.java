@@ -16,28 +16,49 @@
 
 package org.team5924.frc2025;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.team5924.frc2025.commands.DriveCommands;
+import java.util.Set;
+import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
+import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
+import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
+import org.team5924.frc2025.commands.drive.DriveCommands;
+import org.team5924.frc2025.commands.elevator.RunElevator;
+import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
 import org.team5924.frc2025.generated.TunerConstants;
+import org.team5924.frc2025.subsystems.climber.Climber;
+import org.team5924.frc2025.subsystems.climber.ClimberIO;
+import org.team5924.frc2025.subsystems.climber.ClimberIOSim;
+import org.team5924.frc2025.subsystems.climber.ClimberIOTalonFX;
 import org.team5924.frc2025.subsystems.drive.Drive;
 import org.team5924.frc2025.subsystems.drive.GyroIO;
 import org.team5924.frc2025.subsystems.drive.GyroIOPigeon2;
 import org.team5924.frc2025.subsystems.drive.ModuleIO;
 import org.team5924.frc2025.subsystems.drive.ModuleIOSim;
 import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
+import org.team5924.frc2025.subsystems.elevator.Elevator;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
+import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
+import org.team5924.frc2025.subsystems.vision.Vision;
+import org.team5924.frc2025.subsystems.vision.VisionIO;
+import org.team5924.frc2025.subsystems.vision.VisionIOLimelight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -48,17 +69,21 @@ import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Climber climber;
   private final CoralInAndOut coralInAndOut;
+  private final Elevator elevator;
+  private final Vision vision;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -69,7 +94,10 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+        climber = new Climber(new ClimberIOTalonFX());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
+        elevator = new Elevator(new ElevatorIOTalonFX() {});
+        vision = new Vision(new VisionIOLimelight());
         break;
 
       case SIM:
@@ -81,7 +109,10 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+        climber = new Climber(new ClimberIOSim());
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
+        elevator = new Elevator(new ElevatorIO() {});
+        vision = new Vision(new VisionIO() {});
         break;
 
       default:
@@ -93,12 +124,35 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        climber = new Climber(new ClimberIO() {});
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
+        vision = new Vision(new VisionIO() {});
         break;
     }
 
+    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
+    NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
+    NamedCommands.registerCommand(
+        "Elevator Height L4",
+        Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+    NamedCommands.registerCommand(
+        "Elevator Height L3",
+        Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+    NamedCommands.registerCommand(
+        "Elevator Height Intake",
+        Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    boolean isCompetition = true;
+
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    // As an example, this will only show autos that start with "comp" while at
+    // competition as defined by the programmer
+    autoChooser =
+        AutoBuilder.buildAutoChooserWithOptionsModifier(
+            (stream) ->
+                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -115,6 +169,20 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Elevator SysId (Quasistatic Forward)",
+        elevator.upSysId.quasistatic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Elevator SysId (Quasistatic Reverse)",
+        elevator.downSysId.quasistatic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "Elevator SysId (Dynamic Forward)",
+        elevator.upSysId.dynamic(SysIdRoutine.Direction.kForward));
+    autoChooser.addOption(
+        "Elevator SysId (Dynamic Reverse)",
+        elevator.downSysId.dynamic(SysIdRoutine.Direction.kReverse));
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -135,15 +203,15 @@ public class RobotContainer {
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX()));
 
-    // Lock to 0° when A button is held
+    // Nope. It's slow mode now. Quarter speed
     driveController
         .a()
         .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
+            DriveCommands.joystickDrive(
                 drive,
-                () -> -driveController.getLeftY(),
-                () -> -driveController.getLeftX(),
-                () -> new Rotation2d()));
+                () -> -driveController.getLeftY() * .25,
+                () -> -driveController.getLeftX() * .25,
+                () -> -driveController.getRightX() * .25));
 
     // Switch to X pattern when X button is pressed
     driveController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -159,15 +227,73 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
+    driveController
+        .leftBumper()
+        .whileTrue(
+            new DeferredCommand(() -> DriveCommands.driveToReef(drive, true), Set.of(drive)));
+
+    driveController
+        .rightBumper()
+        .whileTrue(
+            new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
+
     // Coral In and Out
-    operatorController
+
+    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    driveController
         .leftTrigger()
-        .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING)));
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+
     operatorController
         .rightTrigger()
         .onTrue(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.LOADING)));
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
+    operatorController
+        .rightTrigger()
+        .onFalse(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+
+    // Elevator
+    elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
+    operatorController
+        .a()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.STOW)));
+    operatorController
+        .b()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L2)));
+    operatorController
+        .x()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L3)));
+    operatorController
+        .y()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+    operatorController
+        .leftBumper()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.MANUAL)));
+    operatorController
+        .rightBumper()
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+
+    // Vision
+    vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
+
+    // Climber
+    // Dpad Down
+    driveController
+        .pov(180)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.CLIMB)));
+
+    // Dpad Up
+    driveController
+        .pov(0)
+        .onTrue(Commands.runOnce(() -> climber.setGoalState(Climber.ClimberState.REVERSE_CLIMB)));
+
+    // No Dpad Up or Dpad Down
+    driveController
+        .pov(180)
+        .or(driveController.pov(0))
+        .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
   }
 
   /**
@@ -176,6 +302,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return autoChooser.getSelected();
   }
 }
