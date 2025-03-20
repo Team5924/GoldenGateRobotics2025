@@ -260,10 +260,7 @@ public class RobotContainer {
     operatorController
         .rightTrigger()
         .onFalse(
-            Commands.runOnce(() ->
-    coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-
-    // TODO: fix logic here, shooter should not work because no right trigger or (instead of and) no y turns it off
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
 
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));

@@ -20,6 +20,8 @@ import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.val;
+
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
@@ -169,9 +171,13 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         < (int) Math.floor(shooterDetectThreshold.get());
   }
 
-  public void handleStateFromElevatorState(ElevatorState elevatorState) {
+  
 
-    // Set the volatge of the Coral In and Out based on the elevator state
+  /**
+   * Sets the voltage of the CoralInAndOut based on the elevator state
+   * @param elevatorState the current ElevatorState of the elevator
+   */ 
+  public void handleStateFromElevatorState(ElevatorState elevatorState) {
     switch (elevatorState) {
       case L1:
         setGoalState(CoralState.SHOOTING_L1);
@@ -179,7 +185,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
 
       case L2:
       case L3:
-        setGoalState(CoralState.SHOOTING_L1);
+        setGoalState(CoralState.SHOOTING_L2_AND_L3);
         break;
 
       case L4:
