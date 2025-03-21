@@ -290,11 +290,14 @@ public class Drive extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    VisionFieldPoseEstimate visionPose = RobotState.getInstance().getEstimatedPose();
-    addVisionMeasurement(
-        visionPose.getVisionRobotPoseMeters(),
-        visionPose.getTimestampSeconds(),
-        visionPose.getVisionMeasurementStdDevs());
+    VisionFieldPoseEstimate newVisionPose = RobotState.getInstance().getEstimatedPose();
+
+    if (newVisionPose != null) {
+      addVisionMeasurement(
+          newVisionPose.getVisionRobotPoseMeters(),
+          newVisionPose.getTimestampSeconds(),
+          newVisionPose.getVisionMeasurementStdDevs());
+    }
   }
 
   /**

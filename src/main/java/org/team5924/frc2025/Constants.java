@@ -62,6 +62,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
+  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -158,7 +159,7 @@ public final class Constants {
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-      double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterLineup = 1.62; // Leg 3 (meters)
       double distanceFromCenterToRoboCenterShoot = 1.22; // Leg 3 but different (meters)
       double offset = -.205;
       double offsetCorrection = 0.09; // Correction for the offset just in case!!
