@@ -59,6 +59,9 @@ public class Vision extends SubsystemBase {
         inputs.frontUpFiducials,
         inputs.megatag2PoseEstimateFrontUp);
 
+    updateVision(
+        inputs.backLimelightSeesTarget, inputs.backFiducials, inputs.megatag2PoseEstimateBack);
+
     // boolean isRedAlliance = allianceSubscriber.get();
     // if (isRedAlliance != previousAllianceSubscriberValue) {
     //   previousAllianceSubscriberValue = isRedAlliance;
@@ -83,16 +86,15 @@ public class Vision extends SubsystemBase {
             processMegatag2PoseEstimate(megatag2PoseEstimate);
 
         if (megatag2Estimate.isPresent()) {
-          if(megatag2PoseEstimate.isFrontLimelight){
+          if (megatag2PoseEstimate.isFrontLimelight) {
             Logger.recordOutput(
-              "Vision/Front/" + "Megatag2Estimate",
-              megatag2Estimate.get().getVisionRobotPoseMeters());
+                "Vision/Front/" + "Megatag2Estimate",
+                megatag2Estimate.get().getVisionRobotPoseMeters());
             RobotState.getInstance().setEstimatedPoseFront(megatag2Estimate.get());
-          }
-          else{
+          } else {
             Logger.recordOutput(
-              "Vision/Front/" + "Megatag2Estimate",
-              megatag2Estimate.get().getVisionRobotPoseMeters());
+                "Vision/Back/" + "Megatag2Estimate",
+                megatag2Estimate.get().getVisionRobotPoseMeters());
             RobotState.getInstance().setEstimatedPoseBack(megatag2Estimate.get());
           }
         }

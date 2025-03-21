@@ -49,9 +49,7 @@ public class RobotState {
   @Setter
   private VisionFieldPoseEstimate estimatedPoseFront = new VisionFieldPoseEstimate();
 
-  @AutoLogOutput
-  @Getter
-  @Setter
+  @AutoLogOutput @Getter @Setter
   private VisionFieldPoseEstimate estimatedPoseBack = new VisionFieldPoseEstimate();
 
   /* ### Climber ### */

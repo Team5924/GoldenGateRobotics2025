@@ -26,7 +26,7 @@ import org.team5924.frc2025.util.MegatagPoseEstimate;
 /** Add your docs here. */
 public class VisionIOLimelight implements VisionIO {
   public VisionIOLimelight() {
-    LimelightHelpers.SetIMUMode("limelight-front-up", 1);
+    LimelightHelpers.SetIMUMode("limelight-front", 1);
     LimelightHelpers.SetIMUMode("limelight-back", 1);
     LimelightHelpers.SetIMUMode("limelight-front-down", 1);
 
@@ -35,7 +35,7 @@ public class VisionIOLimelight implements VisionIO {
 
   private void setLLSettings() {
     LimelightHelpers.setPipelineIndex(
-        "limelight-front-up",
+        "limelight-front",
         RobotState.getInstance().isRedAlliance()
             ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
@@ -53,7 +53,7 @@ public class VisionIOLimelight implements VisionIO {
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
 
     LimelightHelpers.setCameraPose_RobotSpace(
-        "limelight-front-up",
+        "limelight-front",
         Constants.FRONT_UP_LIMELIGHT_OFF_FORWARD,
         Constants.FRONT_UP_LIMELIGHT_OFF_SIDE,
         Constants.FRONT_UP_LIMELIGHT_OFF_UP,
@@ -80,7 +80,7 @@ public class VisionIOLimelight implements VisionIO {
         Constants.FRONT_DOWN_LIMELIGHT_OFF_YAW);
 
     if (!DriverStation.isDisabled()) {
-      LimelightHelpers.SetIMUMode("limelight-front-up", 2);
+      LimelightHelpers.SetIMUMode("limelight-front", 2);
       LimelightHelpers.SetIMUMode("limelight-back", 2);
       LimelightHelpers.SetIMUMode("limelight-front-down", 2);
 
@@ -88,7 +88,7 @@ public class VisionIOLimelight implements VisionIO {
     }
     // } else {
     LimelightHelpers.SetRobotOrientation(
-        "limelight-front-up",
+        "limelight-front",
         RobotState.getInstance().getYawPosition().getDegrees(),
         RobotState.getInstance().getYawVelocityRadPerSec(),
         0,
@@ -121,13 +121,13 @@ public class VisionIOLimelight implements VisionIO {
     double lowestTagAmbiguityBack = 1;
     double lowestTagAmbiguityFrontDown = 1;
 
-    inputs.frontUpLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-up");
+    inputs.frontUpLimelightSeesTarget = LimelightHelpers.getTV("limelight-front");
     inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-back");
     inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-down");
 
     if (inputs.frontUpLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2FrontUp =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front-up");
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
 
       inputs.megatag2PoseEstimateFrontUp = MegatagPoseEstimate.fromLimelight(megatag2FrontUp, true);
       if (megatag2FrontUp != null) {
@@ -147,8 +147,7 @@ public class VisionIOLimelight implements VisionIO {
         frontUpDistToCameraTotal += rawFiducial.distance;
       }
 
-      inputs.frontUpAprilTagDistance =
-          LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-up");
+      inputs.frontUpAprilTagDistance = LimelightHelpers.getBotPose3d_TargetSpace("limelight-front");
 
       inputs.lowestTagAmbiguityFrontUp = lowestTagAmbiguityFrontUp;
       // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;
@@ -179,7 +178,7 @@ public class VisionIOLimelight implements VisionIO {
 
     if (inputs.frontDownLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2FrontDown =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front-up");
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front-down");
 
       inputs.megatag2PoseEstimateFrontDown =
           MegatagPoseEstimate.fromLimelight(megatag2FrontDown, true);
@@ -202,7 +201,7 @@ public class VisionIOLimelight implements VisionIO {
       }
 
       inputs.frontDownAprilTagDistance =
-          LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-up");
+          LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-down");
 
       inputs.lowestTagAmbiguityFrontDown = lowestTagAmbiguityFrontDown;
       // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;

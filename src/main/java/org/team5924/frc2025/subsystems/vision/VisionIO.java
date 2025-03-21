@@ -41,6 +41,7 @@ public interface VisionIO {
     public Pose2d megatag2PoseEstimateFrontUpPose2d = null;
     public Pose2d megatag2PoseEstimateBackPose2d = null;
     public Pose2d megatag2PoseEstimateFrontDownPose2d = null;
+
     public int megatag2PoseEstimateFrontUpTagCount = 0;
     public int megatag2PoseEstimateBackTagCount = 0;
     public int megatag2PoseEstimateFrontDownTagCount = 0;

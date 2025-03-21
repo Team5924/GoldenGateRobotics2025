@@ -110,7 +110,7 @@ public class TunerConstants {
                   .withStatorCurrentLimitEnable(true));
   private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();
   // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
-  private static final Pigeon2Configuration pigeonConfigs = 
+  private static final Pigeon2Configuration pigeonConfigs =
       new Pigeon2Configuration()
           .withMountPose(
               new MountPoseConfigs()
@@ -134,8 +134,8 @@ public class TunerConstants {
   private static final double kSteerGearRatio = 12.1;
   private static final Distance kWheelRadius = Inches.of(2);
 
-  private static final boolean kInvertLeftSide = false;
-  private static final boolean kInvertRightSide = true;
+  private static final boolean kInvertLeftSide = true;
+  private static final boolean kInvertRightSide = false;
 
   private static final int kPigeonId = 0;
 
