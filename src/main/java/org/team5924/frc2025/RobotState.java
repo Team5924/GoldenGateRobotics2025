@@ -24,6 +24,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
+import org.team5924.frc2025.subsystems.rollers.Algae.AlgaeRoller.AlgaeRollerState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 import org.team5924.frc2025.util.VisionFieldPoseEstimate;
 
@@ -63,7 +64,15 @@ public class RobotState {
   @Getter @Setter private CoralState coralInAndOutState = CoralState.NO_CORAL;
 
   /* ### Algae Pivot ### */
-  @Getter @Setter private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/AlgaePivotState")
+  private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/AlgaeRollerState")
+  private AlgaeRollerState algaeRollerState = AlgaeRollerState.NO_ALGAE;
 
   /* ### Vision ### */
   @Getter @Setter private int limelightImuMode = 0;
