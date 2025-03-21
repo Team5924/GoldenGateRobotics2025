@@ -63,7 +63,10 @@ public class RobotState {
   @Getter @Setter private CoralState coralInAndOutState = CoralState.NO_CORAL;
 
   /* ### Algae Pivot ### */
-  @Getter @Setter private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+  @Getter
+  @Setter
+  @AutoLogOutput(key = "RobotState/AlgaePivotState")
+  private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
 
   /* ### Vision ### */
   @Getter @Setter private int limelightImuMode = 0;
