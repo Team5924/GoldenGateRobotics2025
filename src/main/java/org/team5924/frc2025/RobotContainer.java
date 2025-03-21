@@ -305,7 +305,6 @@ public class RobotContainer {
         .pov(180)
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
-
   }
 
   /**

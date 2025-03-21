@@ -93,7 +93,7 @@ public class Vision extends SubsystemBase {
           RobotState.getInstance().setEstimatedPose(megatag2Estimate.get());
         }
       }
-    } 
+    }
   }
 
   private Optional<VisionFieldPoseEstimate> processMegatag2PoseEstimate(
@@ -110,42 +110,6 @@ public class Vision extends SubsystemBase {
     // TODO: Tag filtering?
 
     double xyStdDev;
-<<<<<<< HEAD
-    if (poseEstimate.fiducialIds.length > 0) {
-      // multiple targets detected
-      if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
-        xyStdDev = 0.2;
-      }
-      // we detect at least one of our speaker tags and we're close to it.
-      else if (
-      /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
-        xyStdDev = 0.5;
-      }
-      // 1 target with large area and close to estimated pose
-      else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
-        xyStdDev = 0.5;
-      }
-      // 1 target farther away and estimated pose is close
-      else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
-        xyStdDev = 1.0;
-      } else if (poseEstimate.fiducialIds.length > 1) {
-        xyStdDev = 1.2;
-      } else {
-        xyStdDev = 2.4;
-      }
-
-      Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);
-      Logger.recordOutput("Vision/Front/" + "Megatag2AvgTagArea", poseEstimate.avgTagArea);
-      Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
-
-      Matrix<N3, N1> visionMeasurementStdDevs =
-          VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
-      measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
-      lastVisionTimestamp = poseEstimate.timestampSeconds;
-      return Optional.of(
-          new VisionFieldPoseEstimate(
-              measuredPose, poseEstimate.timestampSeconds, visionMeasurementStdDevs));
-=======
     // if (poseEstimate.fiducialIds.length > 0) {
     // multiple targets detected
     if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
@@ -173,7 +137,6 @@ public class Vision extends SubsystemBase {
     } else {
       System.out.println("setting new stdev");
       xyStdDev = 2.4;
->>>>>>> c4622354626009d9a61a8a0544d3b000a5a3f5e5
     }
 
     Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);
