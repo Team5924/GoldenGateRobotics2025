@@ -38,7 +38,6 @@ public interface VisionIO {
     public MegatagPoseEstimate megatag2PoseEstimateBack = null;
     public MegatagPoseEstimate megatag2PoseEstimateFrontDown = null;
 
-
     public Pose2d megatag2PoseEstimateFrontUpPose2d = null;
     public Pose2d megatag2PoseEstimateBackPose2d = null;
     public Pose2d megatag2PoseEstimateFrontDownPose2d = null;
@@ -56,13 +55,11 @@ public interface VisionIO {
     public double frontUpAprilTagPipelineLatencySeconds = 0.0;
     public double frontUpAprilTagCaptureLatencySeconds = 0.0;
 
-
     public double backAprilTagPipelineLatencySeconds = 0.0;
     public double backAprilTagCaptureLatencySeconds = 0.0;
 
     public double frontDownAprilTagPipelineLatencySeconds = 0.0;
     public double frontDownAprilTagCaptureLatencySeconds = 0.0;
-
 
     public Pose3d frontUpAprilTagDistance = new Pose3d();
     public Pose3d backAprilTagDistance = new Pose3d();

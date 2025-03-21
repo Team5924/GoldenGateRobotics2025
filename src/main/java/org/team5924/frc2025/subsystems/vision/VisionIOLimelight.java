@@ -147,7 +147,8 @@ public class VisionIOLimelight implements VisionIO {
         frontUpDistToCameraTotal += rawFiducial.distance;
       }
 
-      inputs.frontUpAprilTagDistance = LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-up");
+      inputs.frontUpAprilTagDistance =
+          LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-up");
 
       inputs.lowestTagAmbiguityFrontUp = lowestTagAmbiguityFrontUp;
       // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;
@@ -180,9 +181,11 @@ public class VisionIOLimelight implements VisionIO {
       LimelightHelpers.PoseEstimate megatag2FrontDown =
           LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front-up");
 
-      inputs.megatag2PoseEstimateFrontDown = MegatagPoseEstimate.fromLimelight(megatag2FrontDown, true);
+      inputs.megatag2PoseEstimateFrontDown =
+          MegatagPoseEstimate.fromLimelight(megatag2FrontDown, true);
       if (megatag2FrontDown != null) {
-        inputs.frontDownFiducials = FiducialObservation.fromLimelight(megatag2FrontDown.rawFiducials);
+        inputs.frontDownFiducials =
+            FiducialObservation.fromLimelight(megatag2FrontDown.rawFiducials);
         inputs.megatag2PoseEstimateFrontDownPose2d = megatag2FrontDown.pose;
         inputs.megatag2PoseEstimateFrontDownTagCount = megatag2FrontDown.tagCount;
         inputs.megatag2PoseEstimateFrontDownAvgTagArea = megatag2FrontDown.avgTagArea;
@@ -198,7 +201,8 @@ public class VisionIOLimelight implements VisionIO {
         frontDownDistToCameraTotal += rawFiducial.distance;
       }
 
-      inputs.frontDownAprilTagDistance = LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-up");
+      inputs.frontDownAprilTagDistance =
+          LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-up");
 
       inputs.lowestTagAmbiguityFrontDown = lowestTagAmbiguityFrontDown;
       // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;

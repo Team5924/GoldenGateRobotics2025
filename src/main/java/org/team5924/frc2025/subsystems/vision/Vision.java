@@ -55,7 +55,9 @@ public class Vision extends SubsystemBase {
     Logger.processInputs("Vision", inputs);
 
     updateVision(
-        inputs.frontUpLimelightSeesTarget, inputs.frontUpFiducials, inputs.megatag2PoseEstimateFrontUp);
+        inputs.frontUpLimelightSeesTarget,
+        inputs.frontUpFiducials,
+        inputs.megatag2PoseEstimateFrontUp);
 
     // boolean isRedAlliance = allianceSubscriber.get();
     // if (isRedAlliance != previousAllianceSubscriberValue) {
@@ -143,10 +145,10 @@ public class Vision extends SubsystemBase {
 
   public MegatagPoseEstimate getBotPose2dBlue() {
     // If all pose estimates are null, return null
-    if (inputs.megatag2PoseEstimateFrontUp == null 
-        && inputs.megatag2PoseEstimateBack == null 
+    if (inputs.megatag2PoseEstimateFrontUp == null
+        && inputs.megatag2PoseEstimateBack == null
         && inputs.megatag2PoseEstimateFrontDown == null) {
-        return null;
+      return null;
     }
 
     // Start with the assumption that one of the values is not null
@@ -154,29 +156,32 @@ public class Vision extends SubsystemBase {
     double lowestAmbiguity = 1; // Initialize with the highest possible value
 
     // Compare front-up Limelight pose
-    if (inputs.megatag2PoseEstimateFrontUp != null && inputs.lowestTagAmbiguityFrontUp < lowestAmbiguity) {
-        lowestAmbiguity = inputs.lowestTagAmbiguityFrontUp;
-        bestPose = inputs.megatag2PoseEstimateFrontUp;
+    if (inputs.megatag2PoseEstimateFrontUp != null
+        && inputs.lowestTagAmbiguityFrontUp < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityFrontUp;
+      bestPose = inputs.megatag2PoseEstimateFrontUp;
     }
 
     // Compare back Limelight pose
-    if (inputs.megatag2PoseEstimateBack != null && inputs.lowestTagAmbiguityBack < lowestAmbiguity) {
-        lowestAmbiguity = inputs.lowestTagAmbiguityBack;
-        bestPose = inputs.megatag2PoseEstimateBack;
+    if (inputs.megatag2PoseEstimateBack != null
+        && inputs.lowestTagAmbiguityBack < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityBack;
+      bestPose = inputs.megatag2PoseEstimateBack;
     }
 
     // Compare front-down Limelight pose
-    if (inputs.megatag2PoseEstimateFrontDown != null && inputs.lowestTagAmbiguityFrontDown < lowestAmbiguity) {
-        lowestAmbiguity = inputs.lowestTagAmbiguityFrontDown;
-        bestPose = inputs.megatag2PoseEstimateFrontDown;
+    if (inputs.megatag2PoseEstimateFrontDown != null
+        && inputs.lowestTagAmbiguityFrontDown < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityFrontDown;
+      bestPose = inputs.megatag2PoseEstimateFrontDown;
     }
 
     return bestPose; // Returns the pose estimate with the lowest ambiguity
-}
-
+  }
 
   public double getLatencySecondsFront() {
-    return inputs.frontUpAprilTagCaptureLatencySeconds + inputs.frontUpAprilTagPipelineLatencySeconds;
+    return inputs.frontUpAprilTagCaptureLatencySeconds
+        + inputs.frontUpAprilTagPipelineLatencySeconds;
   }
 
   public double getLatencySecondsBack() {
