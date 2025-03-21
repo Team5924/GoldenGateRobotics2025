@@ -14,7 +14,7 @@
  * If you did not, see <https://www.gnu.org/licenses>.
  */
 
-package org.team5924.frc2025.subsystems.rollers.Algae;
+package org.team5924.frc2025.subsystems.rollers.algae;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIO;

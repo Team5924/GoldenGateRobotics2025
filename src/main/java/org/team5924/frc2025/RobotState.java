@@ -24,8 +24,8 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.team5924.frc2025.subsystems.climber.Climber.ClimberState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
-import org.team5924.frc2025.subsystems.rollers.Algae.AlgaeRoller.AlgaeRollerState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
+import org.team5924.frc2025.subsystems.rollers.algae.AlgaeRoller.AlgaeRollerState;
 import org.team5924.frc2025.util.VisionFieldPoseEstimate;
 
 @Getter
