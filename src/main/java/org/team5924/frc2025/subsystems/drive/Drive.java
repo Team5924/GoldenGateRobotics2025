@@ -290,11 +290,41 @@ public class Drive extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    VisionFieldPoseEstimate visionPose = RobotState.getInstance().getEstimatedPose();
-    addVisionMeasurement(
-        visionPose.getVisionRobotPoseMeters(),
-        visionPose.getTimestampSeconds(),
-        visionPose.getVisionMeasurementStdDevs());
+    VisionFieldPoseEstimate visionPoseFront = RobotState.getInstance().getEstimatedPoseFront();
+
+    VisionFieldPoseEstimate visionPoseBack = RobotState.getInstance().getEstimatedPoseBack();
+    
+    if(visionPoseFront != null && visionPoseBack == null){
+      addVisionMeasurement( visionPoseFront.getVisionRobotPoseMeters(), 
+                            visionPoseFront.getTimestampSeconds(), 
+                            visionPoseFront.getVisionMeasurementStdDevs());
+      RobotState.getInstance().setEstimatedPoseFront(null);
+    }
+    else if(visionPoseFront == null && visionPoseBack != null){
+      addVisionMeasurement( visionPoseBack.getVisionRobotPoseMeters(), 
+                            visionPoseBack.getTimestampSeconds(), 
+                            visionPoseBack.getVisionMeasurementStdDevs());
+      RobotState.getInstance().setEstimatedPoseBack(null);
+    }
+    else if(visionPoseFront != null && visionPoseBack != null){
+      if(visionPoseFront.getTimestampSeconds() > visionPoseBack.getTimestampSeconds()){
+        addVisionMeasurement( visionPoseFront.getVisionRobotPoseMeters(), 
+                            visionPoseFront.getTimestampSeconds(), 
+                            visionPoseFront.getVisionMeasurementStdDevs());
+
+        RobotState.getInstance().setEstimatedPoseFront(null);
+        RobotState.getInstance().setEstimatedPoseBack(null);
+      }
+      else{
+      addVisionMeasurement( visionPoseBack.getVisionRobotPoseMeters(), 
+                            visionPoseBack.getTimestampSeconds(), 
+                            visionPoseBack.getVisionMeasurementStdDevs());
+
+      RobotState.getInstance().setEstimatedPoseFront(null);
+      RobotState.getInstance().setEstimatedPoseBack(null);
+      }
+      
+    }
   }
 
   /**

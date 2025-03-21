@@ -44,10 +44,15 @@ public class RobotState {
   private Pose2d odometryPose = new Pose2d();
 
   /* Vision Pose */
-  @AutoLogOutput(key = "RobotState/EstimatedPose")
+  @AutoLogOutput(key = "RobotState/EstimatedPoseFront")
   @Getter
   @Setter
-  private VisionFieldPoseEstimate estimatedPose = new VisionFieldPoseEstimate();
+  private VisionFieldPoseEstimate estimatedPoseFront = new VisionFieldPoseEstimate();
+
+  @AutoLogOutput
+  @Getter
+  @Setter
+  private VisionFieldPoseEstimate estimatedPoseBack = new VisionFieldPoseEstimate();
 
   /* ### Climber ### */
   @Setter

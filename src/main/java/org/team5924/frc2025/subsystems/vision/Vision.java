@@ -55,7 +55,9 @@ public class Vision extends SubsystemBase {
     Logger.processInputs("Vision", inputs);
 
     updateVision(
-        inputs.frontUpLimelightSeesTarget, inputs.frontUpFiducials, inputs.megatag2PoseEstimateFrontUp);
+        inputs.frontUpLimelightSeesTarget,
+        inputs.frontUpFiducials,
+        inputs.megatag2PoseEstimateFrontUp);
 
     // boolean isRedAlliance = allianceSubscriber.get();
     // if (isRedAlliance != previousAllianceSubscriberValue) {
@@ -81,10 +83,18 @@ public class Vision extends SubsystemBase {
             processMegatag2PoseEstimate(megatag2PoseEstimate);
 
         if (megatag2Estimate.isPresent()) {
-          Logger.recordOutput(
+          if(megatag2PoseEstimate.isFrontLimelight){
+            Logger.recordOutput(
               "Vision/Front/" + "Megatag2Estimate",
               megatag2Estimate.get().getVisionRobotPoseMeters());
-          RobotState.getInstance().setEstimatedPose(megatag2Estimate.get());
+            RobotState.getInstance().setEstimatedPoseFront(megatag2Estimate.get());
+          }
+          else{
+            Logger.recordOutput(
+              "Vision/Front/" + "Megatag2Estimate",
+              megatag2Estimate.get().getVisionRobotPoseMeters());
+            RobotState.getInstance().setEstimatedPoseBack(megatag2Estimate.get());
+          }
         }
       }
     }
@@ -106,23 +116,30 @@ public class Vision extends SubsystemBase {
     if (poseEstimate.fiducialIds.length > 0) {
       // multiple targets detected
       if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
+        System.out.println("stdev being set to .2");
         xyStdDev = 0.2;
       }
       // we detect at least one of our speaker tags and we're close to it.
       else if (
       /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
+        System.out.println("stdev being set to .5");
         xyStdDev = 0.5;
       }
       // 1 target with large area and close to estimated pose
       else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
+        System.out.println("stdev being set to .5");
         xyStdDev = 0.5;
       }
       // 1 target farther away and estimated pose is close
       else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
+
+        System.out.println("stdev being set to 1.0");
         xyStdDev = 1.0;
       } else if (poseEstimate.fiducialIds.length > 1) {
+        System.out.println("stdev being set to 1.2");
         xyStdDev = 1.2;
       } else {
+        System.out.println("stdev being set to 2.4");
         xyStdDev = 2.4;
       }
 
@@ -143,10 +160,10 @@ public class Vision extends SubsystemBase {
 
   public MegatagPoseEstimate getBotPose2dBlue() {
     // If all pose estimates are null, return null
-    if (inputs.megatag2PoseEstimateFrontUp == null 
-        && inputs.megatag2PoseEstimateBack == null 
+    if (inputs.megatag2PoseEstimateFrontUp == null
+        && inputs.megatag2PoseEstimateBack == null
         && inputs.megatag2PoseEstimateFrontDown == null) {
-        return null;
+      return null;
     }
 
     // Start with the assumption that one of the values is not null
@@ -154,29 +171,32 @@ public class Vision extends SubsystemBase {
     double lowestAmbiguity = 1; // Initialize with the highest possible value
 
     // Compare front-up Limelight pose
-    if (inputs.megatag2PoseEstimateFrontUp != null && inputs.lowestTagAmbiguityFrontUp < lowestAmbiguity) {
-        lowestAmbiguity = inputs.lowestTagAmbiguityFrontUp;
-        bestPose = inputs.megatag2PoseEstimateFrontUp;
+    if (inputs.megatag2PoseEstimateFrontUp != null
+        && inputs.lowestTagAmbiguityFrontUp < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityFrontUp;
+      bestPose = inputs.megatag2PoseEstimateFrontUp;
     }
 
     // Compare back Limelight pose
-    if (inputs.megatag2PoseEstimateBack != null && inputs.lowestTagAmbiguityBack < lowestAmbiguity) {
-        lowestAmbiguity = inputs.lowestTagAmbiguityBack;
-        bestPose = inputs.megatag2PoseEstimateBack;
+    if (inputs.megatag2PoseEstimateBack != null
+        && inputs.lowestTagAmbiguityBack < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityBack;
+      bestPose = inputs.megatag2PoseEstimateBack;
     }
 
     // Compare front-down Limelight pose
-    if (inputs.megatag2PoseEstimateFrontDown != null && inputs.lowestTagAmbiguityFrontDown < lowestAmbiguity) {
-        lowestAmbiguity = inputs.lowestTagAmbiguityFrontDown;
-        bestPose = inputs.megatag2PoseEstimateFrontDown;
+    if (inputs.megatag2PoseEstimateFrontDown != null
+        && inputs.lowestTagAmbiguityFrontDown < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityFrontDown;
+      bestPose = inputs.megatag2PoseEstimateFrontDown;
     }
 
     return bestPose; // Returns the pose estimate with the lowest ambiguity
-}
-
+  }
 
   public double getLatencySecondsFront() {
-    return inputs.frontUpAprilTagCaptureLatencySeconds + inputs.frontUpAprilTagPipelineLatencySeconds;
+    return inputs.frontUpAprilTagCaptureLatencySeconds
+        + inputs.frontUpAprilTagPipelineLatencySeconds;
   }
 
   public double getLatencySecondsBack() {

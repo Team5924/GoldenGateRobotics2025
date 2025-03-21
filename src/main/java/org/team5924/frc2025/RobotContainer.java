@@ -276,7 +276,7 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Vision
-    vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
+    //vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
 
     // Climber
     // Dpad Down
