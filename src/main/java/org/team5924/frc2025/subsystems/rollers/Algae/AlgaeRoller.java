@@ -28,24 +28,25 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 @Setter
 @Getter
 public class AlgaeRoller extends GenericRollerSystem<AlgaeRoller.AlgaeRollerState> {
+
   @RequiredArgsConstructor
   @Getter
   public enum AlgaeRollerState implements VoltageState {
     NO_ALGAE(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/NoCoralVoltage", 0.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/NoCoralVoltage", 0.0)),
+        new LoggedTunableNumber("AlgaeRoller/NoAlgaeVoltage", 0.0),
+        new LoggedTunableNumber("DummyValue", 0.0)),
     INTAKING(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/IntakingVoltage", -12.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/IntakingVoltage", 12.0)),
+        new LoggedTunableNumber("AlgaeRoller/IntakingVoltage", -12.0),
+        new LoggedTunableNumber("DummyValue", 0.0)),
     STORED_ALGAE(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
+        new LoggedTunableNumber("AlgaeRoller/StoredAlgaeVoltage", 0.0),
+        new LoggedTunableNumber("DummyValue", 0.0)),
     SHOOTING(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 12.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0));
+        new LoggedTunableNumber("AlgaeRoller/ShootingVoltage", 12.0),
+        new LoggedTunableNumber("DummyValue", 0.0));
 
     private final DoubleSupplier voltageSupplier;
-    private final DoubleSupplier handoffVoltage;
+    private final DoubleSupplier dummySupplier;
   }
 
   private AlgaeRollerState goalState = AlgaeRollerState.NO_ALGAE;
