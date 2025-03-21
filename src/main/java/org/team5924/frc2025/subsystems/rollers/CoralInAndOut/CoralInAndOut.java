@@ -59,7 +59,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
-        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", -12.0),
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpohoitBackVoltage", -12.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", -12.0));
 
     private final DoubleSupplier voltageSupplier;
