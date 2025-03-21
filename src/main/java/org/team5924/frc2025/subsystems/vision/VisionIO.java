@@ -26,33 +26,47 @@ import org.team5924.frc2025.util.MegatagPoseEstimate;
 public interface VisionIO {
   @AutoLog
   public static class VisionIOInputs {
-    public boolean frontLimelightSeesTarget = false;
+    public boolean frontUpLimelightSeesTarget = false;
     public boolean backLimelightSeesTarget = false;
+    public boolean frontDownLimelightSeesTarget = false;
 
-    public FiducialObservation[] frontFiducials = new FiducialObservation[] {};
+    public FiducialObservation[] frontUpFiducials = new FiducialObservation[] {};
     public FiducialObservation[] backFiducials = new FiducialObservation[] {};
+    public FiducialObservation[] frontDownFiducials = new FiducialObservation[] {};
 
-    public MegatagPoseEstimate megatag2PoseEstimateFront = null;
+    public MegatagPoseEstimate megatag2PoseEstimateFrontUp = null;
     public MegatagPoseEstimate megatag2PoseEstimateBack = null;
+    public MegatagPoseEstimate megatag2PoseEstimateFrontDown = null;
 
-    public Pose2d megatag2PoseEstimateFrontPose2d = null;
+
+    public Pose2d megatag2PoseEstimateFrontUpPose2d = null;
     public Pose2d megatag2PoseEstimateBackPose2d = null;
-    public int megatag2PoseEstimateFrontTagCount = 0;
+    public Pose2d megatag2PoseEstimateFrontDownPose2d = null;
+    public int megatag2PoseEstimateFrontUpTagCount = 0;
     public int megatag2PoseEstimateBackTagCount = 0;
-    public double megatag2PoseEstimateFrontAvgTagArea = 0;
+    public int megatag2PoseEstimateFrontDownTagCount = 0;
+    public double megatag2PoseEstimateFrontUpAvgTagArea = 0;
     public double megatag2PoseEstimateBackAvgTagArea = 0;
+    public double megatag2PoseEstimateFrontDownAvgTagArea = 0;
 
-    public double lowestTagAmbiguityFront = 1;
+    public double lowestTagAmbiguityFrontUp = 1;
     public double lowestTagAmbiguityBack = 1;
+    public double lowestTagAmbiguityFrontDown = 1;
 
-    public double frontAprilTagPipelineLatencySeconds = 0.0;
-    public double frontAprilTagCaptureLatencySeconds = 0.0;
+    public double frontUpAprilTagPipelineLatencySeconds = 0.0;
+    public double frontUpAprilTagCaptureLatencySeconds = 0.0;
+
 
     public double backAprilTagPipelineLatencySeconds = 0.0;
     public double backAprilTagCaptureLatencySeconds = 0.0;
 
-    public Pose3d frontAprilTagDistance = new Pose3d();
-    public double backAprilTagDistance = 0.0;
+    public double frontDownAprilTagPipelineLatencySeconds = 0.0;
+    public double frontDownAprilTagCaptureLatencySeconds = 0.0;
+
+
+    public Pose3d frontUpAprilTagDistance = new Pose3d();
+    public Pose3d backAprilTagDistance = new Pose3d();
+    public Pose3d frontDownAprilTagDistance = new Pose3d();
   }
 
   /** Updates the set of loggable inputs. */
