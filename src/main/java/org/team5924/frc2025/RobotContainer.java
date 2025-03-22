@@ -349,8 +349,6 @@ public class RobotContainer {
         .pov(270)
         .onFalse(
             Commands.runOnce(() -> algaeRoller.setGoalState(AlgaeRoller.AlgaeRollerState.STOPPED)));
-    
-    
   }
 
   /**
