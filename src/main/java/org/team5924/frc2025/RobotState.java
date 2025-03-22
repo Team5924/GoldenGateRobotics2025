@@ -49,8 +49,8 @@ public class RobotState {
   @Setter
   private VisionFieldPoseEstimate estimatedPoseFront = new VisionFieldPoseEstimate();
 
-  @AutoLogOutput(key = "RobotState/EstimatedPoseBack") 
-  @Getter 
+  @AutoLogOutput(key = "RobotState/EstimatedPoseBack")
+  @Getter
   @Setter
   private VisionFieldPoseEstimate estimatedPoseBack = new VisionFieldPoseEstimate();
 

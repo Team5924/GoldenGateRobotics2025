@@ -62,6 +62,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
+  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -115,7 +116,7 @@ public final class Constants {
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
   public static final Distance SPROCKET_RADIUS = Inches.of(.6405);
   public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
-\
+
   /* Algae Rollers*/
   public static final int ALGAE_TALON_ID = 35;
   public static final String ALGAE_BUS = "rio";

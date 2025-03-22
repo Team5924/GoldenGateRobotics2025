@@ -208,9 +208,9 @@ public class VisionIOLimelight implements VisionIO {
     }
 
     inputs.frontUpAprilTagPipelineLatencySeconds =
-        LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT_UP) / 1000;
+        LimelightHelpers.getLatency_Pipeline("limelight-front") / 1000;
     inputs.frontUpAprilTagCaptureLatencySeconds =
-        LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT_UP) / 1000;
+        LimelightHelpers.getLatency_Capture("limelight-front") / 1000;
 
     inputs.backAprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
