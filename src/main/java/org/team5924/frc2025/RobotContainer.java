@@ -306,26 +306,28 @@ public class RobotContainer {
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
 
-    driveController
+    operatorController
         .pov(180)
         .onTrue(Commands.runOnce(() -> algaePivot.setGoalState(AlgaePivot.AlgaePivotState.STOW)));
 
     // Dpad Up
-    driveController
+    operatorController
         .pov(0)
         .onTrue(Commands.runOnce(() -> algaePivot.setGoalState(AlgaePivot.AlgaePivotState.DEPLOY)));
 
     // No Dpad Up or Dpad Down
-    driveController
+    operatorController
         .pov(270)
         .onTrue(
             Commands.runOnce(
                 () -> algaeRoller.setGoalState(AlgaeRoller.AlgaeRollerState.SPINNING)));
 
-    driveController
+    operatorController
         .pov(270)
         .onFalse(
             Commands.runOnce(() -> algaeRoller.setGoalState(AlgaeRoller.AlgaeRollerState.STOPPED)));
+    
+    
   }
 
   /**
