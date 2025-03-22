@@ -130,8 +130,15 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
-    NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
+    NamedCommands.registerCommand(
+        "Run Shooter", 
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L4)));
+    NamedCommands.registerCommand(
+        "Stop CoralInAndOut", 
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    NamedCommands.registerCommand(
+        "Run Intake", 
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
     NamedCommands.registerCommand(
         "Elevator Height L4",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));

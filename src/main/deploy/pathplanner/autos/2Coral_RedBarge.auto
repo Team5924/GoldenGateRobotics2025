@@ -13,12 +13,6 @@
                 "data": {
                   "pathName": "2Leave RB"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Height L4"
-                }
               }
             ]
           }
@@ -30,53 +24,69 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "2Reef to CS RB"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Height Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Run Intake"
-                }
-              }
-            ]
+            "waitTime": 0.0
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "2CS to Reef RB"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Height L4"
-                }
-              }
-            ]
+            "name": "Stop CoralInAndOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2Reef to CS RB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop CoralInAndOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2CS to Reef RB"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Run Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop CoralInAndOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Height Intake"
           }
         }
       ]
