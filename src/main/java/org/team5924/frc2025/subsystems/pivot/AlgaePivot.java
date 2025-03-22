@@ -17,7 +17,6 @@
 package org.team5924.frc2025.subsystems.pivot;
 
 import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
@@ -36,13 +35,8 @@ public class AlgaePivot extends SubsystemBase {
   private final AlgaePivotIOInputsAutoLogged inputs = new AlgaePivotIOInputsAutoLogged();
 
   public enum AlgaePivotState {
-    INTAKE_HIGH(new LoggedTunableNumber("AlgaePivotIntakeHighRads", 0)),
-    INTAKE_LOW(new LoggedTunableNumber("AlgaePivotIntakeLowRads", 0)),
-    INTAKE_FLOOR(new LoggedTunableNumber("AlgaePivotIntakeFloorRads", 0.5)),
-    NET(new LoggedTunableNumber("AlgaePivotIntakeNetRads", 1)),
-    MANUAL(new LoggedTunableNumber("AlgaePivotManualRads", -1)),
-    MOVING(new LoggedTunableNumber("AlgaePivotMovingRads", -1)),
-    HOLDING(new LoggedTunableNumber("AlgaePivotHoldingRads", -1));
+    DEPLOY(new LoggedTunableNumber("AlgaePivotIntakeHighRads", 0)),
+    STOW(new LoggedTunableNumber("AlgaePivotIntakeLowRads", 0));
 
     private final LoggedTunableNumber rads;
 
@@ -60,7 +54,7 @@ public class AlgaePivot extends SubsystemBase {
   /** Creates a new AlgaePivot. */
   public AlgaePivot(AlgaePivotIO io) {
     this.io = io;
-    this.goalState = AlgaePivotState.INTAKE_FLOOR;
+    this.goalState = AlgaePivotState.STOW;
     this.AlgaePivotMotorDisconnected =
         new Alert("Algae pivot motor disconnected!", Alert.AlertType.kWarning);
 
@@ -100,14 +94,12 @@ public class AlgaePivot extends SubsystemBase {
   public void setGoalState(AlgaePivotState goalState) {
     this.goalState = goalState;
     switch (goalState) {
-      case MANUAL:
-        RobotState.getInstance().setAlgaePivotState(AlgaePivotState.MANUAL);
+      case STOW:
+        RobotState.getInstance().setAlgaePivotState(AlgaePivotState.STOW);
+        io.setPosition(goalState.rads.getAsDouble());
         break;
-      case MOVING:
-        DriverStation.reportError("Invalid goal AlgaePivotState!", null);
-        break;
-      default:
-        RobotState.getInstance().setAlgaePivotState(AlgaePivotState.MOVING);
+      case DEPLOY:
+        RobotState.getInstance().setAlgaePivotState(AlgaePivotState.DEPLOY);
         io.setPosition(goalState.rads.getAsDouble());
         break;
     }

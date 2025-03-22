@@ -124,6 +124,9 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
         500,
         algaePivotCANcoderAbsolutePositionRotations,
         algaePivotCANcoderRelativePositionRotations);
+
+    // re-zeros the algae pivot motor on initialiation
+    algaePivotTalon.setPosition(0);
   }
 
   @Override

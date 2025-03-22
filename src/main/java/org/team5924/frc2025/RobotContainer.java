@@ -51,10 +51,14 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFX;
+import org.team5924.frc2025.subsystems.pivot.AlgaePivot;
+import org.team5924.frc2025.subsystems.pivot.AlgaePivotIOTalonFX;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
+import org.team5924.frc2025.subsystems.rollers.algae.AlgaeRoller;
+import org.team5924.frc2025.subsystems.rollers.algae.AlgaeRollerIOKrakenFOC;
 import org.team5924.frc2025.subsystems.vision.Vision;
 import org.team5924.frc2025.subsystems.vision.VisionIO;
 import org.team5924.frc2025.subsystems.vision.VisionIOLimelight;
@@ -72,6 +76,8 @@ public class RobotContainer {
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
   private final Vision vision;
+  private final AlgaePivot algaePivot;
+  private final AlgaeRoller algaeRoller;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -97,6 +103,8 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFX() {});
         vision = new Vision(new VisionIOLimelight());
+        algaePivot = new AlgaePivot(new AlgaePivotIOTalonFX());
+        algaeRoller = new AlgaeRoller(new AlgaeRollerIOKrakenFOC());
         break;
 
       case SIM:
@@ -112,6 +120,8 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        algaePivot = new AlgaePivot(new AlgaePivotIOTalonFX());
+        algaeRoller = new AlgaeRoller(new AlgaeRollerIOKrakenFOC());
         break;
 
       default:
@@ -127,6 +137,8 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        algaePivot = new AlgaePivot(new AlgaePivotIOTalonFX());
+        algaeRoller = new AlgaeRoller(new AlgaeRollerIOKrakenFOC());
         break;
     }
 
@@ -293,6 +305,27 @@ public class RobotContainer {
         .pov(180)
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+
+    driveController
+        .pov(180)
+        .onTrue(Commands.runOnce(() -> algaePivot.setGoalState(AlgaePivot.AlgaePivotState.STOW)));
+
+    // Dpad Up
+    driveController
+        .pov(0)
+        .onTrue(Commands.runOnce(() -> algaePivot.setGoalState(AlgaePivot.AlgaePivotState.DEPLOY)));
+
+    // No Dpad Up or Dpad Down
+    driveController
+        .pov(270)
+        .onTrue(
+            Commands.runOnce(
+                () -> algaeRoller.setGoalState(AlgaeRoller.AlgaeRollerState.SPINNING)));
+
+    driveController
+        .pov(270)
+        .onFalse(
+            Commands.runOnce(() -> algaeRoller.setGoalState(AlgaeRoller.AlgaeRollerState.STOPPED)));
   }
 
   /**

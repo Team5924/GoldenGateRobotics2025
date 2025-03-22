@@ -123,7 +123,7 @@ public class VisionIOLimelight implements VisionIO {
 
     inputs.frontUpLimelightSeesTarget = LimelightHelpers.getTV("limelight-front");
     inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-back");
-    inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-down");
+    inputs.frontDownLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-down");
 
     if (inputs.frontUpLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2FrontUp =

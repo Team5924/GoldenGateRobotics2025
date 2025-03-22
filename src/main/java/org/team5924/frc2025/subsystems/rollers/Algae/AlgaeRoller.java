@@ -32,24 +32,18 @@ public class AlgaeRoller extends GenericRollerSystem<AlgaeRoller.AlgaeRollerStat
   @RequiredArgsConstructor
   @Getter
   public enum AlgaeRollerState implements VoltageState {
-    NO_ALGAE(
+    STOPPED(
         new LoggedTunableNumber("AlgaeRoller/NoAlgaeVoltage", 0.0),
         new LoggedTunableNumber("DummyValue", 0.0)),
-    INTAKING(
+    SPINNING(
         new LoggedTunableNumber("AlgaeRoller/IntakingVoltage", -12.0),
-        new LoggedTunableNumber("DummyValue", 0.0)),
-    STORED_ALGAE(
-        new LoggedTunableNumber("AlgaeRoller/StoredAlgaeVoltage", 0.0),
-        new LoggedTunableNumber("DummyValue", 0.0)),
-    SHOOTING(
-        new LoggedTunableNumber("AlgaeRoller/ShootingVoltage", 12.0),
         new LoggedTunableNumber("DummyValue", 0.0));
 
     private final DoubleSupplier voltageSupplier;
     private final DoubleSupplier dummySupplier;
   }
 
-  private AlgaeRollerState goalState = AlgaeRollerState.NO_ALGAE;
+  private AlgaeRollerState goalState = AlgaeRollerState.STOPPED;
 
   protected final AlgaeRollerIOInputsAutoLogged algaeRollerInputs =
       new AlgaeRollerIOInputsAutoLogged();
@@ -70,11 +64,8 @@ public class AlgaeRoller extends GenericRollerSystem<AlgaeRoller.AlgaeRollerStat
   public void setGoalState(AlgaeRollerState goalState) {
     this.goalState = goalState;
     switch (goalState) {
-      case NO_ALGAE -> RobotState.getInstance().setAlgaeRollerState(AlgaeRollerState.NO_ALGAE);
-      case INTAKING -> RobotState.getInstance().setAlgaeRollerState(AlgaeRollerState.INTAKING);
-      case STORED_ALGAE ->
-          RobotState.getInstance().setAlgaeRollerState(AlgaeRollerState.STORED_ALGAE);
-      case SHOOTING -> RobotState.getInstance().setAlgaeRollerState(AlgaeRollerState.SHOOTING);
+      case STOPPED -> RobotState.getInstance().setAlgaeRollerState(AlgaeRollerState.STOPPED);
+      case SPINNING -> RobotState.getInstance().setAlgaeRollerState(AlgaeRollerState.SPINNING);
     }
   }
 

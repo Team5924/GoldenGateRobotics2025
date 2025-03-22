@@ -70,12 +70,12 @@ public class RobotState {
   @Getter
   @Setter
   @AutoLogOutput(key = "RobotState/AlgaePivotState")
-  private AlgaePivotState algaePivotState = AlgaePivotState.INTAKE_FLOOR;
+  private AlgaePivotState algaePivotState = AlgaePivotState.STOW;
 
   @Getter
   @Setter
   @AutoLogOutput(key = "RobotState/AlgaeRollerState")
-  private AlgaeRollerState algaeRollerState = AlgaeRollerState.NO_ALGAE;
+  private AlgaeRollerState algaeRollerState = AlgaeRollerState.STOPPED;
 
   /* ### Vision ### */
   @Getter @Setter private int limelightImuMode = 0;
