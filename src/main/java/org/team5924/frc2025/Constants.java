@@ -62,6 +62,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
+  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -125,8 +126,10 @@ public final class Constants {
   public static final double ALGAE_REDUCTION = 1.0; // Adjust value as needed
 
   /* # Vision # */
-  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-front";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT_UP = "limelight-front";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT_DOWN = "limelight-back";
+
 
   public static final double FRONT_UP_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(9.158, Inches);
   public static final double FRONT_UP_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(10.200, Inches);

@@ -123,7 +123,7 @@ public class VisionIOLimelight implements VisionIO {
 
     inputs.frontUpLimelightSeesTarget = LimelightHelpers.getTV("limelight-front");
     inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-back");
-    inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-down");
+    inputs.frontDownLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-down");
 
     if (inputs.frontUpLimelightSeesTarget) {
       LimelightHelpers.PoseEstimate megatag2FrontUp =
@@ -208,9 +208,9 @@ public class VisionIOLimelight implements VisionIO {
     }
 
     inputs.frontUpAprilTagPipelineLatencySeconds =
-        LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
+        LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT_UP) / 1000;
     inputs.frontUpAprilTagCaptureLatencySeconds =
-        LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT) / 1000;
+        LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_FRONT_UP) / 1000;
 
     inputs.backAprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
