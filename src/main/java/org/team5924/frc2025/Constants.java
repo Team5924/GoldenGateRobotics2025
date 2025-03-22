@@ -62,6 +62,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
+  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -90,7 +91,7 @@ public final class Constants {
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
 
   /* # Pivot # */
-  public static final int ALGAE_PIVOT_TALON_ID = 55;
+  public static final int ALGAE_PIVOT_TALON_ID = 34;
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 62.5; // TODO: most likely change
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
 
@@ -117,7 +118,7 @@ public final class Constants {
   public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
 
   /* Algae Rollers*/
-  public static final int ALGAE_TALON_ID = 70;
+  public static final int ALGAE_TALON_ID = 35;
   public static final String ALGAE_BUS = "rio";
   public static final int ALGAE_CURRENT_LIMIT = 40; // Adjust value as needed
   public static final boolean ALGAE_INVERT = false; // Adjust value as needed
@@ -128,11 +129,11 @@ public final class Constants {
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-front";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
-  public static final double FRONT_UP_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(9.158, Inches);
-  public static final double FRONT_UP_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(10.200, Inches);
-  public static final double FRONT_UP_LIMELIGHT_OFF_UP = Meters.convertFrom(11.202, Inches);
+  public static final double FRONT_UP_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(8.885, Inches);
+  public static final double FRONT_UP_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
+  public static final double FRONT_UP_LIMELIGHT_OFF_UP = Meters.convertFrom(16.17, Inches);
   public static final double FRONT_UP_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double FRONT_UP_LIMELIGHT_OFF_PITCH = -5.0;
+  public static final double FRONT_UP_LIMELIGHT_OFF_PITCH = 5.0;
   public static final double FRONT_UP_LIMELIGHT_OFF_YAW = 0.0;
 
   public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(-8.781, Inches);
