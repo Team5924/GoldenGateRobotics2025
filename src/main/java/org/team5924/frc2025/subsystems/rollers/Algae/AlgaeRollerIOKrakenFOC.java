@@ -27,12 +27,12 @@ import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
 public class AlgaeRollerIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements AlgaeRollerIO {
 
-  private static final int loadShootId = Constants.CORAL_IN_AND_OUT_CAN_ID;
-  private static final String bus = Constants.CORAL_IN_AND_OUT_BUS;
-  private static final int currentLimitAmps = Constants.CORAL_IN_AND_OUT_CURRENT_LIMIT;
-  private static final boolean invert = Constants.CORAL_IN_AND_OUT_INVERT;
-  private static final boolean loadShootBrake = Constants.CORAL_IN_AND_OUT_BRAKE;
-  private static final double reduction = Constants.CORAL_IN_AND_OUT_REDUCTION;
+  private static final int AlgaeRollerId = Constants.ALGAE_TALON_ID;
+  private static final String bus = Constants.ALGAE_BUS;
+  private static final int currentLimitAmps = Constants.ALGAE_CURRENT_LIMIT;
+  private static final boolean invert = Constants.ALGAE_INVERT;
+  private static final boolean loadShootBrake = Constants.ALGAE_BRAKE;
+  private static final double reduction = Constants.ALGAE_REDUCTION;
 
   private static final LaserCan AlgaeRollerLC = new LaserCan(Constants.CORAL_INTAKE_LASER_CAN_ID);
 
@@ -43,7 +43,7 @@ public class AlgaeRollerIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
       new Alert("Algae LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
   public AlgaeRollerIOKrakenFOC() {
-    super(loadShootId, bus, currentLimitAmps, invert, loadShootBrake, reduction);
+    super(AlgaeRollerId, bus, currentLimitAmps, invert, loadShootBrake, reduction);
   }
 
   public void updateInputs(AlgaeRollerIOInputs inputs) {
