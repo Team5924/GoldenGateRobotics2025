@@ -21,12 +21,12 @@ public final class BuildConstants {
   public static final String MAVEN_GROUP = "";
   public static final String MAVEN_NAME = "GoldenGateRobotics2025";
   public static final String VERSION = "unspecified";
-  public static final int GIT_REVISION = 236;
-  public static final String GIT_SHA = "25e6b0715d12d753bced1ced703275c77b6d0ad7";
-  public static final String GIT_DATE = "2025-03-21 21:35:46 EDT";
-  public static final String GIT_BRANCH = "sfr-vision-fix";
-  public static final String BUILD_DATE = "2025-03-21 21:54:39 EDT";
-  public static final long BUILD_UNIX_TIME = 1742608479975L;
+  public static final int GIT_REVISION = 219;
+  public static final String GIT_SHA = "d7fc3944e01a03d126b3f619cc5087042bd37e3f";
+  public static final String GIT_DATE = "2025-03-21 23:39:27 EDT";
+  public static final String GIT_BRANCH = "sfr-autos";
+  public static final String BUILD_DATE = "2025-03-22 13:48:55 EDT";
+  public static final long BUILD_UNIX_TIME = 1742665735578L;
   public static final int DIRTY = 1;
 
   private BuildConstants() {}
