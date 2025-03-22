@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Elevator Height Intake",
+      "name": "Elevator Height Intake Trigger",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null

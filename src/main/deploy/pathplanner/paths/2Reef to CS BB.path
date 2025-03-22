@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.214651639344262,
+        "x": 5.142725409836065,
         "y": 5.157838114754097
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.531352459016393,
+        "x": 4.459426229508196,
         "y": 5.7931864754098354
       },
       "isLocked": false,
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Elevator Height Intake",
+      "name": "Elevator Height Intake Trigger",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
@@ -60,7 +60,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -122.66091272167368
+    "rotation": -120.46554491945989
   },
   "useDefaultConstraints": true
 }
