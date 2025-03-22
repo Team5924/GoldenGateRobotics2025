@@ -37,7 +37,6 @@ import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
 import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
-import org.team5924.frc2025.commands.vision.RunVisionPoseEstimation;
 import org.team5924.frc2025.generated.TunerConstants;
 import org.team5924.frc2025.subsystems.climber.Climber;
 import org.team5924.frc2025.subsystems.climber.ClimberIO;
@@ -237,9 +236,20 @@ public class RobotContainer {
         .whileTrue(
             new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
 
+    driveController
+        .rightTrigger()
+        .whileTrue(
+            DriveCommands.turnToRightCoralStation(
+                drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
+
+    driveController
+        .leftTrigger()
+        .whileTrue(
+            DriveCommands.turnToLeftCoralStation(
+                drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
     // Coral In and Out
 
-    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
+    driveController.y().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
     driveController
         .leftTrigger()
         .onFalse(
@@ -276,7 +286,7 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Vision
-    vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
+    // vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
 
     // Climber
     // Dpad Down
