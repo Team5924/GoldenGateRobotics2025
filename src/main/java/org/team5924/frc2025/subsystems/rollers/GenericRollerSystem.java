@@ -49,7 +49,7 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
   private final Alert disconnected;
   protected final Timer stateTimer = new Timer();
 
-  private final Notification disconnectedNotification;
+  // private final Notification disconnectedNotification;
 
   public GenericRollerSystem(String name, GenericRollerSystemIO io) {
     this.name = name;
@@ -57,9 +57,9 @@ public abstract class GenericRollerSystem<G extends GenericRollerSystem.VoltageS
 
     disconnected = new Alert(name + " motor disconnected!", Alert.AlertType.kWarning);
 
-    disconnectedNotification =
-        new Notification(
-            NotificationLevel.WARNING, name + " Warning", name + " motor disconnected!");
+    // disconnectedNotification =
+    //     new Notification(
+    //         NotificationLevel.WARNING, name + " Warning", name + " motor disconnected!");
 
     stateTimer.start();
   }

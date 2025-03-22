@@ -55,7 +55,7 @@ public class AlgaePivot extends SubsystemBase {
 
   private final Alert AlgaePivotMotorDisconnected;
 
-  private final Notification algaePivotMotorDisconnectedNotification;
+  // private final Notification algaePivotMotorDisconnectedNotification;
 
   /** Creates a new AlgaePivot. */
   public AlgaePivot(AlgaePivotIO io) {
@@ -64,9 +64,9 @@ public class AlgaePivot extends SubsystemBase {
     this.AlgaePivotMotorDisconnected =
         new Alert("Algae pivot motor disconnected!", Alert.AlertType.kWarning);
 
-    algaePivotMotorDisconnectedNotification =
-        new Notification(
-            NotificationLevel.WARNING, "Algae Pivot Warning", "Algae Pivot motor disconnected!");
+    // algaePivotMotorDisconnectedNotification =
+    //     new Notification(
+    //         NotificationLevel.WARNING, "Algae Pivot Warning", "Algae Pivot motor disconnected!");
   }
 
   @Override

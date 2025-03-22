@@ -69,8 +69,8 @@ public class Elevator extends SubsystemBase {
   private final Alert leftMotorDisconnected;
   private final Alert rightMotorDisconnected;
 
-  private final Notification leftMotorDisconnectedNotification;
-  private final Notification rightMotorDisconnectedNotification;
+  // private final Notification leftMotorDisconnectedNotification;
+  // private final Notification rightMotorDisconnectedNotification;
 
   public Elevator(ElevatorIO io) {
     this.io = io;
@@ -82,13 +82,13 @@ public class Elevator extends SubsystemBase {
     this.rightMotorDisconnected =
         new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
 
-    leftMotorDisconnectedNotification =
-        new Notification(
-            NotificationLevel.WARNING, "Elevator Warning", "Left elevator motor disconnected!");
+    // leftMotorDisconnectedNotification =
+    //     new Notification(
+    //         NotificationLevel.WARNING, "Elevator Warning", "Left elevator motor disconnected!");
 
-    rightMotorDisconnectedNotification =
-        new Notification(
-            NotificationLevel.WARNING, "Elevator Warning", "Right elevator motor disconnected!");
+    // rightMotorDisconnectedNotification =
+    //     new Notification(
+    //         NotificationLevel.WARNING, "Elevator Warning", "Right elevator motor disconnected!");
 
     upSysId =
         new SysIdRoutine(
