@@ -35,8 +35,8 @@ public class AlgaePivot extends SubsystemBase {
   private final AlgaePivotIOInputsAutoLogged inputs = new AlgaePivotIOInputsAutoLogged();
 
   public enum AlgaePivotState {
-    DEPLOY(new LoggedTunableNumber("AlgaePivotIntakeHighRads", 0)),
-    STOW(new LoggedTunableNumber("AlgaePivotIntakeLowRads", 0));
+    DEPLOY(new LoggedTunableNumber("AlgaePivotIntakeHighRads", -13.5)),
+    STOW(new LoggedTunableNumber("AlgaePivotIntakeLowRads", .1));
 
     private final LoggedTunableNumber rads;
 

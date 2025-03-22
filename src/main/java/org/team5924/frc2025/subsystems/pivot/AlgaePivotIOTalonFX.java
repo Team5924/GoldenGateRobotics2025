@@ -34,6 +34,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -62,7 +63,9 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
   private final PositionVoltage positionControl =
       new PositionVoltage(0).withUpdateFreqHz(0.0).withEnableFOC(true);
 
-  LoggedTunableNumber algaePivotMotorkP = new LoggedTunableNumber("AlgaePivotMotorkP", 0);
+  private final PIDController pid = new PIDController(3, 0, 0);
+
+  LoggedTunableNumber algaePivotMotorkP = new LoggedTunableNumber("AlgaePivotMotorkP", 2);
   LoggedTunableNumber algaePivotMotorkI = new LoggedTunableNumber("AlgaePivotMotorkI", 0);
   LoggedTunableNumber algaePivotMotorkD = new LoggedTunableNumber("AlgaePivotMotorkD", 0);
   LoggedTunableNumber algaePivotMotorkS = new LoggedTunableNumber("AlgaePivotMotorkS", 0);
@@ -162,6 +165,6 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
 
   @Override
   public void setPosition(double rads) {
-    algaePivotTalon.setControl(positionControl.withPosition(rads));
+    algaePivotTalon.setVoltage(pid.calculate(algaePivotPosition.getValueAsDouble(), rads));
   }
 }
