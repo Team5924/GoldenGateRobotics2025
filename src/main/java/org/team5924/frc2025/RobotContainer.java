@@ -136,6 +136,9 @@ public class RobotContainer {
         "Stop CoralInAndOut",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
     NamedCommands.registerCommand(
+        "Coral In Intake",
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
+    NamedCommands.registerCommand(
         "Run Intake",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
     NamedCommands.registerCommand(
@@ -154,16 +157,15 @@ public class RobotContainer {
     new EventTrigger("Elevator Height Intake Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
+    
+
     // Set up auto routines
     boolean isCompetition = true;
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     // As an example, this will only show autos that start with "comp" while at
     // competition as defined by the programmer
-    autoChooser =
-        AutoBuilder.buildAutoChooserWithOptionsModifier(
-            (stream) ->
-                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -274,7 +276,8 @@ public class RobotContainer {
     operatorController
         .rightTrigger()
         .onFalse(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+            Commands.runOnce(
+                () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
 
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));

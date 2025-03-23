@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.8240778688524584,
-        "y": 2.8921618852459017
+        "x": 3.800102459016393,
+        "y": 2.9281249999999988
       },
       "prevControl": {
-        "x": 3.3988371595078752,
-        "y": 2.485485070872192
+        "x": 3.37486174967181,
+        "y": 2.521448185626289
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "Elevator Height L4 Trigger",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.45,
       "endWaypointRelativePos": null,
       "command": null
     }
