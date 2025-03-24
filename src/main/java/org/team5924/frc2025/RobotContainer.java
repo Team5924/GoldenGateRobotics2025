@@ -131,13 +131,14 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "Run Shooter",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L4)));
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.AUTO_L4)));
     NamedCommands.registerCommand(
         "Stop CoralInAndOut",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
     NamedCommands.registerCommand(
         "Coral In Intake",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
+        Commands.runOnce(
+            () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
     NamedCommands.registerCommand(
         "Run Intake",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
@@ -156,8 +157,6 @@ public class RobotContainer {
 
     new EventTrigger("Elevator Height Intake Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
-
-    
 
     // Set up auto routines
     boolean isCompetition = true;

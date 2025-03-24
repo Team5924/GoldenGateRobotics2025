@@ -97,16 +97,16 @@ public class Climber extends SubsystemBase {
       lastState = getGoalState();
     }
 
-    // io.runVolts(goalState.volts.getAsDouble());
+    io.runVolts(goalState.volts.getAsDouble());
 
-    if (inputs.rotatePositionRads < 0
-        && RobotState.getInstance().getClimberState().equals(ClimberState.CLIMB)) {
-      io.runVolts(goalState.volts.getAsDouble());
-    }
+    // if (inputs.rotatePositionRads < 0
+    //     && RobotState.getInstance().getClimberState().equals(ClimberState.CLIMB)) {
+    //   io.runVolts(goalState.volts.getAsDouble());
+    // }
 
-    if (RobotState.getInstance().getClimberState().equals(ClimberState.REVERSE_CLIMB)) {
-      io.runVolts(goalState.volts.getAsDouble());
-    }
+    // if (RobotState.getInstance().getClimberState().equals(ClimberState.REVERSE_CLIMB)) {
+    //   io.runVolts(goalState.volts.getAsDouble());
+    // }
 
     Logger.recordOutput("Climber/Climber Goal", goalState.toString());
   }
