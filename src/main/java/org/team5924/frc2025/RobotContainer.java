@@ -21,6 +21,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
+import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -158,6 +159,12 @@ public class RobotContainer {
     new EventTrigger("Elevator Height Intake Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
+    new EventTrigger("Elevator Height L4 Trigger")
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+
+    new EventTrigger("Elevator Height Intake Trigger")
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+
     // Set up auto routines
     boolean isCompetition = true;
 
@@ -215,6 +222,7 @@ public class RobotContainer {
             () -> -driveController.getLeftX() * .8,
             () -> -driveController.getRightX() * .8));
 
+
     // Nope. It's slow mode now. Quarter speed
     driveController
         .a()
@@ -254,7 +262,17 @@ public class RobotContainer {
     //     .whileTrue(
     //         DriveCommands.turnToRightCoralStation(
     //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
+    // driveController
+    //     .rightTrigger()
+    //     .whileTrue(
+    //         DriveCommands.turnToRightCoralStation(
+    //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
 
+    // driveController
+    //     .leftTrigger()
+    //     .whileTrue(
+    //         DriveCommands.turnToLeftCoralStation(
+    //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
     // driveController
     //     .leftTrigger()
     //     .whileTrue(
@@ -262,6 +280,7 @@ public class RobotContainer {
     //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
     // Coral In and Out
 
+    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
     driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
     driveController
         .leftTrigger()
