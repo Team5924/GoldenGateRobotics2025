@@ -71,11 +71,23 @@ public class AlgaePivot extends SubsystemBase {
 
     Logger.recordOutput("AlgaePivot/GoalState", goalState.toString());
     Logger.recordOutput("AlgaePivot/TargetRads", goalState.rads);
+    Logger.recordOutput("AlgaePivot/DifferenceRads", getDifferenceRads());
+    Logger.recordOutput("AlgaePivot/IsAtSetpoint", isAtSetpoint());
 
     AlgaePivotMotorDisconnected.set(!inputs.algaePivotMotorConnected);
 
+    if (!isAtSetpoint())
+      io.setPosition(goalState.rads.getAsDouble());
+
     // if (!inputs.algaePivotMotorConnected)
     //   Elastic.sendNotification(algaePivotMotorDisconnectedNotification);
+  }
+
+  /**
+   * @return the difference of the goal pivot rads and the current pivot rads
+   */
+  private double getDifferenceRads() {
+    return goalState.rads.getAsDouble() - getAlgaePivotPositionRads();
   }
 
   private double getAlgaePivotPositionRads() {
@@ -83,8 +95,7 @@ public class AlgaePivot extends SubsystemBase {
   }
 
   public boolean isAtSetpoint() {
-    return Math.abs(getAlgaePivotPositionRads() - this.goalState.rads.getAsDouble())
-        < AlgaePivotTolerance.getAsDouble();
+    return Math.abs(getDifferenceRads()) <= AlgaePivotTolerance.getAsDouble();
   }
 
   public void setVoltage(double voltage) {
@@ -96,11 +107,9 @@ public class AlgaePivot extends SubsystemBase {
     switch (goalState) {
       case STOW:
         RobotState.getInstance().setAlgaePivotState(AlgaePivotState.STOW);
-        io.setPosition(goalState.rads.getAsDouble());
         break;
       case DEPLOY:
         RobotState.getInstance().setAlgaePivotState(AlgaePivotState.DEPLOY);
-        io.setPosition(goalState.rads.getAsDouble());
         break;
     }
   }
