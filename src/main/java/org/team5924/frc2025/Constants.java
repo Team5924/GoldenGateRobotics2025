@@ -176,7 +176,7 @@ public final class Constants {
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
       double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 1.22; // Leg 3 but different (meters)
+      double distanceFromCenterToRoboCenterShoot = 1.32; // Leg 3 but different (meters)
       double offset = -.198;
       double offsetCorrection = 0.085; // Correction for the offset just in case!!
 

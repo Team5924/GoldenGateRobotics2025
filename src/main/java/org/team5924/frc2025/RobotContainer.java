@@ -21,7 +21,6 @@ import static edu.wpi.first.units.Units.Seconds;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.events.EventTrigger;
-import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -221,7 +220,6 @@ public class RobotContainer {
             () -> -driveController.getLeftY() * .8,
             () -> -driveController.getLeftX() * .8,
             () -> -driveController.getRightX() * .8));
-
 
     // Nope. It's slow mode now. Quarter speed
     driveController
