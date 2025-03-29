@@ -176,10 +176,10 @@ public final class Constants {
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
       double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 1.22; // Leg 3 but different (meters)
+      double distanceFromCenterToRoboCenterShoot = 1.32; // Leg 3 but different (meters)
       double offset = -.205;
       double offsetCorrection = 0.09; // Correction for the offset just in case!!
-
+$
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
         Pose2d poseDirection = new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
@@ -310,20 +310,22 @@ public final class Constants {
                 redCenter.getX()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 

@@ -76,8 +76,7 @@ public class AlgaePivot extends SubsystemBase {
 
     AlgaePivotMotorDisconnected.set(!inputs.algaePivotMotorConnected);
 
-    if (!isAtSetpoint())
-      io.setPosition(goalState.rads.getAsDouble());
+    if (!isAtSetpoint()) io.setPosition(goalState.rads.getAsDouble());
 
     // if (!inputs.algaePivotMotorConnected)
     //   Elastic.sendNotification(algaePivotMotorDisconnectedNotification);

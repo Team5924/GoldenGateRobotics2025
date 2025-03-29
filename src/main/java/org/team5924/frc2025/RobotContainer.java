@@ -329,7 +329,6 @@ public class RobotContainer {
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
 
-
     // Algae Pivot
 
     // Dpad Down

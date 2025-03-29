@@ -165,6 +165,9 @@ public class AlgaePivotIOTalonFX implements AlgaePivotIO {
 
   @Override
   public void setPosition(double rads) {
-    algaePivotTalon.setVoltage(pid.calculate(algaePivotPosition.getValue().in(Radians) / Constants.MOTOR_TO_ALGAE_PIVOT_REDUCTION, rads));
+    algaePivotTalon.setVoltage(
+        pid.calculate(
+            algaePivotPosition.getValue().in(Radians) / Constants.MOTOR_TO_ALGAE_PIVOT_REDUCTION,
+            rads));
   }
 }
