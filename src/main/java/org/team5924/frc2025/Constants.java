@@ -179,7 +179,7 @@ public final class Constants {
       double distanceFromCenterToRoboCenterShoot = 1.32; // Leg 3 but different (meters)
       double offset = -.205;
       double offsetCorrection = 0.09; // Correction for the offset just in case!!
-$
+
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
         Pose2d poseDirection = new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
