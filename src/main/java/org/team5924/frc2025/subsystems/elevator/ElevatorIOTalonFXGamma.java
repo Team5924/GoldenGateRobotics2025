@@ -210,7 +210,7 @@ public class ElevatorIOTalonFXGamma implements ElevatorIO {
     canCoderConfig.MagnetSensor.MagnetOffset = Constants.ELEVATOR_CANCODER_OFFSET;
 
     // Apply Configs
-    StatusCode[] statusArray = new StatusCode[15];
+    StatusCode[] statusArray = new StatusCode[14];
 
     statusArray[0] = leaderTalonConfig.apply(currentLimitsConfigs);
     statusArray[1] = leaderTalonConfig.apply(leaderMotorConfigs);
@@ -227,9 +227,9 @@ public class ElevatorIOTalonFXGamma implements ElevatorIO {
     statusArray[11] = followerTalonConfig.apply(openLoopRampsConfigs);
     statusArray[12] = followerTalonConfig.apply(closedLoopRampsConfigs);
 
-    statusArray[13] = elevatorCANCoderConfig.apply(canCoderConfig);
+    // statusArray[13] = elevatorCANCoderConfig.apply(canCoderConfig);
 
-    statusArray[14] = elevatorCANdi.getConfigurator().apply(configs);
+    statusArray[13] = elevatorCANdi.getConfigurator().apply(configs);
 
     boolean isErrorPresent = false;
     for (StatusCode s : statusArray) if (!s.isOK()) isErrorPresent = true;

@@ -91,8 +91,8 @@ public class Drive extends SubsystemBase {
                   TunerConstantsGamma.BackRight.LocationY)));
 
   // PathPlanner config constants
-  private static final double ROBOT_MASS_KG = 61.23;
-  private static final double ROBOT_MOI = 8.59;
+  private static final double ROBOT_MASS_KG = 58.4;
+  private static final double ROBOT_MOI = 4.39;
   private static final double WHEEL_COF = 1.2;
   private static final RobotConfig PP_CONFIG =
       new RobotConfig(
