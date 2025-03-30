@@ -121,12 +121,12 @@ public final class Constants {
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-front";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
-  public static final double FRONT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(8.885, Inches);
-  public static final double FRONT_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
-  public static final double FRONT_LIMELIGHT_OFF_UP = Meters.convertFrom(16.17, Inches);
-  public static final double FRONT_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double FRONT_LIMELIGHT_OFF_PITCH = 5.0;
-  public static final double FRONT_LIMELIGHT_OFF_YAW = 0.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(9.72, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.831, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_UP = Meters.convertFrom(7.725, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_ROLL = 0.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_PITCH = 0.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = 10.0;
 
   public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(8.971, Inches);
   public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
@@ -134,6 +134,14 @@ public final class Constants {
   public static final double BACK_LIMELIGHT_OFF_ROLL = 0.0;
   public static final double BACK_LIMELIGHT_OFF_PITCH = 15.0;
   public static final double BACK_LIMELIGHT_OFF_YAW = 180.0;
+
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(8.885, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_SIDE =
+      -1 * Meters.convertFrom(9.755, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_UP = Meters.convertFrom(16.17, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_ROLL = 0.0;
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_PITCH = 5.0;
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_YAW = 0.0;
 
   public static final int LIMELIGHT_RED_ALLIANCE_PIPELINE = 0;
   public static final int LIMELIGHT_BLUE_ALLIANCE_PIPELINE = 0;

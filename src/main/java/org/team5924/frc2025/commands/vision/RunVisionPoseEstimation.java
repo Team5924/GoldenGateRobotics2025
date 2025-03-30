@@ -65,7 +65,7 @@ public class RunVisionPoseEstimation extends Command {
             estimatedPose.pose,
             Timer.getFPGATimestamp()
                 - (estimatedPose.isFrontLimelight
-                    ? vision.getLatencySecondsFront()
+                    ? vision.getLatencySecondsFrontLeft()
                     : vision.getLatencySecondsBack()),
             visionMeasurement);
       }
@@ -79,11 +79,11 @@ public class RunVisionPoseEstimation extends Command {
   private boolean isVisionReliable(MegatagPoseEstimate pose) {
     int fiducialsSpotted =
         pose.isFrontLimelight
-            ? vision.getNumberFiducialsSpottedFront()
+            ? vision.getNumberFiducialsSpottedFrontLeft()
             : vision.getNumberFiducialsSpottedBack();
     double lowestAmbiguity =
         pose.isFrontLimelight
-            ? vision.getLowestTagAmbiguityFront()
+            ? vision.getLowestTagAmbiguityFrontLeft()
             : vision.getLowestTagAmbiguityBack();
 
     return (fiducialsSpotted == 1 && lowestAmbiguity < 0.2)

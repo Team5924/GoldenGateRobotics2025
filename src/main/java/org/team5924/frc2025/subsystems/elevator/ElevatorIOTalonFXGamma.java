@@ -92,11 +92,11 @@ public class ElevatorIOTalonFXGamma implements ElevatorIO {
   /* Gains */
   LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA", 0.00);
   LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/kS", 0.13);
-  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", 0.4);
+  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", .44);
   LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 7);
   LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI", 0);
   LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0.07);
-  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.37);
+  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.34);
 
   LoggedTunableNumber motionAcceleration =
       new LoggedTunableNumber("Elevator/MotionAcceleration", 400);
@@ -272,13 +272,13 @@ public class ElevatorIOTalonFXGamma implements ElevatorIO {
         new VoltageOut(0)
             .withUpdateFreqHz(0.0)
             .withEnableFOC(true)
-            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
-            .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
+            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue());
+    // .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
     magicMotionVoltage =
         new MotionMagicVoltage(0)
             .withEnableFOC(true)
-            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
-            .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
+            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue());
+    // .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
 
     rightTalon.setControl(new Follower(leftTalon.getDeviceID(), true));
     leftTalon.setPosition(0.0);
