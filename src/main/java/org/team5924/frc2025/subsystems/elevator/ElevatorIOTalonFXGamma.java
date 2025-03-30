@@ -96,7 +96,7 @@ public class ElevatorIOTalonFXGamma implements ElevatorIO {
   LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 7);
   LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI", 0);
   LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0.07);
-  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.33);
+  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.37);
 
   LoggedTunableNumber motionAcceleration =
       new LoggedTunableNumber("Elevator/MotionAcceleration", 400);
