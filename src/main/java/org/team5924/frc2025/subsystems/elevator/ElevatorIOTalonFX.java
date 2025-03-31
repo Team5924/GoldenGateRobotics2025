@@ -62,6 +62,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.util.LoggedTunableNumber;
+import org.team5924.frc2025.util.Elastic;
+import org.team5924.frc2025.util.Elastic.Notification;
+import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 
 /** TODO: Need to rezero elevator on min height. */
 
@@ -141,6 +144,39 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private final Alert candiPin2FloatAlert =
       new Alert("Elevator CANdiPin2 is floating. Check connection.", Alert.AlertType.kWarning);
 
+  /* Notifications */
+  
+  private final Notification updateMotorConfigNotification =
+    new Notification(
+        NotificationLevel.WARNING,
+        "Elevator Warning",
+        "Update elevator motor config error!");
+  
+    private final Notification initialMotorConfigNotification =
+      new Notification(
+          NotificationLevel.ERROR,
+          "Elevator Config Error",
+          "Initial elevator motor config error! Restart robot code to clear.");
+  
+    private final Notification candiPin1FloatNotification =
+      new Notification(
+          NotificationLevel.WARNING,
+          "Elevator Warning",
+          "Elevator CANdiPin1 is floating. Check connection.");
+  
+    private final Notification candiPin2FloatNotification =
+    new Notification(
+        NotificationLevel.WARNING,
+        "Elevator Warning",
+        "Update Elevator CANdiPin2 is floating. Check connection.");
+
+        
+    private boolean isCandi1Alert;
+    private boolean isCandi2Alert;
+
+    private boolean wasCandi1Alert;
+    private boolean wasCandi2Alert;
+    
   public ElevatorIOTalonFX() {
     leftTalon = new TalonFX(Constants.ELEVATOR_LEFT_TALON_ID);
     rightTalon = new TalonFX(Constants.ELEVATOR_RIGHT_TALON_ID);
@@ -234,6 +270,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     boolean isErrorPresent = false;
     for (StatusCode s : statusArray) if (!s.isOK()) isErrorPresent = true;
     initalMotorConfigAlert.set(isErrorPresent);
+    if (isErrorPresent)
+      Elastic.sendNotification(initialMotorConfigNotification);
     Logger.recordOutput("Elevator/InitConfReport", statusArray);
 
     leftPosition = leftTalon.getPosition();
@@ -348,8 +386,20 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     updateTunableNumbers();
     isAtZero();
 
-    candiPin1FloatAlert.set(elevatorCANdi.getS1State().getValue() == S1StateValue.Floating);
-    candiPin2FloatAlert.set(elevatorCANdi.getS2State().getValue() == S2StateValue.Floating);
+    isCandi1Alert = elevatorCANdi.getS1State().getValue() == S1StateValue.Floating;
+    isCandi2Alert = elevatorCANdi.getS2State().getValue() == S2StateValue.Floating;
+
+    candiPin1FloatAlert.set(isCandi1Alert);
+    candiPin2FloatAlert.set(isCandi2Alert);
+
+    if (!wasCandi1Alert && isCandi1Alert)
+      Elastic.sendNotification(candiPin1FloatNotification);
+      
+    if (!wasCandi2Alert && isCandi2Alert)
+      Elastic.sendNotification(candiPin2FloatNotification);
+
+    wasCandi1Alert = isCandi1Alert;
+    isCandi2Alert = wasCandi2Alert;
   }
 
   public void updateTunableNumbers() {
@@ -383,6 +433,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
       boolean isErrorPresent = false;
       for (StatusCode s : statusArray) if (!s.isOK()) isErrorPresent = true;
       updateMotorConfigAlert.set(isErrorPresent);
+      if (isErrorPresent)
+          Elastic.sendNotification(updateMotorConfigNotification);
       Logger.recordOutput("Elevator/Leader/UpdateConfReport", statusArray);
     }
   }

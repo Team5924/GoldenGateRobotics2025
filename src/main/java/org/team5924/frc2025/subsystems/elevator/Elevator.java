@@ -30,6 +30,7 @@ import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.RobotState;
+import org.team5924.frc2025.util.Elastic;
 import org.team5924.frc2025.util.Elastic.Notification;
 import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 import org.team5924.frc2025.util.LoggedTunableNumber;
@@ -69,8 +70,8 @@ public class Elevator extends SubsystemBase {
   private final Alert leftMotorDisconnected;
   private final Alert rightMotorDisconnected;
 
-  // private final Notification leftMotorDisconnectedNotification;
-  // private final Notification rightMotorDisconnectedNotification;
+  private final Notification leftMotorDisconnectedNotification;
+  private final Notification rightMotorDisconnectedNotification;
 
   public Elevator(ElevatorIO io) {
     this.io = io;
@@ -82,13 +83,13 @@ public class Elevator extends SubsystemBase {
     this.rightMotorDisconnected =
         new Alert("Right elevator motor disconnected!", Alert.AlertType.kWarning);
 
-    // leftMotorDisconnectedNotification =
-    //     new Notification(
-    //         NotificationLevel.WARNING, "Elevator Warning", "Left elevator motor disconnected!");
+    leftMotorDisconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, "Elevator Warning", "Left elevator motor disconnected!");
 
-    // rightMotorDisconnectedNotification =
-    //     new Notification(
-    //         NotificationLevel.WARNING, "Elevator Warning", "Right elevator motor disconnected!");
+    rightMotorDisconnectedNotification =
+        new Notification(
+            NotificationLevel.WARNING, "Elevator Warning", "Right elevator motor disconnected!");
 
     upSysId =
         new SysIdRoutine(
@@ -119,12 +120,17 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator/GoalState", goalState.toString());
     Logger.recordOutput("Elevator/TargetHeight", goalState.heightMeters);
 
+    boolean wasLeftMotorDisconnected = leftMotorDisconnected.get();
+    boolean wasRightMotorDisconnected = rightMotorDisconnected.get();
+
     leftMotorDisconnected.set(!inputs.leftMotorConnected);
     rightMotorDisconnected.set(!inputs.rightMotorConnected);
 
-    // if (!inputs.leftMotorConnected) Elastic.sendNotification(leftMotorDisconnectedNotification);
-    // if (!inputs.rightMotorConnected)
-    // Elastic.sendNotification(rightMotorDisconnectedNotification);
+    if (!wasLeftMotorDisconnected && leftMotorDisconnected.get())
+      Elastic.sendNotification(leftMotorDisconnectedNotification);
+
+    if (!wasRightMotorDisconnected && leftMotorDisconnected.get())
+      Elastic.sendNotification(rightMotorDisconnectedNotification);
 
     RobotState.getInstance().setElevatorPositionMeters(getElevatorPositionMeters());
 

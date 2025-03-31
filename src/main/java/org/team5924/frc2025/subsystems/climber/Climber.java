@@ -27,6 +27,9 @@ import org.team5924.frc2025.RobotState;
 import org.team5924.frc2025.subsystems.elevator.Elevator.ElevatorState;
 import org.team5924.frc2025.subsystems.pivot.AlgaePivot.AlgaePivotState;
 import org.team5924.frc2025.util.LoggedTunableNumber;
+import org.team5924.frc2025.util.Elastic;
+import org.team5924.frc2025.util.Elastic.Notification;
+import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 
 @Setter
 @Getter
@@ -55,8 +58,13 @@ public class Climber extends SubsystemBase {
   private ClimberState lastState;
 
   private final Alert rotateDisconnected;
-
   private final Alert invalidStateTransition;
+
+  private final Notification motorDisconnectedNotification =
+    new Notification(
+        NotificationLevel.WARNING,
+        "Climber Disconnected",
+        "Climber motor is disconnected!");
 
   protected final Timer stateTimer = new Timer();
 
@@ -80,7 +88,13 @@ public class Climber extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
 
+    boolean wasMotorDisconnected = rotateDisconnected.get();
+
     rotateDisconnected.set(!inputs.rotateMotorConnected);
+
+    // Prevent warning spam
+    if (!wasMotorDisconnected && rotateDisconnected.get())
+      Elastic.sendNotification(motorDisconnectedNotification);
 
     // If the robot's state is STOW && the cage is within range && algae pivot is STOW &&
     // elevator height is below L1 elevator height, then set the robot's state to READY_TO_CLIMB

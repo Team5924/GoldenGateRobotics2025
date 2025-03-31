@@ -26,6 +26,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import org.littletonrobotics.junction.Logger;
+import org.team5924.frc2025.util.Elastic;
+import org.team5924.frc2025.util.Elastic.Notification;
+import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 
 public class Module {
   private final ModuleIO io;
@@ -38,6 +41,11 @@ public class Module {
   private final Alert driveDisconnectedAlert;
   private final Alert turnDisconnectedAlert;
   private final Alert turnEncoderDisconnectedAlert;
+  
+  private final Notification driveDisconnectedNotification;
+  private final Notification turnDisconnectedNotification;
+  private final Notification turnEncoderDisconnectedNotification;
+
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
   public Module(
@@ -59,6 +67,22 @@ public class Module {
         new Alert(
             "Disconnected turn encoder on module " + Integer.toString(index) + ".",
             AlertType.kError);
+  
+    driveDisconnectedNotification =
+      new Notification(
+          NotificationLevel.ERROR,
+          "Module Disconnected",
+          "Disconnected drive motor on module " + Integer.toString(index) + ".");
+    turnDisconnectedNotification =
+      new Notification(
+          NotificationLevel.ERROR,
+          "Module Disconnected",
+          "Disconnected turn motor on module " + Integer.toString(index) + ".");
+    turnEncoderDisconnectedNotification =
+        new Notification(
+            NotificationLevel.ERROR,
+            "Module Disconnected",
+            "Disconnected turn encoder on module " + Integer.toString(index) + ".");
   }
 
   public void periodic() {
@@ -74,10 +98,26 @@ public class Module {
       odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
     }
 
+    
+    // Check and store alert values before updating
+    boolean wasDriveDisconnected = driveDisconnectedAlert.get();
+    boolean wasTurnDisconnected = turnDisconnectedAlert.get();
+    boolean wasTurnEncoderDisconnected = turnEncoderDisconnectedAlert.get();
+
     // Update alerts
     driveDisconnectedAlert.set(!inputs.driveConnected);
     turnDisconnectedAlert.set(!inputs.turnConnected);
     turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
+
+    // prevents error spam
+    if (!wasDriveDisconnected && driveDisconnectedAlert.get())
+      Elastic.sendNotification(driveDisconnectedNotification);
+
+    if (!wasTurnDisconnected && turnDisconnectedAlert.get())
+      Elastic.sendNotification(turnDisconnectedNotification);
+
+    if (!wasTurnEncoderDisconnected && turnEncoderDisconnectedAlert.get())
+      Elastic.sendNotification(turnEncoderDisconnectedNotification);
   }
 
   /** Runs the module with the specified setpoint state. Mutates the state to optimize it. */

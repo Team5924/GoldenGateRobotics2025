@@ -17,12 +17,16 @@
 package org.team5924.frc2025.subsystems.rollers.CoralInAndOut;
 
 import au.grapplerobotics.LaserCan;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import org.team5924.frc2025.Constants;
 import org.team5924.frc2025.subsystems.rollers.GenericRollerSystemIOKrakenFOC;
 import org.team5924.frc2025.util.LaserCAN_Measurement;
 import org.team5924.frc2025.util.exceptions.SensorRuntimeException;
+import org.team5924.frc2025.util.Elastic;
+import org.team5924.frc2025.util.Elastic.Notification;
+import org.team5924.frc2025.util.Elastic.Notification.NotificationLevel;
 
 public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     implements CoralInAndOutIO {
@@ -63,6 +67,14 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
   private static final Alert shooterLCInvalidMeasure =
       new Alert("Shooter LaserCAN grabbed invalid measurement. See logs.", AlertType.kWarning);
 
+  private static Notification intakeLCDisconnectNotification =
+          new Notification(
+              NotificationLevel.WARNING, "Coral In and Out Warning", "Intake LaserCAN disconnected.");
+
+  private static Notification shooterLCDisconnectNotification =
+          new Notification(
+              NotificationLevel.WARNING, "Coral In and Out Warning", "Shooter LaserCAN disconnected.");
+
   public CoralInAndOutIOKrakenFOC() {
     super(loadShootId, bus, currentLimitAmps, invert, loadShootBrake, reduction);
     innerHandoffSystem =
@@ -78,8 +90,11 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     } catch (SensorRuntimeException e) {
       switch (e.getErrorType()) {
         case DISCONNECTED -> {
+          boolean wasConnected = inputs.intakeLCConnected;
           inputs.intakeLCConnected = false;
           intakeLCDisconnectAlert.set(true);
+          if (wasConnected)
+            Elastic.sendNotification(intakeLCDisconnectNotification);
         }
         case INVALID_DATA -> intakeLCInvalidMeasure.set(true);
         default -> {
@@ -97,8 +112,11 @@ public class CoralInAndOutIOKrakenFOC extends GenericRollerSystemIOKrakenFOC
     } catch (SensorRuntimeException e) {
       switch (e.getErrorType()) {
         case DISCONNECTED -> {
+          boolean wasConnected = inputs.intakeLCConnected;
           inputs.shooterLCConnected = false;
           shooterLCDisconnectAlert.set(true);
+          if (wasConnected)
+            Elastic.sendNotification(shooterLCDisconnectNotification);
         }
         case INVALID_DATA -> shooterLCInvalidMeasure.set(true);
         default -> {

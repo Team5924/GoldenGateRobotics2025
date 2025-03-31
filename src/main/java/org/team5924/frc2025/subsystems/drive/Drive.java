@@ -110,11 +110,11 @@ public class Drive extends SubsystemBase {
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-  // private final Notification gyroDisconnectedNotification =
-  //     new Notification(
-  //         NotificationLevel.ERROR,
-  //         "Gyro Disconnected",
-  //         "Disconnected gyro, using kinematics as fallback.");
+  private final Notification gyroDisconnectedNotification =
+      new Notification(
+          NotificationLevel.ERROR,
+          "Gyro Disconnected",
+          "Disconnected gyro, using kinematics as fallback.");
 
   boolean isFlipped =
       DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
@@ -279,11 +279,15 @@ public class Drive extends SubsystemBase {
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
+    // Check if gyro alert was enabled before updating
+    boolean wasGyroDisconnected = gyroDisconnectedAlert.get();
+
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
-    // if (!gyroInputs.connected && Constants.currentMode != Mode.SIM)
-    //   Elastic.sendNotification(gyroDisconnectedNotification);
+    // prevents error spam: alert will only send on the first periodic call of gyro being disconnected
+    if (!wasGyroDisconnected && gyroDisconnectedAlert.get())
+      Elastic.sendNotification(gyroDisconnectedNotification);
 
     // Update RobotState
     RobotState.getInstance().setOdometryPose(getPose());
