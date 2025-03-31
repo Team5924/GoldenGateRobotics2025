@@ -64,7 +64,7 @@ public class Pathing {
   public static PathPlannerPath createPath(Pose2d currentPose, List<Pose2d> destinationPoses) {
     List<Waypoint> waypoints =
         PathPlannerPath.waypointsFromPoses(
-            currentPose, /* destinationPoses.get(0), */ destinationPoses.get(1));
+            currentPose, destinationPoses.get(0), destinationPoses.get(1));
     List<RotationTarget> holonomicRotations = new ArrayList<>();
     holonomicRotations.add(new RotationTarget(0.75, destinationPoses.get(1).getRotation()));
 

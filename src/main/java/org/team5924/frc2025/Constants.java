@@ -118,7 +118,7 @@ public final class Constants {
   public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
 
   /* # Vision # */
-  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-front";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-frontl";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
   public static final double FRONT_LEFT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(9.72, Inches);
@@ -126,7 +126,7 @@ public final class Constants {
   public static final double FRONT_LEFT_LIMELIGHT_OFF_UP = Meters.convertFrom(7.725, Inches);
   public static final double FRONT_LEFT_LIMELIGHT_OFF_ROLL = 0.0;
   public static final double FRONT_LEFT_LIMELIGHT_OFF_PITCH = 0.0;
-  public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = 10.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = -10.0;
 
   public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(8.971, Inches);
   public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
@@ -168,7 +168,7 @@ public final class Constants {
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
       double distanceFromCenterToRoboCenterLineup = 1.62; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 1.22; // Leg 3 but different (meters)
+      double distanceFromCenterToRoboCenterShoot = 1.32; // Leg 3 but different (meters)
       double offset = -.205;
       double offsetCorrection = 0.09; // Correction for the offset just in case!!
 

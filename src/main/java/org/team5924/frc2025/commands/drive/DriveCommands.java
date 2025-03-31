@@ -329,10 +329,10 @@ public class DriveCommands {
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
           // flips the heading based off of alliance
-          if (!isFlipped) {
-            heading = Constants.CORAL_STATION_RADIANS_NORMAL;
-          } else {
+          if (isFlipped) {
             heading = Constants.CORAL_STATION_RADIANS_NORMAL - Math.PI;
+          } else {
+            heading = Constants.CORAL_STATION_RADIANS_NORMAL;
           }
 
           // make a +-3 degree tolerance
@@ -385,10 +385,10 @@ public class DriveCommands {
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
-          if (!isFlipped) {
-            heading = -Constants.CORAL_STATION_RADIANS_NORMAL;
-          } else {
+          if (isFlipped) {
             heading = -Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI;
+          } else {
+            heading = -Constants.CORAL_STATION_RADIANS_NORMAL;
           }
 
           boolean inPIDMargin = Math.abs(drive.getRotation().getRadians() - heading) > 0.0523599;
