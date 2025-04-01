@@ -17,7 +17,6 @@
 package org.team5924.frc2025.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.AutoLog;
 import org.team5924.frc2025.util.FiducialObservation;
 import org.team5924.frc2025.util.MegatagPoseEstimate;
@@ -26,33 +25,40 @@ import org.team5924.frc2025.util.MegatagPoseEstimate;
 public interface VisionIO {
   @AutoLog
   public static class VisionIOInputs {
-    public boolean frontLimelightSeesTarget = false;
+    public boolean frontLeftLimelightSeesTarget = false;
     public boolean backLimelightSeesTarget = false;
+    public boolean frontRightLimelightSeesTarget = false;
 
-    public FiducialObservation[] frontFiducials = new FiducialObservation[] {};
+    public FiducialObservation[] frontLeftFiducials = new FiducialObservation[] {};
     public FiducialObservation[] backFiducials = new FiducialObservation[] {};
+    public FiducialObservation[] frontRightFiducials = new FiducialObservation[] {};
 
-    public MegatagPoseEstimate megatag2PoseEstimateFront = null;
+    public MegatagPoseEstimate megatag2PoseEstimateFrontLeft = null;
     public MegatagPoseEstimate megatag2PoseEstimateBack = null;
+    public MegatagPoseEstimate megatag2PoseEstimateFrontRight = null;
 
-    public Pose2d megatag2PoseEstimateFrontPose2d = null;
+    public Pose2d megatag2PoseEstimateFrontLeftPose2d = null;
     public Pose2d megatag2PoseEstimateBackPose2d = null;
-    public int megatag2PoseEstimateFrontTagCount = 0;
+    public Pose2d megatag2PoseEstimateFrontRightPose2d = null;
+    public int megatag2PoseEstimateFrontLeftTagCount = 0;
     public int megatag2PoseEstimateBackTagCount = 0;
-    public double megatag2PoseEstimateFrontAvgTagArea = 0;
+    public int megatag2PoseEstimateFrontRightTagCount = 0;
+    public double megatag2PoseEstimateFrontLeftAvgTagArea = 0;
     public double megatag2PoseEstimateBackAvgTagArea = 0;
+    public double megatag2PoseEstimateFrontRightAvgTagArea = 0;
 
-    public double lowestTagAmbiguityFront = 1;
+    public double lowestTagAmbiguityFrontLeft = 1;
     public double lowestTagAmbiguityBack = 1;
+    public double lowestTagAmbiguityFrontRight = 1;
 
-    public double frontAprilTagPipelineLatencySeconds = 0.0;
-    public double frontAprilTagCaptureLatencySeconds = 0.0;
+    public double frontLeftAprilTagPipelineLatencySeconds = 0.0;
+    public double frontLeftAprilTagCaptureLatencySeconds = 0.0;
 
     public double backAprilTagPipelineLatencySeconds = 0.0;
     public double backAprilTagCaptureLatencySeconds = 0.0;
 
-    public Pose3d frontAprilTagDistance = new Pose3d();
-    public double backAprilTagDistance = 0.0;
+    public double frontRightAprilTagPipelineLatencySeconds = 0.0;
+    public double frontRightAprilTagCaptureLatencySeconds = 0.0;
   }
 
   /** Updates the set of loggable inputs. */

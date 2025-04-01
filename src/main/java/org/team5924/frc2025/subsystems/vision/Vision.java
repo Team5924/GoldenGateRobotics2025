@@ -57,7 +57,9 @@ public class Vision extends SubsystemBase {
     Logger.processInputs("Vision", inputs);
 
     updateVision(
-        inputs.frontLimelightSeesTarget, inputs.frontFiducials, inputs.megatag2PoseEstimateFront);
+        inputs.frontLeftLimelightSeesTarget,
+        inputs.frontLeftFiducials,
+        inputs.megatag2PoseEstimateFrontLeft);
 
     // boolean isRedAlliance = allianceSubscriber.get();
     // if (isRedAlliance != previousAllianceSubscriberValue) {
@@ -80,17 +82,21 @@ public class Vision extends SubsystemBase {
               || megatag2PoseEstimate.pose.getY()
                   > Constants.FIELD_WIDTH + Constants.FIELD_BORDER_MARGIN;
       if (cameraSeesTarget && !filterOut) {
-        System.out.println("Processing Megatag Pose Estimate");
         Optional<VisionFieldPoseEstimate> megatag2Estimate =
             processMegatag2PoseEstimate(megatag2PoseEstimate);
 
         if (megatag2Estimate.isPresent()) {
-          Logger.recordOutput(
-              "Vision/Front/" + "Megatag2Estimate",
-              megatag2Estimate.get().getVisionRobotPoseMeters());
-          System.out.println("Robot Has New Estimated Pose");
-          System.out.println(megatag2PoseEstimate.timestampSeconds);
-          RobotState.getInstance().setEstimatedPose(megatag2Estimate.get());
+          if (megatag2PoseEstimate.isFrontLimelight) {
+            Logger.recordOutput(
+                "Vision/Front/" + "Megatag2Estimate",
+                megatag2Estimate.get().getVisionRobotPoseMeters());
+            RobotState.getInstance().setEstimatedPoseFrontLeft(megatag2Estimate.get());
+          } else {
+            Logger.recordOutput(
+                "Vision/Back/" + "Megatag2Estimate",
+                megatag2Estimate.get().getVisionRobotPoseMeters());
+            RobotState.getInstance().setEstimatedPoseBack(megatag2Estimate.get());
+          }
         }
       }
     }
@@ -113,29 +119,29 @@ public class Vision extends SubsystemBase {
     // if (poseEstimate.fiducialIds.length > 0) {
     // multiple targets detected
     if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 0.2;
     }
     // we detect at least one of our speaker tags and we're close to it.
     else if (
     /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 0.5;
     }
     // 1 target with large area and close to estimated pose
     else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
       xyStdDev = 0.5;
-      System.out.println("setting new stdev");
+
     }
     // 1 target farther away and estimated pose is close
     else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 1.0;
     } else if (poseEstimate.fiducialIds.length > 1) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 1.2;
     } else {
-      System.out.println("setting new stdev");
+
       xyStdDev = 2.4;
     }
 
@@ -157,43 +163,57 @@ public class Vision extends SubsystemBase {
   }
 
   public MegatagPoseEstimate getBotPose2dBlue() {
-    if (inputs.megatag2PoseEstimateFront == null && inputs.megatag2PoseEstimateBack == null) {
+    if (inputs.megatag2PoseEstimateFrontLeft == null && inputs.megatag2PoseEstimateBack == null) {
       return null;
     }
-    if (inputs.megatag2PoseEstimateFront == null) {
+    if (inputs.megatag2PoseEstimateFrontLeft == null) {
       return inputs.megatag2PoseEstimateBack;
     }
     if (inputs.megatag2PoseEstimateBack == null) {
-      return inputs.megatag2PoseEstimateFront;
+      return inputs.megatag2PoseEstimateFrontLeft;
     }
-    if (inputs.lowestTagAmbiguityFront < inputs.lowestTagAmbiguityBack) {
-      return inputs.megatag2PoseEstimateFront;
+    if (inputs.lowestTagAmbiguityFrontLeft < inputs.lowestTagAmbiguityBack) {
+      return inputs.megatag2PoseEstimateFrontLeft;
     } else {
       return inputs.megatag2PoseEstimateBack;
     }
   }
 
-  public double getLatencySecondsFront() {
-    return inputs.frontAprilTagCaptureLatencySeconds + inputs.frontAprilTagPipelineLatencySeconds;
+  public double getLatencySecondsFrontLeft() {
+    return inputs.frontLeftAprilTagCaptureLatencySeconds
+        + inputs.frontLeftAprilTagPipelineLatencySeconds;
   }
 
   public double getLatencySecondsBack() {
     return inputs.backAprilTagCaptureLatencySeconds + inputs.backAprilTagPipelineLatencySeconds;
   }
 
-  public double getLowestTagAmbiguityFront() {
-    return inputs.lowestTagAmbiguityFront;
+  public double getLatencySecondsFronRtRight() {
+    return inputs.frontRightAprilTagCaptureLatencySeconds
+        + inputs.frontRightAprilTagPipelineLatencySeconds;
+  }
+
+  public double getLowestTagAmbiguityFrontLeft() {
+    return inputs.lowestTagAmbiguityFrontLeft;
   }
 
   public double getLowestTagAmbiguityBack() {
     return inputs.lowestTagAmbiguityBack;
   }
 
-  public int getNumberFiducialsSpottedFront() {
-    return inputs.frontFiducials.length;
+  public double getLowestTagAmbiguityFrontRight() {
+    return inputs.lowestTagAmbiguityFrontRight;
+  }
+
+  public int getNumberFiducialsSpottedFrontLeft() {
+    return inputs.frontLeftFiducials.length;
   }
 
   public int getNumberFiducialsSpottedBack() {
     return inputs.backFiducials.length;
+  }
+
+  public int getNumberFiducialsSpottedFrontRight() {
+    return inputs.frontRightFiducials.length;
   }
 }

@@ -115,9 +115,9 @@ public class TunerConstantsGamma {
       new Pigeon2Configuration()
           .withMountPose(
               new MountPoseConfigs()
-                  .withMountPoseRoll(-1.507846713066101)
-                  .withMountPosePitch(0.7226503491401672)
-                  .withMountPoseYaw(-90.46802520751953));
+                  .withMountPoseRoll(-1.5499616861343384) // -1.402620792388916) //
+                  .withMountPosePitch(0.13110311329364777) // 0.18634425103664398) //
+                  .withMountPoseYaw(-89.02062225341797)); // 90.86538696289062)); //
 
   // CAN bus that the devices are located on;
   // All swerve devices must share the same CAN bus
@@ -135,8 +135,8 @@ public class TunerConstantsGamma {
   private static final double kSteerGearRatio = 12.1;
   private static final Distance kWheelRadius = Inches.of(1.939);
 
-  private static final boolean kInvertLeftSide = false;
-  private static final boolean kInvertRightSide = true;
+  private static final boolean kInvertLeftSide = true;
+  private static final boolean kInvertRightSide = false;
 
   private static final int kPigeonId = 0;
 
