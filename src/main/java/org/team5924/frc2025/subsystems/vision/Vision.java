@@ -150,7 +150,7 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
 
     Matrix<N3, N1> visionMeasurementStdDevs =
-        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
+        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(360));
     measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
 
     return Optional.of(

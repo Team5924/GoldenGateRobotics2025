@@ -57,7 +57,6 @@ public class Pathing {
 
       Pose2d nearestPose = currentPose.nearest(rightBranchPoses);
       return rightAllianceBranchPairs.get(rightBranchPoses.indexOf(nearestPose));
-  
     }
   }
 
