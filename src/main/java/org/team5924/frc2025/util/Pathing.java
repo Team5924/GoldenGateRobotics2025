@@ -16,18 +16,15 @@
 
 package org.team5924.frc2025.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.team5924.frc2025.Constants;
-
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.RotationTarget;
 import com.pathplanner.lib.path.Waypoint;
-
 import edu.wpi.first.math.geometry.Pose2d;
+import java.util.ArrayList;
+import java.util.List;
+import org.team5924.frc2025.Constants;
 
 /** Add your docs here. */
 public class Pathing {
@@ -67,7 +64,7 @@ public class Pathing {
   public static PathPlannerPath createPath(Pose2d currentPose, List<Pose2d> destinationPoses) {
     List<Waypoint> waypoints =
         PathPlannerPath.waypointsFromPoses(
-            currentPose, destinationPoses.get(0), destinationPoses.get(1));
+            currentPose, /* destinationPoses.get(0), */ destinationPoses.get(1));
     List<RotationTarget> holonomicRotations = new ArrayList<>();
     holonomicRotations.add(new RotationTarget(0.5, destinationPoses.get(1).getRotation()));
 
@@ -78,7 +75,7 @@ public class Pathing {
             new ArrayList<>(),
             new ArrayList<>(),
             new ArrayList<>(),
-            new PathConstraints(1, 1, Math.PI, Math.PI), // insert pathconstraints here
+            new PathConstraints(1.5, 1, Math.PI, Math.PI * 5 / 6), // insert pathconstraints here
             null, // null for on-the-fly path
             new GoalEndState(0.0, destinationPoses.get(1).getRotation()),
             false);

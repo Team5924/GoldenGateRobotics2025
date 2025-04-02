@@ -121,12 +121,14 @@ public final class Constants {
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-frontl";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
-  public static final double FRONT_LEFT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(9.72, Inches);
-  public static final double FRONT_LEFT_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.831, Inches);
-  public static final double FRONT_LEFT_LIMELIGHT_OFF_UP = Meters.convertFrom(7.725, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_FORWARD =
+      Meters.convertFrom(7.829572, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_SIDE =
+      -1 * Meters.convertFrom(2.317419, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_UP = Meters.convertFrom(7.015618, Inches);
   public static final double FRONT_LEFT_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double FRONT_LEFT_LIMELIGHT_OFF_PITCH = 0.0;
-  public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = -10.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_PITCH = 18.881721;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = 27.236313;
 
   public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(8.971, Inches);
   public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
@@ -167,9 +169,9 @@ public final class Constants {
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-      double distanceFromCenterToRoboCenterLineup = 1.62; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 1.32; // Leg 3 but different (meters)
-      double offset = -.205;
+      double distanceFromCenterToRoboCenterLineup = 1.42; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterShoot = 1.25; // Leg 3 but different (meters)
+      double offset = -.198;
       double offsetCorrection = 0.09; // Correction for the offset just in case!!
 
       // Initialize branch positions
@@ -302,20 +304,22 @@ public final class Constants {
                 redCenter.getX()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
                     + (Math.sqrt(
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
-                                + Math.pow(halfIsoBaseOfBranchesAndCenter + offset, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset)
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
