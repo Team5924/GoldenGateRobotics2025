@@ -82,7 +82,6 @@ public class Vision extends SubsystemBase {
               || megatag2PoseEstimate.pose.getY()
                   > Constants.FIELD_WIDTH + Constants.FIELD_BORDER_MARGIN;
       if (cameraSeesTarget && !filterOut) {
-        System.out.println("Processing Megatag Pose Estimate");
         Optional<VisionFieldPoseEstimate> megatag2Estimate =
             processMegatag2PoseEstimate(megatag2PoseEstimate);
 
@@ -120,29 +119,29 @@ public class Vision extends SubsystemBase {
     // if (poseEstimate.fiducialIds.length > 0) {
     // multiple targets detected
     if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 0.2;
     }
     // we detect at least one of our speaker tags and we're close to it.
     else if (
     /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 0.5;
     }
     // 1 target with large area and close to estimated pose
     else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
       xyStdDev = 0.5;
-      System.out.println("setting new stdev");
+
     }
     // 1 target farther away and estimated pose is close
     else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 1.0;
     } else if (poseEstimate.fiducialIds.length > 1) {
-      System.out.println("setting new stdev");
+
       xyStdDev = 1.2;
     } else {
-      System.out.println("setting new stdev");
+
       xyStdDev = 2.4;
     }
 
@@ -151,7 +150,7 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
 
     Matrix<N3, N1> visionMeasurementStdDevs =
-        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
+        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(360));
     measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
 
     return Optional.of(
