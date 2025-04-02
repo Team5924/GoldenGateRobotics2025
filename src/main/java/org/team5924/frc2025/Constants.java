@@ -169,8 +169,8 @@ public final class Constants {
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-      double distanceFromCenterToRoboCenterLineup = 1.42; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 1.25; // Leg 3 but different (meters)
+      double distanceFromCenterToRoboCenterLineup = 1.57; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterShoot = 1.33; // Leg 3 but different (meters)
       double offset = -.198;
       double offsetCorrection = 0.09; // Correction for the offset just in case!!
 
@@ -238,36 +238,46 @@ public final class Constants {
         var blueLeftBranchLineup =
             new Pose2d(
                 blueCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 blueCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
         var blueRightBranchLineup =
             new Pose2d(
                 blueCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 blueCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
@@ -348,36 +358,46 @@ public final class Constants {
         var redLeftBranchLineup =
             new Pose2d(
                 redCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 redCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
         var redRightBranchLineup =
             new Pose2d(
                 redCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 redCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
