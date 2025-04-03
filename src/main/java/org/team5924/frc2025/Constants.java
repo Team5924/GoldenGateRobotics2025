@@ -63,7 +63,6 @@ public final class Constants {
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
   public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
-  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -325,12 +324,9 @@ public final class Constants {
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
                                 + Math.pow(
                                     halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
-                                + Math.pow(
-                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                     (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
@@ -338,12 +334,9 @@ public final class Constants {
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
                                 + Math.pow(
                                     halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
-                                + Math.pow(
-                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                     (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());

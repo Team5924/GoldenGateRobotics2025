@@ -20,7 +20,6 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -33,6 +32,8 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Set;
+import org.team5924.frc2025.commands.coralInAndOut.RunIntake;
+import org.team5924.frc2025.commands.coralInAndOut.RunShooter;
 import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
@@ -129,19 +130,8 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand(
-        "Run Shooter",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.AUTO_L4)));
-    NamedCommands.registerCommand(
-        "Stop CoralInAndOut",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
-    NamedCommands.registerCommand(
-        "Coral In Intake",
-        Commands.runOnce(
-            () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
-    NamedCommands.registerCommand(
-        "Run Intake",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
+    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
+    NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
     NamedCommands.registerCommand(
         "Elevator Height L4",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
@@ -152,25 +142,16 @@ public class RobotContainer {
         "Elevator Height Intake",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
-    new EventTrigger("Elevator Height L4 Trigger")
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
-
-    new EventTrigger("Elevator Height Intake Trigger")
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
-
-    new EventTrigger("Elevator Height L4 Trigger")
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
-
-    new EventTrigger("Elevator Height Intake Trigger")
-        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
-
     // Set up auto routines
     boolean isCompetition = true;
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     // As an example, this will only show autos that start with "comp" while at
     // competition as defined by the programmer
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser =
+        AutoBuilder.buildAutoChooserWithOptionsModifier(
+            (stream) ->
+                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -217,9 +198,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -driveController.getLeftY() * .8,
-            () -> -driveController.getLeftX() * .8,
-            () -> -driveController.getRightX() * .8));
+            () -> -driveController.getLeftY(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX()));
 
     // Nope. It's slow mode now. Quarter speed
     driveController
