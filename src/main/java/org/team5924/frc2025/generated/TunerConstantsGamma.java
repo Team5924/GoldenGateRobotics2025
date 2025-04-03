@@ -62,9 +62,9 @@ public class TunerConstantsGamma {
   // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
   private static final Slot0Configs steerGains =
       new Slot0Configs()
-          .withKP(108)
+          .withKP(128)
           .withKI(0)
-          .withKD(0.1)
+          .withKD(0.2)
           .withKS(0.1)
           .withKV(1.91)
           .withKA(0)
@@ -133,7 +133,7 @@ public class TunerConstantsGamma {
 
   private static final double kDriveGearRatio = 7.673684210526316;
   private static final double kSteerGearRatio = 12.1;
-  private static final Distance kWheelRadius = Inches.of(1.939);
+  private static final Distance kWheelRadius = Inches.of(2.094);
 
   private static final boolean kInvertLeftSide = false;
   private static final boolean kInvertRightSide = true;
