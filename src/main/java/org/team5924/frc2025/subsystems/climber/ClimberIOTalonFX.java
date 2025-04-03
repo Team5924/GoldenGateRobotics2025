@@ -89,6 +89,7 @@ public class ClimberIOTalonFX implements ClimberIO {
 
     // Disables status signals not called for update above
     rotateTalon.optimizeBusUtilization(0, 1.0);
+    rotateTalon.setPosition(0);
   }
 
   @Override

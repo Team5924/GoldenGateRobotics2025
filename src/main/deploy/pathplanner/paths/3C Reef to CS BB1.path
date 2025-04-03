@@ -50,7 +50,7 @@
     "rotation": -51.17017509502959
   },
   "reversed": false,
-  "folder": "3C_BB",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -121.7014296695056

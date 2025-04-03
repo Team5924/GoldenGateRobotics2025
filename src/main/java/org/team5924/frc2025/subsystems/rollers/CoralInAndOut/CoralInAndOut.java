@@ -45,22 +45,25 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/IntakingVoltage", -12.0)),
     STORED_CORAL_IN_INTAKE(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", -.5)),
     STORED_CORAL_IN_SHOOTER(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/StoredVoltage", 0.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/StoredVoltage", 0.0)),
     SHOOTING_L2_AND_L3(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2.5),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", -5.0)),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", -1.25)),
     SHOOTING_L4(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 3.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", -5.0)),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", -2.0)),
     SHOOTING_L1(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/ShootingVoltage", 2.0),
         new LoggedTunableNumber("CoralInAndOut/HandoffMotor/ShootingVoltage", 0.0)),
     SPIT_BACK(
         new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", -12.0),
-        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", 12.0));
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", 12.0)),
+    AUTO_L4(
+        new LoggedTunableNumber("CoralInAndOut/LoadShootMotor/SpitBackVoltage", 2.5),
+        new LoggedTunableNumber("CoralInAndOut/HandoffMotor/SpitBackVoltage", -1.5));
 
     private final DoubleSupplier voltageSupplier;
     private final DoubleSupplier handoffVoltage;
@@ -150,6 +153,7 @@ public class CoralInAndOut extends GenericRollerSystem<CoralInAndOut.CoralState>
         }
       }
       case SPIT_BACK -> RobotState.getInstance().setCoralInAndOutState(CoralState.SPIT_BACK);
+      case AUTO_L4 -> RobotState.getInstance().setCoralInAndOutState(CoralState.AUTO_L4);
     }
   }
 

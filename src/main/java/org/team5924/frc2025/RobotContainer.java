@@ -131,10 +131,14 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "Run Shooter",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L4)));
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.AUTO_L4)));
     NamedCommands.registerCommand(
         "Stop CoralInAndOut",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+    NamedCommands.registerCommand(
+        "Coral In Intake",
+        Commands.runOnce(
+            () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
     NamedCommands.registerCommand(
         "Run Intake",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
@@ -154,16 +158,19 @@ public class RobotContainer {
     new EventTrigger("Elevator Height Intake Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
+    new EventTrigger("Elevator Height L4 Trigger")
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+
+    new EventTrigger("Elevator Height Intake Trigger")
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+
     // Set up auto routines
     boolean isCompetition = true;
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     // As an example, this will only show autos that start with "comp" while at
     // competition as defined by the programmer
-    autoChooser =
-        AutoBuilder.buildAutoChooserWithOptionsModifier(
-            (stream) ->
-                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -253,7 +260,17 @@ public class RobotContainer {
     //     .whileTrue(
     //         DriveCommands.turnToRightCoralStation(
     //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
+    // driveController
+    //     .rightTrigger()
+    //     .whileTrue(
+    //         DriveCommands.turnToRightCoralStation(
+    //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
 
+    // driveController
+    //     .leftTrigger()
+    //     .whileTrue(
+    //         DriveCommands.turnToLeftCoralStation(
+    //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
     // driveController
     //     .leftTrigger()
     //     .whileTrue(
@@ -261,6 +278,7 @@ public class RobotContainer {
     //             drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
     // Coral In and Out
 
+    driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
     driveController.leftTrigger().onTrue(new TeleopShoot(coralInAndOut).withTimeout(Seconds.of(1)));
     driveController
         .leftTrigger()
@@ -274,7 +292,8 @@ public class RobotContainer {
     operatorController
         .rightTrigger()
         .onFalse(
-            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
+            Commands.runOnce(
+                () -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.STORED_CORAL_IN_INTAKE)));
 
     // Elevator
     elevator.setDefaultCommand(new RunElevator(elevator, operatorController::getLeftY));
