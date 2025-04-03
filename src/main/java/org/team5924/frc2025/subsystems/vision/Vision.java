@@ -57,9 +57,9 @@ public class Vision extends SubsystemBase {
     Logger.processInputs("Vision", inputs);
 
     updateVision(
-        inputs.frontUpLimelightSeesTarget,
-        inputs.frontUpFiducials,
-        inputs.megatag2PoseEstimateFrontUp);
+        inputs.frontLeftLimelightSeesTarget,
+        inputs.frontLeftFiducials,
+        inputs.megatag2PoseEstimateFrontLeft);
 
     updateVision(
         inputs.backLimelightSeesTarget, inputs.backFiducials, inputs.megatag2PoseEstimateBack);
@@ -93,7 +93,7 @@ public class Vision extends SubsystemBase {
             Logger.recordOutput(
                 "Vision/Front/" + "Megatag2Estimate",
                 megatag2Estimate.get().getVisionRobotPoseMeters());
-            RobotState.getInstance().setEstimatedPoseFront(megatag2Estimate.get());
+            RobotState.getInstance().setEstimatedPoseFrontLeft(megatag2Estimate.get());
           } else {
             Logger.recordOutput(
                 "Vision/Back/" + "Megatag2Estimate",
@@ -167,9 +167,9 @@ public class Vision extends SubsystemBase {
 
   public MegatagPoseEstimate getBotPose2dBlue() {
     // If all pose estimates are null, return null
-    if (inputs.megatag2PoseEstimateFrontUp == null
+    if (inputs.megatag2PoseEstimateFrontLeft == null
         && inputs.megatag2PoseEstimateBack == null
-        && inputs.megatag2PoseEstimateFrontDown == null) {
+        && inputs.megatag2PoseEstimateFrontRight == null) {
       return null;
     }
 
@@ -178,10 +178,10 @@ public class Vision extends SubsystemBase {
     double lowestAmbiguity = 1; // Initialize with the highest possible value
 
     // Compare front-up Limelight pose
-    if (inputs.megatag2PoseEstimateFrontUp != null
-        && inputs.lowestTagAmbiguityFrontUp < lowestAmbiguity) {
-      lowestAmbiguity = inputs.lowestTagAmbiguityFrontUp;
-      bestPose = inputs.megatag2PoseEstimateFrontUp;
+    if (inputs.megatag2PoseEstimateFrontLeft != null
+        && inputs.lowestTagAmbiguityFrontLeft < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityFrontLeft;
+      bestPose = inputs.megatag2PoseEstimateFrontLeft;
     }
 
     // Compare back Limelight pose
@@ -192,10 +192,10 @@ public class Vision extends SubsystemBase {
     }
 
     // Compare front-down Limelight pose
-    if (inputs.megatag2PoseEstimateFrontDown != null
-        && inputs.lowestTagAmbiguityFrontDown < lowestAmbiguity) {
-      lowestAmbiguity = inputs.lowestTagAmbiguityFrontDown;
-      bestPose = inputs.megatag2PoseEstimateFrontDown;
+    if (inputs.megatag2PoseEstimateFrontRight != null
+        && inputs.lowestTagAmbiguityFrontRight < lowestAmbiguity) {
+      lowestAmbiguity = inputs.lowestTagAmbiguityFrontRight;
+      bestPose = inputs.megatag2PoseEstimateFrontRight;
     }
 
     return bestPose; // Returns the pose estimate with the lowest ambiguity

@@ -296,7 +296,7 @@ public class Drive extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    VisionFieldPoseEstimate visionPoseFront = RobotState.getInstance().getEstimatedPoseFront();
+    VisionFieldPoseEstimate visionPoseFront = RobotState.getInstance().getEstimatedPoseFrontLeft();
 
     VisionFieldPoseEstimate visionPoseBack = RobotState.getInstance().getEstimatedPoseBack();
 
@@ -305,7 +305,7 @@ public class Drive extends SubsystemBase {
           visionPoseFront.getVisionRobotPoseMeters(),
           visionPoseFront.getTimestampSeconds(),
           visionPoseFront.getVisionMeasurementStdDevs());
-      RobotState.getInstance().setEstimatedPoseFront(null);
+      RobotState.getInstance().setEstimatedPoseFrontLeft(null);
     } else if (visionPoseFront == null && visionPoseBack != null) {
       addVisionMeasurement(
           visionPoseBack.getVisionRobotPoseMeters(),
@@ -319,7 +319,7 @@ public class Drive extends SubsystemBase {
             visionPoseFront.getTimestampSeconds(),
             visionPoseFront.getVisionMeasurementStdDevs());
 
-        RobotState.getInstance().setEstimatedPoseFront(null);
+        RobotState.getInstance().setEstimatedPoseFrontLeft(null);
         RobotState.getInstance().setEstimatedPoseBack(null);
       } else {
         addVisionMeasurement(
@@ -327,7 +327,7 @@ public class Drive extends SubsystemBase {
             visionPoseBack.getTimestampSeconds(),
             visionPoseBack.getVisionMeasurementStdDevs());
 
-        RobotState.getInstance().setEstimatedPoseFront(null);
+        RobotState.getInstance().setEstimatedPoseFrontLeft(null);
         RobotState.getInstance().setEstimatedPoseBack(null);
       }
     }

@@ -64,7 +64,6 @@ public final class Constants {
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
   public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
-  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
