@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2Leave Mid"
+                  "pathName": "2Leave BB"
                 }
               }
             ]
@@ -24,13 +24,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
           "type": "wait",
           "data": {
             "waitTime": 1.0
@@ -75,7 +68,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator Height Intake"
+            "name": "Run Shooter"
           }
         }
       ]

@@ -63,6 +63,7 @@ public final class Constants {
   public static final double FIELD_WIDTH = field.getFieldWidth();
   public static final double FIELD_LENGTH = field.getFieldLength();
   public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
+  public static final double CORAL_STATION_RADIANS_NORMAL = 0.959931;
 
   /* General */
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
@@ -91,7 +92,7 @@ public final class Constants {
   public static final int CORAL_SHOOTER_LASER_CAN_ID = 11;
 
   /* # Pivot # */
-  public static final int ALGAE_PIVOT_TALON_ID = 55;
+  public static final int ALGAE_PIVOT_TALON_ID = 34;
   public static final double MOTOR_TO_ALGAE_PIVOT_REDUCTION = 62.5; // TODO: most likely change
   public static final int ALGAE_PIVOT_CANCODER_ID = 45;
 
@@ -116,6 +117,14 @@ public final class Constants {
   public static final InvertedValue ELEVATOR_LEFT_INVERSION = InvertedValue.Clockwise_Positive;
   public static final Distance SPROCKET_RADIUS = Inches.of(.6405);
   public static final double ELEVATOR_CANCODER_OFFSET = 0.00; // TODO: Check and change if needed
+
+  /* Algae Rollers*/
+  public static final int ALGAE_TALON_ID = 35;
+  public static final String ALGAE_BUS = "rio";
+  public static final int ALGAE_CURRENT_LIMIT = 40; // Adjust value as needed
+  public static final boolean ALGAE_INVERT = false; // Adjust value as needed
+  public static final boolean ALGAE_BRAKE = true; // Adjust value as needed
+  public static final double ALGAE_REDUCTION = 1.0; // Adjust value as needed
 
   /* # Vision # */
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-frontl";
@@ -316,9 +325,12 @@ public final class Constants {
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
                                 + Math.pow(
                                     halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                     (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 redCenter.getY()
@@ -326,9 +338,12 @@ public final class Constants {
                             Math.pow(distanceFromCenterToRoboCenterShoot, 2)
                                 + Math.pow(
                                     halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                     (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterShoot))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());

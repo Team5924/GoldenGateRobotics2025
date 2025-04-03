@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2Leave Mid"
+                  "pathName": "2Leave RB"
                 }
               }
             ]
@@ -31,13 +31,6 @@
         },
         {
           "type": "named",
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
           "data": {
             "name": "Stop CoralInAndOut"
           }
@@ -45,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2Reef to CS BB"
+            "pathName": "2Reef to CS RB"
           }
         },
         {
@@ -69,13 +62,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2CS to Reef BB"
+            "pathName": "2CS to Reef RB"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Elevator Height Intake"
+            "name": "Run Shooter"
           }
         }
       ]

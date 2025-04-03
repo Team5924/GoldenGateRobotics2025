@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.25061475409836,
-        "y": 5.157838114754097
+        "x": 5.214651639344262,
+        "y": 5.1098872950819665
       },
       "prevControl": {
-        "x": 6.303846015394708,
-        "y": 5.691636688117175
+        "x": 6.267882900640609,
+        "y": 5.643685868445044
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,14 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Elevator Height L4 Trigger",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -56,7 +63,8 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -122.47119229084852
+    "rotation": -122.34744349944194
+    "rotation": -122.34744349944194
   },
   "reversed": false,
   "folder": null,
