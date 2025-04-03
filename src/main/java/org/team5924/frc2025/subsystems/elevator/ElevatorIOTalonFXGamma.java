@@ -1,5 +1,5 @@
 /*
- * ElevatorIOTalonFX.java
+ * ElevatorIOTalonFXGamma.java
  */
 
 /* 
@@ -66,7 +66,7 @@ import org.team5924.frc2025.util.LoggedTunableNumber;
 /** TODO: Need to rezero elevator on min height. */
 
 /** Add your docs here. */
-public class ElevatorIOTalonFX implements ElevatorIO {
+public class ElevatorIOTalonFXGamma implements ElevatorIO {
   /* Motor Hardware */
   private final TalonFX leftTalon;
   private final TalonFX rightTalon;
@@ -92,11 +92,11 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   /* Gains */
   LoggedTunableNumber kA = new LoggedTunableNumber("Elevator/kA", 0.00);
   LoggedTunableNumber kS = new LoggedTunableNumber("Elevator/kS", 0.13);
-  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", 0.4);
+  LoggedTunableNumber kV = new LoggedTunableNumber("Elevator/kV", .44);
   LoggedTunableNumber kP = new LoggedTunableNumber("Elevator/kP", 7);
   LoggedTunableNumber kI = new LoggedTunableNumber("Elevator/kI", 0);
   LoggedTunableNumber kD = new LoggedTunableNumber("Elevator/kD", 0.07);
-  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.33);
+  LoggedTunableNumber kG = new LoggedTunableNumber("Elevator/kG", 0.34);
 
   LoggedTunableNumber motionAcceleration =
       new LoggedTunableNumber("Elevator/MotionAcceleration", 400);
@@ -141,7 +141,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   private final Alert candiPin2FloatAlert =
       new Alert("Elevator CANdiPin2 is floating. Check connection.", Alert.AlertType.kWarning);
 
-  public ElevatorIOTalonFX() {
+  public ElevatorIOTalonFXGamma() {
     leftTalon = new TalonFX(Constants.ELEVATOR_LEFT_TALON_ID);
     rightTalon = new TalonFX(Constants.ELEVATOR_RIGHT_TALON_ID);
     elevatorCANCoder = new CANcoder(Constants.ELEVATOR_CANCODER_ID);
@@ -210,7 +210,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     canCoderConfig.MagnetSensor.MagnetOffset = Constants.ELEVATOR_CANCODER_OFFSET;
 
     // Apply Configs
-    StatusCode[] statusArray = new StatusCode[15];
+    StatusCode[] statusArray = new StatusCode[14];
 
     statusArray[0] = leaderTalonConfig.apply(currentLimitsConfigs);
     statusArray[1] = leaderTalonConfig.apply(leaderMotorConfigs);
@@ -227,9 +227,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     statusArray[11] = followerTalonConfig.apply(openLoopRampsConfigs);
     statusArray[12] = followerTalonConfig.apply(closedLoopRampsConfigs);
 
-    statusArray[13] = elevatorCANCoderConfig.apply(canCoderConfig);
+    // statusArray[13] = elevatorCANCoderConfig.apply(canCoderConfig);
 
-    statusArray[14] = elevatorCANdi.getConfigurator().apply(configs);
+    statusArray[13] = elevatorCANdi.getConfigurator().apply(configs);
 
     boolean isErrorPresent = false;
     for (StatusCode s : statusArray) if (!s.isOK()) isErrorPresent = true;
@@ -272,13 +272,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         new VoltageOut(0)
             .withUpdateFreqHz(0.0)
             .withEnableFOC(true)
-            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
-            .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
+            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue());
+    // .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
     magicMotionVoltage =
         new MotionMagicVoltage(0)
             .withEnableFOC(true)
-            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue())
-            .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
+            .withLimitForwardMotion(elevatorCANdi.getS2Closed().getValue());
+    // .withLimitReverseMotion(elevatorCANdi.getS1Closed().getValue());
 
     rightTalon.setControl(new Follower(leftTalon.getDeviceID(), true));
     leftTalon.setPosition(0.0);
