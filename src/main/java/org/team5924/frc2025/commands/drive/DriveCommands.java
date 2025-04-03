@@ -310,31 +310,6 @@ public class DriveCommands {
     double gyroDelta = 0.0;
   }
 
-  /**
-   * Uses y position of the robot to find the closest coral station
-   *
-   * @return closest coral station
-   */
-  public static Command turnToClosestCoralStation(
-      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
-    boolean isFlipped =
-        DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get() == Alliance.Red;
-
-    // above center of the field
-    boolean aboveCenter = drive.getPose().getY() > Constants.FIELD_WIDTH / 2;
-
-    if (aboveCenter != isFlipped) {
-      // above center, not flipped; below center, flipped -> right station
-      return turnToRightCoralStation(drive, xSupplier, ySupplier);
-    } else {
-      // below center, not flipped; above center, flipped -> left station
-      return turnToLeftCoralStation(drive, xSupplier, ySupplier);
-    }
-  }
-
-  // X |
-  //   | X
   public static Command turnToRightCoralStation(
       Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     return Commands.run(
@@ -354,10 +329,10 @@ public class DriveCommands {
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
           // flips the heading based off of alliance
-          if (!isFlipped) {
-            heading = Constants.CORAL_STATION_RADIANS_NORMAL;
-          } else {
+          if (isFlipped) {
             heading = Constants.CORAL_STATION_RADIANS_NORMAL - Math.PI;
+          } else {
+            heading = Constants.CORAL_STATION_RADIANS_NORMAL;
           }
 
           // make a +-3 degree tolerance
@@ -392,8 +367,6 @@ public class DriveCommands {
         drive);
   }
 
-  //   | X
-  // X |
   public static Command turnToLeftCoralStation(
       Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     return Commands.run(
@@ -412,10 +385,10 @@ public class DriveCommands {
               DriverStation.getAlliance().isPresent()
                   && DriverStation.getAlliance().get() == Alliance.Red;
 
-          if (!isFlipped) {
-            heading = -Constants.CORAL_STATION_RADIANS_NORMAL;
-          } else {
+          if (isFlipped) {
             heading = -Constants.CORAL_STATION_RADIANS_NORMAL + Math.PI;
+          } else {
+            heading = -Constants.CORAL_STATION_RADIANS_NORMAL;
           }
 
           boolean inPIDMargin = Math.abs(drive.getRotation().getRadians() - heading) > 0.0523599;

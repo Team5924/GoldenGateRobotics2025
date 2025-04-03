@@ -35,6 +35,8 @@ public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
   private final VisionIO io;
 
+  private double lastVisionTimestamp = 0;
+
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
   // private final BooleanSubscriber allianceSubscriber =
@@ -74,6 +76,7 @@ public class Vision extends SubsystemBase {
       FiducialObservation[] cameraFiducialObservations,
       MegatagPoseEstimate megatag2PoseEstimate) {
     if (megatag2PoseEstimate != null) {
+      // System.out.println("Megatag2PoseEstimate is not null");
       boolean filterOut =
           megatag2PoseEstimate.pose.getX() < -Constants.FIELD_BORDER_MARGIN
               || megatag2PoseEstimate.pose.getX()
@@ -106,7 +109,8 @@ public class Vision extends SubsystemBase {
       MegatagPoseEstimate poseEstimate) {
     Pose2d loggedRobotPose = RobotState.getInstance().getOdometryPose();
     Pose2d measuredPose = poseEstimate.pose;
-    if (poseEstimate.avgTagDist > 1.2) {
+    if (poseEstimate.avgTagDist > 3) {
+      System.out.println("Returning optional.empty");
       return Optional.empty();
     }
 
@@ -115,49 +119,50 @@ public class Vision extends SubsystemBase {
     // TODO: Tag filtering?
 
     double xyStdDev;
-    if (poseEstimate.fiducialIds.length > 0) {
-      // multiple targets detected
-      if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
-        System.out.println("stdev being set to .2");
-        xyStdDev = 0.2;
-      }
-      // we detect at least one of our speaker tags and we're close to it.
-      else if (
-      /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
-        System.out.println("stdev being set to .5");
-        xyStdDev = 0.5;
-      }
-      // 1 target with large area and close to estimated pose
-      else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
-        System.out.println("stdev being set to .5");
-        xyStdDev = 0.5;
-      }
-      // 1 target farther away and estimated pose is close
-      else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
+    // if (poseEstimate.fiducialIds.length > 0) {
+    // multiple targets detected
+    if (poseEstimate.fiducialIds.length >= 2 && poseEstimate.avgTagArea > 0.1) {
 
-        System.out.println("stdev being set to 1.0");
-        xyStdDev = 1.0;
-      } else if (poseEstimate.fiducialIds.length > 1) {
-        System.out.println("stdev being set to 1.2");
-        xyStdDev = 1.2;
-      } else {
-        System.out.println("stdev being set to 2.4");
-        xyStdDev = 2.4;
-      }
+      xyStdDev = 0.2;
+    }
+    // we detect at least one of our speaker tags and we're close to it.
+    else if (
+    /* TODO: doesSeeReefTag() && */ poseEstimate.avgTagArea > 0.2) {
 
-      Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);
-      Logger.recordOutput("Vision/Front/" + "Megatag2AvgTagArea", poseEstimate.avgTagArea);
-      Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
+      xyStdDev = 0.5;
+    }
+    // 1 target with large area and close to estimated pose
+    else if (poseEstimate.avgTagArea > 0.8 && poseDelta < 0.5) {
+      xyStdDev = 0.5;
 
-      Matrix<N3, N1> visionMeasurementStdDevs =
-          VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(50.0));
-      measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
-      return Optional.of(
-          new VisionFieldPoseEstimate(
-              measuredPose, poseEstimate.timestampSeconds, visionMeasurementStdDevs));
+    }
+    // 1 target farther away and estimated pose is close
+    else if (poseEstimate.avgTagArea > 0.1 && poseDelta < 0.3) {
+
+      xyStdDev = 1.0;
+    } else if (poseEstimate.fiducialIds.length > 1) {
+
+      xyStdDev = 1.2;
+    } else {
+
+      xyStdDev = 2.4;
     }
 
-    return Optional.empty();
+    Logger.recordOutput("Vision/Front/" + "Megatag2StdDev", xyStdDev);
+    Logger.recordOutput("Vision/Front/" + "Megatag2AvgTagArea", poseEstimate.avgTagArea);
+    Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
+
+    Matrix<N3, N1> visionMeasurementStdDevs =
+        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(5));
+    measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
+
+    return Optional.of(
+        new VisionFieldPoseEstimate(
+            measuredPose, poseEstimate.timestampSeconds, visionMeasurementStdDevs));
+    // }
+
+    // System.out.println("Returning optional.empty");
+    // return Optional.empty();
   }
 
   public MegatagPoseEstimate getBotPose2dBlue() {
@@ -196,28 +201,41 @@ public class Vision extends SubsystemBase {
     return bestPose; // Returns the pose estimate with the lowest ambiguity
   }
 
-  public double getLatencySecondsFront() {
-    return inputs.frontUpAprilTagCaptureLatencySeconds
-        + inputs.frontUpAprilTagPipelineLatencySeconds;
+  public double getLatencySecondsFrontLeft() {
+    return inputs.frontLeftAprilTagCaptureLatencySeconds
+        + inputs.frontLeftAprilTagPipelineLatencySeconds;
   }
 
   public double getLatencySecondsBack() {
     return inputs.backAprilTagCaptureLatencySeconds + inputs.backAprilTagPipelineLatencySeconds;
   }
 
-  public double getLowestTagAmbiguityFront() {
-    return inputs.lowestTagAmbiguityFrontUp;
+  public double getLatencySecondsFronRtRight() {
+    return inputs.frontRightAprilTagCaptureLatencySeconds
+        + inputs.frontRightAprilTagPipelineLatencySeconds;
+  }
+
+  public double getLowestTagAmbiguityFrontLeft() {
+    return inputs.lowestTagAmbiguityFrontLeft;
   }
 
   public double getLowestTagAmbiguityBack() {
     return inputs.lowestTagAmbiguityBack;
   }
 
-  public int getNumberFiducialsSpottedFront() {
-    return inputs.frontUpFiducials.length;
+  public double getLowestTagAmbiguityFrontRight() {
+    return inputs.lowestTagAmbiguityFrontRight;
+  }
+
+  public int getNumberFiducialsSpottedFrontLeft() {
+    return inputs.frontLeftFiducials.length;
   }
 
   public int getNumberFiducialsSpottedBack() {
     return inputs.backFiducials.length;
+  }
+
+  public int getNumberFiducialsSpottedFrontRight() {
+    return inputs.frontRightFiducials.length;
   }
 }
