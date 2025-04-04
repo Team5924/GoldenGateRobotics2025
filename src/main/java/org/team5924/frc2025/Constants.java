@@ -145,7 +145,8 @@ public final class Constants {
   public static final double BACK_LIMELIGHT_OFF_PITCH = 35.0;
   public static final double BACK_LIMELIGHT_OFF_YAW = 180.0;
 
-  public static final double FRONT_RIGHT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(7.322051, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_FORWARD =
+      Meters.convertFrom(7.322051, Inches);
   public static final double FRONT_RIGHT_LIMELIGHT_OFF_SIDE = Meters.convertFrom(2.0, Inches);
   public static final double FRONT_RIGHT_LIMELIGHT_OFF_UP = Meters.convertFrom(6.831895, Inches);
   public static final double FRONT_RIGHT_LIMELIGHT_OFF_ROLL = 0.0;
