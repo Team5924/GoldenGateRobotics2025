@@ -53,7 +53,7 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = true;
+  public static final boolean TUNING_MODE = false;
   public static final boolean ALLOW_ASSERTS = false;
 
   /* Field */
