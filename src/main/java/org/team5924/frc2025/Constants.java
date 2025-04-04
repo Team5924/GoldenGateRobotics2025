@@ -126,7 +126,8 @@ public final class Constants {
   public static final double ALGAE_REDUCTION = 1.0; // Adjust value as needed
 
   /* # Vision # */
-  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-frontl";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONTL = "limelight-frontl";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONTR = "limelight-frontr";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
   public static final double FRONT_LEFT_LIMELIGHT_OFF_FORWARD =
