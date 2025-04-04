@@ -26,16 +26,16 @@ import org.team5924.frc2025.util.MegatagPoseEstimate;
 /** Add your docs here. */
 public class VisionIOLimelight implements VisionIO {
   public VisionIOLimelight() {
-    LimelightHelpers.SetIMUMode("limelight-front", 1);
+    LimelightHelpers.SetIMUMode("limelight-frontl", 1);
     LimelightHelpers.SetIMUMode("limelight-back", 1);
-    LimelightHelpers.SetIMUMode("limelight-front-down", 1);
+    LimelightHelpers.SetIMUMode("limelight-frontr", 1);
 
     RobotState.getInstance().setLimelightImuMode(1);
   }
 
   private void setLLSettings() {
     LimelightHelpers.setPipelineIndex(
-        "limelight-front",
+        "limelight-frontl",
         RobotState.getInstance().isRedAlliance()
             ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
@@ -47,19 +47,19 @@ public class VisionIOLimelight implements VisionIO {
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
 
     LimelightHelpers.setPipelineIndex(
-        "limelight-front-down",
+        "limelight-frontr",
         RobotState.getInstance().isRedAlliance()
             ? Constants.LIMELIGHT_RED_ALLIANCE_PIPELINE
             : Constants.LIMELIGHT_BLUE_ALLIANCE_PIPELINE);
 
     LimelightHelpers.setCameraPose_RobotSpace(
-        "limelight-front",
-        Constants.FRONT_UP_LIMELIGHT_OFF_FORWARD,
-        Constants.FRONT_UP_LIMELIGHT_OFF_SIDE,
-        Constants.FRONT_UP_LIMELIGHT_OFF_UP,
-        Constants.FRONT_UP_LIMELIGHT_OFF_ROLL,
-        Constants.FRONT_UP_LIMELIGHT_OFF_PITCH,
-        Constants.FRONT_UP_LIMELIGHT_OFF_YAW);
+        "limelight-frontl",
+        Constants.FRONT_LEFT_LIMELIGHT_OFF_FORWARD,
+        Constants.FRONT_LEFT_LIMELIGHT_OFF_SIDE,
+        Constants.FRONT_LEFT_LIMELIGHT_OFF_UP,
+        Constants.FRONT_LEFT_LIMELIGHT_OFF_ROLL,
+        Constants.FRONT_LEFT_LIMELIGHT_OFF_PITCH,
+        Constants.FRONT_LEFT_LIMELIGHT_OFF_YAW);
 
     LimelightHelpers.setCameraPose_RobotSpace(
         "limelight-back",
@@ -71,24 +71,24 @@ public class VisionIOLimelight implements VisionIO {
         Constants.BACK_LIMELIGHT_OFF_YAW);
 
     LimelightHelpers.setCameraPose_RobotSpace(
-        "limelight-front-down",
-        Constants.FRONT_DOWN_LIMELIGHT_OFF_FORWARD,
-        Constants.FRONT_DOWN_LIMELIGHT_OFF_SIDE,
-        Constants.FRONT_DOWN_LIMELIGHT_OFF_UP,
-        Constants.FRONT_DOWN_LIMELIGHT_OFF_ROLL,
-        Constants.FRONT_DOWN_LIMELIGHT_OFF_PITCH,
-        Constants.FRONT_DOWN_LIMELIGHT_OFF_YAW);
+        "limelight-frontr",
+        Constants.FRONT_RIGHT_LIMELIGHT_OFF_FORWARD,
+        Constants.FRONT_RIGHT_LIMELIGHT_OFF_SIDE,
+        Constants.FRONT_RIGHT_LIMELIGHT_OFF_UP,
+        Constants.FRONT_RIGHT_LIMELIGHT_OFF_ROLL,
+        Constants.FRONT_RIGHT_LIMELIGHT_OFF_PITCH,
+        Constants.FRONT_RIGHT_LIMELIGHT_OFF_YAW);
 
     if (!DriverStation.isDisabled()) {
-      LimelightHelpers.SetIMUMode("limelight-front", 2);
+      LimelightHelpers.SetIMUMode("limelight-frontl", 2);
       LimelightHelpers.SetIMUMode("limelight-back", 2);
-      LimelightHelpers.SetIMUMode("limelight-front-down", 2);
+      LimelightHelpers.SetIMUMode("limelight-frontr", 2);
 
       RobotState.getInstance().setLimelightImuMode(2);
     }
     // } else {
     LimelightHelpers.SetRobotOrientation(
-        "limelight-front",
+        "limelight-frontl",
         RobotState.getInstance().getYawPosition().getDegrees(),
         RobotState.getInstance().getYawVelocityRadPerSec(),
         0,
@@ -106,7 +106,7 @@ public class VisionIOLimelight implements VisionIO {
         0);
     // }
     LimelightHelpers.SetRobotOrientation(
-        "limelight-front-down",
+        "limelight-frontr",
         RobotState.getInstance().getYawPosition().getDegrees(),
         RobotState.getInstance().getYawVelocityRadPerSec(),
         0,
@@ -117,39 +117,39 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    double lowestTagAmbiguityFrontUp = 1;
+    double lowestTagAmbiguityFrontLeft = 1;
     double lowestTagAmbiguityBack = 1;
-    double lowestTagAmbiguityFrontDown = 1;
+    double lowestTagAmbiguityFrontRight = 1;
 
-    inputs.frontUpLimelightSeesTarget = LimelightHelpers.getTV("limelight-front");
+    inputs.frontLeftLimelightSeesTarget = LimelightHelpers.getTV("limelight-frontl");
     inputs.backLimelightSeesTarget = LimelightHelpers.getTV("limelight-back");
-    inputs.frontDownLimelightSeesTarget = LimelightHelpers.getTV("limelight-front-down");
+    inputs.frontRightLimelightSeesTarget = LimelightHelpers.getTV("limelight-frontr");
 
-    if (inputs.frontUpLimelightSeesTarget) {
-      LimelightHelpers.PoseEstimate megatag2FrontUp =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
+    if (inputs.frontLeftLimelightSeesTarget) {
+      LimelightHelpers.PoseEstimate megatag2FrontLeft =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-frontl");
 
-      inputs.megatag2PoseEstimateFrontUp = MegatagPoseEstimate.fromLimelight(megatag2FrontUp, true);
-      if (megatag2FrontUp != null) {
-        inputs.frontUpFiducials = FiducialObservation.fromLimelight(megatag2FrontUp.rawFiducials);
-        inputs.megatag2PoseEstimateFrontUpPose2d = megatag2FrontUp.pose;
-        inputs.megatag2PoseEstimateFrontUpTagCount = megatag2FrontUp.tagCount;
-        inputs.megatag2PoseEstimateFrontUpAvgTagArea = megatag2FrontUp.avgTagArea;
+      inputs.megatag2PoseEstimateFrontLeft =
+          MegatagPoseEstimate.fromLimelight(megatag2FrontLeft, true);
+      if (megatag2FrontLeft != null) {
+        inputs.frontLeftFiducials =
+            FiducialObservation.fromLimelight(megatag2FrontLeft.rawFiducials);
+        inputs.megatag2PoseEstimateFrontLeftPose2d = megatag2FrontLeft.pose;
+        inputs.megatag2PoseEstimateFrontLeftTagCount = megatag2FrontLeft.tagCount;
+        inputs.megatag2PoseEstimateFrontLeftAvgTagArea = megatag2FrontLeft.avgTagArea;
       }
 
-      double frontUpDistToCameraTotal = 0.0;
-      for (FiducialObservation rawFiducial : inputs.frontUpFiducials) {
-        double frontUpTagAmbiguity = rawFiducial.ambiguity;
-        if (frontUpTagAmbiguity < lowestTagAmbiguityFrontUp) {
-          lowestTagAmbiguityFrontUp = frontUpTagAmbiguity;
+      double FrontLeftDistToCameraTotal = 0.0;
+      for (FiducialObservation rawFiducial : inputs.frontLeftFiducials) {
+        double FrontLeftTagAmbiguity = rawFiducial.ambiguity;
+        if (FrontLeftTagAmbiguity < lowestTagAmbiguityFrontLeft) {
+          lowestTagAmbiguityFrontLeft = FrontLeftTagAmbiguity;
         }
 
-        frontUpDistToCameraTotal += rawFiducial.distance;
+        FrontLeftDistToCameraTotal += rawFiducial.distance;
       }
 
-      inputs.frontUpAprilTagDistance = LimelightHelpers.getBotPose3d_TargetSpace("limelight-front");
-
-      inputs.lowestTagAmbiguityFrontUp = lowestTagAmbiguityFrontUp;
+      inputs.lowestTagAmbiguityFrontLeft = lowestTagAmbiguityFrontLeft;
       // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;
     }
 
@@ -173,54 +173,50 @@ public class VisionIOLimelight implements VisionIO {
       }
 
       inputs.lowestTagAmbiguityBack = lowestTagAmbiguityBack;
-      inputs.backAprilTagDistance = LimelightHelpers.getBotPose3d_TargetSpace("limelight-back");
     }
 
-    if (inputs.frontDownLimelightSeesTarget) {
-      LimelightHelpers.PoseEstimate megatag2FrontDown =
-          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front-down");
+    if (inputs.frontRightLimelightSeesTarget) {
+      LimelightHelpers.PoseEstimate megatag2FrontRight =
+          LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-frontr");
 
-      inputs.megatag2PoseEstimateFrontDown =
-          MegatagPoseEstimate.fromLimelight(megatag2FrontDown, true);
-      if (megatag2FrontDown != null) {
-        inputs.frontDownFiducials =
-            FiducialObservation.fromLimelight(megatag2FrontDown.rawFiducials);
-        inputs.megatag2PoseEstimateFrontDownPose2d = megatag2FrontDown.pose;
-        inputs.megatag2PoseEstimateFrontDownTagCount = megatag2FrontDown.tagCount;
-        inputs.megatag2PoseEstimateFrontDownAvgTagArea = megatag2FrontDown.avgTagArea;
+      inputs.megatag2PoseEstimateFrontRight =
+          MegatagPoseEstimate.fromLimelight(megatag2FrontRight, true);
+      if (megatag2FrontRight != null) {
+        inputs.frontRightFiducials =
+            FiducialObservation.fromLimelight(megatag2FrontRight.rawFiducials);
+        inputs.megatag2PoseEstimateFrontRightPose2d = megatag2FrontRight.pose;
+        inputs.megatag2PoseEstimateFrontRightTagCount = megatag2FrontRight.tagCount;
+        inputs.megatag2PoseEstimateFrontRightAvgTagArea = megatag2FrontRight.avgTagArea;
       }
 
-      double frontDownDistToCameraTotal = 0.0;
-      for (FiducialObservation rawFiducial : inputs.frontDownFiducials) {
-        double frontDownTagAmbiguity = rawFiducial.ambiguity;
-        if (frontDownTagAmbiguity < lowestTagAmbiguityFrontDown) {
-          lowestTagAmbiguityFrontDown = frontDownTagAmbiguity;
+      double frontRightDistToCameraTotal = 0.0;
+      for (FiducialObservation rawFiducial : inputs.frontRightFiducials) {
+        double FrontRightTagAmbiguity = rawFiducial.ambiguity;
+        if (FrontRightTagAmbiguity < lowestTagAmbiguityFrontRight) {
+          lowestTagAmbiguityFrontRight = FrontRightTagAmbiguity;
         }
 
-        frontDownDistToCameraTotal += rawFiducial.distance;
+        frontRightDistToCameraTotal += rawFiducial.distance;
       }
 
-      inputs.frontDownAprilTagDistance =
-          LimelightHelpers.getBotPose3d_TargetSpace("limelight-front-down");
-
-      inputs.lowestTagAmbiguityFrontDown = lowestTagAmbiguityFrontDown;
+      inputs.lowestTagAmbiguityFrontRight = lowestTagAmbiguityFrontRight;
       // inputs.frontAprilTagDistance = inputs.frontFiducials[0].distance;
     }
 
-    inputs.frontUpAprilTagPipelineLatencySeconds =
-        LimelightHelpers.getLatency_Pipeline("limelight-front") / 1000;
-    inputs.frontUpAprilTagCaptureLatencySeconds =
-        LimelightHelpers.getLatency_Capture("limelight-front") / 1000;
+    inputs.frontLeftAprilTagPipelineLatencySeconds =
+        LimelightHelpers.getLatency_Pipeline("limelight-frontl") / 1000;
+    inputs.frontLeftAprilTagCaptureLatencySeconds =
+        LimelightHelpers.getLatency_Capture("limelight-frontl") / 1000;
 
     inputs.backAprilTagPipelineLatencySeconds =
         LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
     inputs.backAprilTagCaptureLatencySeconds =
         LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
 
-    inputs.frontDownAprilTagPipelineLatencySeconds =
-        LimelightHelpers.getLatency_Pipeline(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
-    inputs.frontDownAprilTagCaptureLatencySeconds =
-        LimelightHelpers.getLatency_Capture(Constants.APRIL_TAG_LIMELIGHT_NAME_BACK) / 1000;
+    inputs.frontRightAprilTagPipelineLatencySeconds =
+        LimelightHelpers.getLatency_Pipeline("limelight-frontr") / 1000;
+    inputs.frontRightAprilTagCaptureLatencySeconds =
+        LimelightHelpers.getLatency_Capture("limelight-frontr") / 1000;
 
     setLLSettings();
   }

@@ -53,7 +53,7 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = false;
+  public static final boolean TUNING_MODE = true;
   public static final boolean ALLOW_ASSERTS = false;
 
   /* Field */
@@ -68,7 +68,7 @@ public final class Constants {
   public static final double LOOP_PERIODIC_SECONDS = 0.02;
   /* Climber */
   public static final int CLIMBER_CAN_ID = 40;
-  public static final String CLIMBER_BUS = "Drive CANivore";
+  public static final String CLIMBER_BUS = "drive";
   public static final int CLIMBER_CURRENT_LIMIT = 40;
   public static final InvertedValue CLIMBER_INVERT = InvertedValue.CounterClockwise_Positive;
   public static final NeutralModeValue CLIMBER_NEUTRAL_MODE = NeutralModeValue.Brake;
@@ -126,30 +126,33 @@ public final class Constants {
   public static final double ALGAE_REDUCTION = 1.0; // Adjust value as needed
 
   /* # Vision # */
-  public static String APRIL_TAG_LIMELIGHT_NAME_FRONT = "limelight-front";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONTL = "limelight-frontl";
+  public static String APRIL_TAG_LIMELIGHT_NAME_FRONTR = "limelight-frontr";
   public static String APRIL_TAG_LIMELIGHT_NAME_BACK = "limelight-back";
 
-  public static final double FRONT_UP_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(8.885, Inches);
-  public static final double FRONT_UP_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
-  public static final double FRONT_UP_LIMELIGHT_OFF_UP = Meters.convertFrom(16.17, Inches);
-  public static final double FRONT_UP_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double FRONT_UP_LIMELIGHT_OFF_PITCH = 5.0;
-  public static final double FRONT_UP_LIMELIGHT_OFF_YAW = 0.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_FORWARD =
+      Meters.convertFrom(7.829572, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_SIDE =
+      -1 * Meters.convertFrom(2.317419, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_UP = Meters.convertFrom(7.015618, Inches);
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_ROLL = 0.0;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_PITCH = 18.881721;
+  public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = 27.236313;
 
-  public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(8.971, Inches);
-  public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
-  public static final double BACK_LIMELIGHT_OFF_UP = Meters.convertFrom(16.145, Inches);
+  public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(9.749733, Inches);
+  public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(11.25, Inches);
+  public static final double BACK_LIMELIGHT_OFF_UP = Meters.convertFrom(37.031674, Inches);
   public static final double BACK_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double BACK_LIMELIGHT_OFF_PITCH = 15.0;
+  public static final double BACK_LIMELIGHT_OFF_PITCH = 35.0;
   public static final double BACK_LIMELIGHT_OFF_YAW = 180.0;
 
-  public static final double FRONT_DOWN_LIMELIGHT_OFF_FORWARD =
-      -1 * Meters.convertFrom(8.971, Inches);
-  public static final double FRONT_DOWN_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
-  public static final double FRONT_DOWN_LIMELIGHT_OFF_UP = Meters.convertFrom(16.145, Inches);
-  public static final double FRONT_DOWN_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double FRONT_DOWN_LIMELIGHT_OFF_PITCH = 15.0;
-  public static final double FRONT_DOWN_LIMELIGHT_OFF_YAW = 180.0;
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_FORWARD =
+      Meters.convertFrom(7.322051, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_SIDE = Meters.convertFrom(2.0, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_UP = Meters.convertFrom(6.831895, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_ROLL = 0.0;
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_PITCH = 20.0;
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_YAW = 0.0;
 
   public static final int LIMELIGHT_RED_ALLIANCE_PIPELINE = 0;
   public static final int LIMELIGHT_BLUE_ALLIANCE_PIPELINE = 0;
@@ -175,10 +178,10 @@ public final class Constants {
 
     static {
       double halfIsoBaseOfBranchesAndCenter = 0.120; //  Leg 1 (meters)
-      double distanceFromCenterToRoboCenterLineup = 2.05; // Leg 3 (meters)
-      double distanceFromCenterToRoboCenterShoot = 1.32; // Leg 3 but different (meters)
-      double offset = -.198;
-      double offsetCorrection = 0.085; // Correction for the offset just in case!!
+      double distanceFromCenterToRoboCenterLineup = 1.63; // Leg 3 (meters)
+      double distanceFromCenterToRoboCenterShoot = 1.23; // Leg 3 but different (meters)
+      double offset = -.173;
+      double offsetCorrection = 0.11; // Correction for the offset just in case!!
 
       // Initialize branch positions
       for (int face = 0; face < 6; face++) {
@@ -244,36 +247,46 @@ public final class Constants {
         var blueLeftBranchLineup =
             new Pose2d(
                 blueCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 blueCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
         var blueRightBranchLineup =
             new Pose2d(
                 blueCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 blueCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
@@ -354,36 +367,46 @@ public final class Constants {
         var redLeftBranchLineup =
             new Pose2d(
                 redCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 redCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(
+                                    halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 - Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter + offset + offsetCorrection)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
         var redRightBranchLineup =
             new Pose2d(
                 redCenter.getX()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.cos(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 redCenter.getY()
-                    + (radiusLineupCircle
+                    + (Math.sqrt(
+                            Math.pow(distanceFromCenterToRoboCenterLineup, 2)
+                                + Math.pow(halfIsoBaseOfBranchesAndCenter - offset, 2))
                         * Math.sin(
                             poseDirection.getRotation().getRadians()
                                 + Math.atan(
-                                    halfIsoBaseOfBranchesAndCenter
+                                    (halfIsoBaseOfBranchesAndCenter - offset)
                                         / distanceFromCenterToRoboCenterLineup))),
                 Rotation2d.fromRadians(Math.PI / 3 * face).unaryMinus());
 
