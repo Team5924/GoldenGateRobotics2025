@@ -20,6 +20,8 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.EventTrigger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -55,6 +57,7 @@ import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
+import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 import org.team5924.frc2025.subsystems.vision.Vision;
 import org.team5924.frc2025.subsystems.vision.VisionIO;
 import org.team5924.frc2025.subsystems.vision.VisionIOLimelight;
@@ -130,8 +133,9 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand("Run Shooter", new RunShooter(coralInAndOut));
-    NamedCommands.registerCommand("Run Intake", new RunIntake(coralInAndOut));
+    NamedCommands.registerCommand("Run Shooter", Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.SHOOTING_L4)));
+    NamedCommands.registerCommand("Run Intake", Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.INTAKING)));
+    NamedCommands.registerCommand("Coral In Intake", Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.STORED_CORAL_IN_INTAKE)));
     NamedCommands.registerCommand(
         "Elevator Height L4",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
@@ -141,6 +145,9 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Elevator Height Intake",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+
+    new EventTrigger("Elevator Height L4 Trigger").onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+    new EventTrigger("Elevator Height Intake Trigger").onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Set up auto routines
     boolean isCompetition = true;
