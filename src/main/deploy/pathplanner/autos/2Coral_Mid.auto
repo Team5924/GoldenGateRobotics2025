@@ -31,6 +31,13 @@
         },
         {
           "type": "named",
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
           "data": {
             "name": "Stop CoralInAndOut"
           }
@@ -56,31 +63,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Stop CoralInAndOut"
+            "name": "Coral In Intake"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "2CS to Reef BB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Run Shooter"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop CoralInAndOut"
           }
         },
         {

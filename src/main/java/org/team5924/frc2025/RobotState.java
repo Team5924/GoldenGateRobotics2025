@@ -57,7 +57,7 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/EstimatedPoseRight")
   @Getter
   @Setter
-  private VisionFieldPoseEstimate estimatedPoseFrontRightBack = new VisionFieldPoseEstimate();
+  private VisionFieldPoseEstimate estimatedPoseFrontRight = new VisionFieldPoseEstimate();
 
   /* ### Climber ### */
   @Setter

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.142725409836065,
-        "y": 5.157838114754097
+        "x": 5.190676229508196,
+        "y": 5.1098872950819665
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.459426229508196,
-        "y": 5.7931864754098354
+        "x": 4.507377049180327,
+        "y": 5.745235655737705
       },
       "isLocked": false,
       "linkedName": null
@@ -18,8 +18,12 @@
       "anchor": {
         "x": 1.342622950819672,
         "y": 7.111834016393442
+        "x": 1.342622950819672,
+        "y": 7.111834016393442
       },
       "prevControl": {
+        "x": 1.8380122950819653,
+        "y": 6.833094262295082
         "x": 1.8380122950819653,
         "y": 6.833094262295082
       },
@@ -44,6 +48,14 @@
       "command": null
     }
   ],
+  "eventMarkers": [
+    {
+      "name": "Elevator Height Intake Trigger",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -58,8 +70,10 @@
   },
   "reversed": false,
   "folder": null,
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
+    "rotation": -120.46554491945989
     "rotation": -120.46554491945989
   },
   "useDefaultConstraints": true

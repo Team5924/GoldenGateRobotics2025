@@ -167,7 +167,7 @@ public class Drive extends SubsystemBase {
         this::getChassisSpeeds,
         this::runVelocity,
         new PPHolonomicDriveController(
-            new PIDConstants(5.0, 0.0, 0.3), new PIDConstants(3, 0, 0.3)),
+            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5, 0, 0.3)),
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         this);
@@ -296,38 +296,57 @@ public class Drive extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    VisionFieldPoseEstimate visionPoseFront = RobotState.getInstance().getEstimatedPoseFrontLeft();
-
+    VisionFieldPoseEstimate visionPoseFrontLeft =
+        RobotState.getInstance().getEstimatedPoseFrontLeft();
+    VisionFieldPoseEstimate visionPoseFrontRight =
+        RobotState.getInstance().getEstimatedPoseFrontRight();
     VisionFieldPoseEstimate visionPoseBack = RobotState.getInstance().getEstimatedPoseBack();
 
-    if (visionPoseFront != null && visionPoseBack == null) {
+    if (visionPoseFrontLeft != null && visionPoseFrontRight == null && visionPoseBack == null) {
       addVisionMeasurement(
-          visionPoseFront.getVisionRobotPoseMeters(),
-          visionPoseFront.getTimestampSeconds(),
-          visionPoseFront.getVisionMeasurementStdDevs());
+          visionPoseFrontLeft.getVisionRobotPoseMeters(),
+          visionPoseFrontLeft.getTimestampSeconds(),
+          visionPoseFrontLeft.getVisionMeasurementStdDevs());
       RobotState.getInstance().setEstimatedPoseFrontLeft(null);
-    } else if (visionPoseFront == null && visionPoseBack != null) {
+    } else if (visionPoseFrontRight != null
+        && visionPoseFrontLeft == null
+        && visionPoseBack == null) {
+      addVisionMeasurement(
+          visionPoseFrontRight.getVisionRobotPoseMeters(),
+          visionPoseFrontRight.getTimestampSeconds(),
+          visionPoseFrontRight.getVisionMeasurementStdDevs());
+      RobotState.getInstance().setEstimatedPoseFrontRight(null);
+    } else if (visionPoseBack != null
+        && visionPoseFrontLeft == null
+        && visionPoseFrontRight == null) {
       addVisionMeasurement(
           visionPoseBack.getVisionRobotPoseMeters(),
           visionPoseBack.getTimestampSeconds(),
           visionPoseBack.getVisionMeasurementStdDevs());
       RobotState.getInstance().setEstimatedPoseBack(null);
-    } else if (visionPoseFront != null && visionPoseBack != null) {
-      if (visionPoseFront.getTimestampSeconds() > visionPoseBack.getTimestampSeconds()) {
+    } else {
+      VisionFieldPoseEstimate latestPose = visionPoseFrontLeft;
+
+      if (visionPoseFrontRight != null
+          && (latestPose == null
+              || visionPoseFrontRight.getTimestampSeconds() > latestPose.getTimestampSeconds())) {
+        latestPose = visionPoseFrontRight;
+      }
+
+      if (visionPoseBack != null
+          && (latestPose == null
+              || visionPoseBack.getTimestampSeconds() > latestPose.getTimestampSeconds())) {
+        latestPose = visionPoseBack;
+      }
+
+      if (latestPose != null) {
         addVisionMeasurement(
-            visionPoseFront.getVisionRobotPoseMeters(),
-            visionPoseFront.getTimestampSeconds(),
-            visionPoseFront.getVisionMeasurementStdDevs());
+            latestPose.getVisionRobotPoseMeters(),
+            latestPose.getTimestampSeconds(),
+            latestPose.getVisionMeasurementStdDevs());
 
         RobotState.getInstance().setEstimatedPoseFrontLeft(null);
-        RobotState.getInstance().setEstimatedPoseBack(null);
-      } else {
-        addVisionMeasurement(
-            visionPoseBack.getVisionRobotPoseMeters(),
-            visionPoseBack.getTimestampSeconds(),
-            visionPoseBack.getVisionMeasurementStdDevs());
-
-        RobotState.getInstance().setEstimatedPoseFrontLeft(null);
+        RobotState.getInstance().setEstimatedPoseFrontRight(null);
         RobotState.getInstance().setEstimatedPoseBack(null);
       }
     }
