@@ -138,19 +138,18 @@ public final class Constants {
   public static final double FRONT_LEFT_LIMELIGHT_OFF_PITCH = 18.881721;
   public static final double FRONT_LEFT_LIMELIGHT_OFF_YAW = 27.236313;
 
-  public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(8.971, Inches);
-  public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(9.755, Inches);
-  public static final double BACK_LIMELIGHT_OFF_UP = Meters.convertFrom(16.145, Inches);
+  public static final double BACK_LIMELIGHT_OFF_FORWARD = -1 * Meters.convertFrom(9.749733, Inches);
+  public static final double BACK_LIMELIGHT_OFF_SIDE = -1 * Meters.convertFrom(11.250000, Inches);
+  public static final double BACK_LIMELIGHT_OFF_UP = Meters.convertFrom(37.031674, Inches);
   public static final double BACK_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double BACK_LIMELIGHT_OFF_PITCH = 15.0;
+  public static final double BACK_LIMELIGHT_OFF_PITCH = 35.0;
   public static final double BACK_LIMELIGHT_OFF_YAW = 180.0;
 
-  public static final double FRONT_RIGHT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(8.885, Inches);
-  public static final double FRONT_RIGHT_LIMELIGHT_OFF_SIDE =
-      -1 * Meters.convertFrom(9.755, Inches);
-  public static final double FRONT_RIGHT_LIMELIGHT_OFF_UP = Meters.convertFrom(16.17, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_FORWARD = Meters.convertFrom(7.322051, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_SIDE = Meters.convertFrom(2.000000, Inches);
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_UP = Meters.convertFrom(6.830895, Inches);
   public static final double FRONT_RIGHT_LIMELIGHT_OFF_ROLL = 0.0;
-  public static final double FRONT_RIGHT_LIMELIGHT_OFF_PITCH = 5.0;
+  public static final double FRONT_RIGHT_LIMELIGHT_OFF_PITCH = 20.0;
   public static final double FRONT_RIGHT_LIMELIGHT_OFF_YAW = 0.0;
 
   public static final int LIMELIGHT_RED_ALLIANCE_PIPELINE = 0;
