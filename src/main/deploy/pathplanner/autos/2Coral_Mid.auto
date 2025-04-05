@@ -18,15 +18,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Run Shooter"
+            "waitTime": 0.5
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "Run Shooter"
           }
         },
         {
@@ -72,9 +72,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Elevator Height Intake"
+            "name": "Run Shooter"
           }
         }
       ]

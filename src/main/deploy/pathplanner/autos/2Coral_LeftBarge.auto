@@ -11,10 +11,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2Leave BB"
+                  "pathName": "1Leave BB"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -63,6 +69,12 @@
           "type": "path",
           "data": {
             "pathName": "2CS to ReefBB"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
