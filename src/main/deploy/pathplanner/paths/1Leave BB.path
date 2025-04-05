@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.18,
-        "y": 5.04
+        "x": 7.564,
+        "y": 6.1648053278688515
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.197,
-        "y": 5.418499999999999
+        "x": 5.564846435503308,
+        "y": 6.1648053278688515
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1867827868852459,
-        "y": 7.123821721311475
+        "x": 5.18,
+        "y": 5.04
       },
       "prevControl": {
-        "x": 2.9125327868852455,
-        "y": 6.490071721311476
+        "x": 5.778198924376331,
+        "y": 6.076110930052859
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7317188983855645,
+      "minWaypointRelativePos": 0.7,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.75,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,14 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Elevator Height Zero Trigger",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "Elevator Height Intake Trigger",
-      "waypointRelativePos": 0.9003597122302117,
+      "name": "Elevator Height L4 Trigger",
+      "waypointRelativePos": 0.8,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -69,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.007979801441294
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.06858282186238
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -127,7 +127,7 @@ public final class Constants {
   public static final double ALGAE_REDUCTION = 1.0; // Adjust value as needed
 
   /*Lights */
-  public static final int CANDLE_ID = 49;
+  public static final int CANDLE_ID = 41;
 
   /* # Vision # */
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONTL = "limelight-frontl";
@@ -169,11 +169,10 @@ public final class Constants {
     public static final double faceLength = Units.inchesToMeters(36.792600);
     public static final double fieldWidth = field.getFieldWidth();
     public static final Translation2d blueCenter =
-        new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(176.745), Units.inchesToMeters(158.5));
 
     public static final Translation2d redCenter =
-        new Translation2d(Units.inchesToMeters(513.88), fieldWidth / 2.0);
-
+        new Translation2d(Units.inchesToMeters(514.13), Units.inchesToMeters(158.5));
     public static final Pose2d[] centerFaces =
         new Pose2d[6]; // Starting facing the driver station in clockwise order
     public static final List<Pose2d> branchPositions =
@@ -196,9 +195,9 @@ public final class Constants {
         Pose2d poseDirectionBlue =
             new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         Pose2d poseDirectionRed = new Pose2d(redCenter, Rotation2d.fromDegrees(180 - (60 * face)));
-        double adjustX = Units.inchesToMeters(49.75 - 2); // robot x
-        double adjustYLeft = Units.inchesToMeters(6.469 - 6); // robot y left
-        double adjustYRight = Units.inchesToMeters(6.469 + 6); // robot y right
+        double adjustX = Units.inchesToMeters(48.15); // robot x
+        double adjustYLeft = Units.inchesToMeters(6.469 - 3); // robot y left
+        double adjustYRight = Units.inchesToMeters(6.469 + 3.25); // robot y right
 
         var rightBranchPoseShootBlue =
             new Pose2d(

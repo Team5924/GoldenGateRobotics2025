@@ -207,7 +207,7 @@ public class Vision extends SubsystemBase {
     return inputs.backAprilTagCaptureLatencySeconds + inputs.backAprilTagPipelineLatencySeconds;
   }
 
-  public double getLatencySecondsFronRtRight() {
+  public double getLatencySecondsFrontRight() {
     return inputs.frontRightAprilTagCaptureLatencySeconds
         + inputs.frontRightAprilTagPipelineLatencySeconds;
   }

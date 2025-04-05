@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.747000000000001,
-        "y": 5.6922500000000005
+        "x": 6.557274590163935,
+        "y": 5.097899590163934
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 5.07
       },
       "prevControl": {
-        "x": 5.5950000000000015,
-        "y": 5.806121593216773
+        "x": 5.4304303278688515,
+        "y": 5.7212602459016395
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.3423551756885091,
+      "minWaypointRelativePos": 0.7,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.0,
@@ -48,7 +48,7 @@
   "eventMarkers": [
     {
       "name": "Elevator Height L4 Trigger",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.8,
       "endWaypointRelativePos": null,
       "command": null
     }
