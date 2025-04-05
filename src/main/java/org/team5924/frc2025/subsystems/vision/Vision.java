@@ -59,20 +59,7 @@ public class Vision extends SubsystemBase {
     updateVision(
         inputs.frontLeftLimelightSeesTarget,
         inputs.frontLeftFiducials,
-        inputs.megatag2PoseEstimateFrontLeft,
-        false);
-
-    updateVision(
-        inputs.frontRightLimelightSeesTarget,
-        inputs.frontRightFiducials,
-        inputs.megatag2PoseEstimateFrontRight,
-        true);
-
-    updateVision(
-        inputs.backLimelightSeesTarget,
-        inputs.backFiducials,
-        inputs.megatag2PoseEstimateBack,
-        false);
+        inputs.megatag2PoseEstimateFrontLeft);
 
     // boolean isRedAlliance = allianceSubscriber.get();
     // if (isRedAlliance != previousAllianceSubscriberValue) {
@@ -84,8 +71,7 @@ public class Vision extends SubsystemBase {
   private void updateVision(
       boolean cameraSeesTarget,
       FiducialObservation[] cameraFiducialObservations,
-      MegatagPoseEstimate megatag2PoseEstimate,
-      Boolean isFrontRightLL) {
+      MegatagPoseEstimate megatag2PoseEstimate) {
     if (megatag2PoseEstimate != null) {
       // System.out.println("Megatag2PoseEstimate is not null");
       boolean filterOut =
@@ -100,12 +86,7 @@ public class Vision extends SubsystemBase {
             processMegatag2PoseEstimate(megatag2PoseEstimate);
 
         if (megatag2Estimate.isPresent()) {
-          if (isFrontRightLL) {
-            Logger.recordOutput(
-                "Vision/Front/" + "Megatag2Estimate",
-                megatag2Estimate.get().getVisionRobotPoseMeters());
-            RobotState.getInstance().setEstimatedPoseFrontRight(megatag2Estimate.get());
-          } else if (megatag2PoseEstimate.isFrontLimelight) {
+          if (megatag2PoseEstimate.isFrontLimelight) {
             Logger.recordOutput(
                 "Vision/Front/" + "Megatag2Estimate",
                 megatag2Estimate.get().getVisionRobotPoseMeters());
@@ -169,7 +150,7 @@ public class Vision extends SubsystemBase {
     Logger.recordOutput("Vision/Front/" + "Megatag2PoseDifference", poseDelta);
 
     Matrix<N3, N1> visionMeasurementStdDevs =
-        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(3600));
+        VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(5));
     measuredPose = new Pose2d(measuredPose.getTranslation(), loggedRobotPose.getRotation());
 
     return Optional.of(

@@ -51,7 +51,6 @@ import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFXGamma;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
-import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOKrakenFOC;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIOSim;
@@ -131,12 +130,14 @@ public class RobotContainer {
     }
 
     NamedCommands.registerCommand(
-        "Run Shooter", Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.SHOOTING_L4)));
+        "Run Shooter",
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.SHOOTING_L4)));
     NamedCommands.registerCommand(
-        "Run Intake", Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.INTAKING)));
+        "Stop CoralInAndOut",
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.NO_CORAL)));
     NamedCommands.registerCommand(
-        "Coral In Intake",
-        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.STORED_CORAL_IN_INTAKE)));
+        "Run Intake",
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
     NamedCommands.registerCommand(
         "Elevator Height L4",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
@@ -149,6 +150,7 @@ public class RobotContainer {
 
     new EventTrigger("Elevator Height L4 Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
+
     new EventTrigger("Elevator Height Intake Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
@@ -208,9 +210,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -driveController.getLeftY(),
-            () -> -driveController.getLeftX(),
-            () -> -driveController.getRightX()));
+            () -> -driveController.getLeftY() * .8,
+            () -> -driveController.getLeftX() * .8,
+            () -> -driveController.getRightX() * .8));
 
     // Nope. It's slow mode now. Quarter speed
     driveController
@@ -297,7 +299,6 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
 
     // Vision
-    // vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
     // vision.setDefaultCommand(new RunVisionPoseEstimation(drive, vision).ignoringDisable(true));
 
     // Climber

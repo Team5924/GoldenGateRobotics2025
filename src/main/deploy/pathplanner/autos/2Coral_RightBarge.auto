@@ -56,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Coral In Intake"
+            "name": "Stop CoralInAndOut"
           }
         },
         {
@@ -69,6 +69,24 @@
           "type": "named",
           "data": {
             "name": "Run Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop CoralInAndOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Height Intake"
           }
         }
       ]
