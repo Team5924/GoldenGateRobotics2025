@@ -166,11 +166,10 @@ public final class Constants {
     public static final double faceLength = Units.inchesToMeters(36.792600);
     public static final double fieldWidth = field.getFieldWidth();
     public static final Translation2d blueCenter =
-        new Translation2d(Units.inchesToMeters(176.746), fieldWidth / 2.0);
+        new Translation2d(Units.inchesToMeters(176.745), Units.inchesToMeters(158.5));
 
     public static final Translation2d redCenter =
-        new Translation2d(Units.inchesToMeters(513.88), fieldWidth / 2.0);
-
+        new Translation2d(Units.inchesToMeters(514.13), Units.inchesToMeters(158.5));
     public static final Pose2d[] centerFaces =
         new Pose2d[6]; // Starting facing the driver station in clockwise order
     public static final List<Pose2d> branchPositions =
