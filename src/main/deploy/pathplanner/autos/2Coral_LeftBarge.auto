@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2Leave BB"
+                  "pathName": "1Leave BB"
                 }
               }
             ]
@@ -32,7 +32,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.5
           }
         },
         {
@@ -92,13 +92,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Elevator Height Intake"
+            "name": "Stop CoralInAndOut"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Stop CoralInAndOut"
+            "name": "Elevator Height Intake"
           }
         }
       ]
