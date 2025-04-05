@@ -54,7 +54,7 @@ public final class Constants {
     REPLAY
   }
 
-  public static final boolean TUNING_MODE = true;
+  public static final boolean TUNING_MODE = false;
   public static final boolean ALLOW_ASSERTS = false;
 
   /* Field */
@@ -193,65 +193,65 @@ public final class Constants {
         Pose2d poseDirectionBlue =
             new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         Pose2d poseDirectionRed = new Pose2d(redCenter, Rotation2d.fromDegrees(180 - (60 * face)));
-        double adjustX = Units.inchesToMeters(30.738); // robot x
-        double adjustYLeft = Units.inchesToMeters(6.469); // robot y left
-        double adjustYRight = Units.inchesToMeters(6.469); // robot y right
+        double adjustX = Units.inchesToMeters(49.75 - 2); // robot x
+        double adjustYLeft = Units.inchesToMeters(6.469 - 6); // robot y left
+        double adjustYRight = Units.inchesToMeters(6.469 + 6); // robot y right
 
         var rightBranchPoseShootBlue =
             new Pose2d(
                 poseDirectionBlue
                     .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians()));
+                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
         var leftBranchPoseShootBlue =
             new Pose2d(
                 poseDirectionBlue
                     .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians()));
+                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
         var rightBranchLineupPoseBlue =
             new Pose2d(
                 poseDirectionBlue
                     .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians()));
+                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
         var leftBranchLineupPoseBlue =
             new Pose2d(
                 poseDirectionBlue
                     .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians()));
+                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
         var rightBranchPoseShootRed =
             new Pose2d(
                 poseDirectionRed
                     .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians()));
+                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
         var leftBranchPoseShootRed =
             new Pose2d(
                 poseDirectionRed
                     .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians()));
+                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
         var rightBranchLineupPoseRed =
             new Pose2d(
                 poseDirectionRed
                     .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians()));
+                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
         var leftBranchLineupPoseRed =
             new Pose2d(
                 poseDirectionRed
                     .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
                     .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians()));
+                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
         ArrayList<Pose2d> rightBranchBlue = new ArrayList<>();
         rightBranchBlue.add(rightBranchLineupPoseBlue);
