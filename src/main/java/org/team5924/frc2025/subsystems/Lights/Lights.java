@@ -48,6 +48,7 @@ public class Lights extends SubsystemBase {
 
   /* Team-specific Colors */
   public static final Color international_orange = new Color(255, 79, 0);
+  public static final Color primary_red = new Color(192, 54, 44);
 
   public Lights() {
     CANdleConfiguration candleConfiguration = new CANdleConfiguration();
