@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Run Shooter"
@@ -66,9 +72,33 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Run Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator Height Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop CoralInAndOut"
           }
         }
       ]
