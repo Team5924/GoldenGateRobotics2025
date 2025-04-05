@@ -188,6 +188,7 @@ public final class Constants {
         Pose2d poseDirection = new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         Logger.recordOutput("FacePoses/" + face, poseDirection);
 
+        // test
         double radiusLineupCircle =
             Math.sqrt(
                 Math.pow(distanceFromCenterToRoboCenterLineup, 2)
