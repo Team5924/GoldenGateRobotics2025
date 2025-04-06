@@ -39,7 +39,6 @@ import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
 import org.team5924.frc2025.commands.lights.SetLEDColorCommand;
 import org.team5924.frc2025.generated.TunerConstantsGamma;
-import org.team5924.frc2025.subsystems.Lights.LEDSubsystem;
 import org.team5924.frc2025.subsystems.climber.Climber;
 import org.team5924.frc2025.subsystems.climber.ClimberIO;
 import org.team5924.frc2025.subsystems.climber.ClimberIOSim;
@@ -53,6 +52,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFXGamma;
+import org.team5924.frc2025.subsystems.lights.LEDSubsystem;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
@@ -76,7 +76,7 @@ public class RobotContainer {
   private final Elevator elevator;
   private final Vision vision;
   //   private final Lights lights;
-  private final LEDSubsystem ledSubsystem = new LEDSubsystem(CANDLE_ID); // CAN ID = 0
+  private final LEDSubsystem ledSubsystem;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -102,6 +102,7 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFXGamma() {});
         vision = new Vision(new VisionIOLimelight());
+        ledSubsystem = new LEDSubsystem(CANDLE_ID);
         // lights = new Lights();
         break;
 
@@ -118,6 +119,7 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        ledSubsystem = new LEDSubsystem(CANDLE_ID);
         // lights = new Lights();
         break;
 
@@ -134,6 +136,7 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        ledSubsystem = new LEDSubsystem(CANDLE_ID);
         // lights = new Lights();
         break;
     }

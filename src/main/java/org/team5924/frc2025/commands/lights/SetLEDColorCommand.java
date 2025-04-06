@@ -17,7 +17,7 @@
 package org.team5924.frc2025.commands.lights;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.team5924.frc2025.subsystems.Lights.LEDSubsystem;
+import org.team5924.frc2025.subsystems.lights.LEDSubsystem;
 
 public class SetLEDColorCommand extends Command {
   private final LEDSubsystem led;
