@@ -17,6 +17,7 @@
 package org.team5924.frc2025;
 
 import static edu.wpi.first.units.Units.Seconds;
+import static org.team5924.frc2025.Constants.CANDLE_ID;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -36,6 +37,7 @@ import java.util.Set;
 import org.team5924.frc2025.commands.coralInAndOut.TeleopShoot;
 import org.team5924.frc2025.commands.drive.DriveCommands;
 import org.team5924.frc2025.commands.elevator.RunElevator;
+import org.team5924.frc2025.commands.lights.SetLEDColorCommand;
 import org.team5924.frc2025.generated.TunerConstantsGamma;
 import org.team5924.frc2025.subsystems.climber.Climber;
 import org.team5924.frc2025.subsystems.climber.ClimberIO;
@@ -50,6 +52,7 @@ import org.team5924.frc2025.subsystems.drive.ModuleIOTalonFX;
 import org.team5924.frc2025.subsystems.elevator.Elevator;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIO;
 import org.team5924.frc2025.subsystems.elevator.ElevatorIOTalonFXGamma;
+import org.team5924.frc2025.subsystems.lights.LEDSubsystem;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOut.CoralState;
 import org.team5924.frc2025.subsystems.rollers.CoralInAndOut.CoralInAndOutIO;
@@ -72,6 +75,8 @@ public class RobotContainer {
   private final CoralInAndOut coralInAndOut;
   private final Elevator elevator;
   private final Vision vision;
+  //   private final Lights lights;
+  private final LEDSubsystem ledSubsystem;
 
   // Controller
   private final CommandXboxController driveController = new CommandXboxController(0);
@@ -97,6 +102,8 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOKrakenFOC());
         elevator = new Elevator(new ElevatorIOTalonFXGamma() {});
         vision = new Vision(new VisionIOLimelight());
+        ledSubsystem = new LEDSubsystem(CANDLE_ID);
+        // lights = new Lights();
         break;
 
       case SIM:
@@ -112,6 +119,8 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIOSim());
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        ledSubsystem = new LEDSubsystem(CANDLE_ID);
+        // lights = new Lights();
         break;
 
       default:
@@ -127,6 +136,8 @@ public class RobotContainer {
         coralInAndOut = new CoralInAndOut(new CoralInAndOutIO() {});
         elevator = new Elevator(new ElevatorIO() {});
         vision = new Vision(new VisionIO() {});
+        ledSubsystem = new LEDSubsystem(CANDLE_ID);
+        // lights = new Lights();
         break;
     }
 
@@ -321,6 +332,12 @@ public class RobotContainer {
         .pov(180)
         .or(driveController.pov(0))
         .onFalse(Commands.runOnce(() -> climber.handleNoInputState()));
+
+    // lights.defaultCommand();
+    ledSubsystem.setDefaultCommand(
+        new SetLEDColorCommand(
+            ledSubsystem, 240, 74, 0) // default: golden gate international orange
+        );
   }
 
   /**

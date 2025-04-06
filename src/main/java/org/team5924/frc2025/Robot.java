@@ -33,6 +33,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.team5924.frc2025.generated.TunerConstantsGamma;
+import org.team5924.frc2025.subsystems.lights.Lights;
+import org.team5924.frc2025.subsystems.lights.Lights.LEDSegment;
 import org.team5924.frc2025.util.Elastic;
 
 /**
@@ -142,7 +144,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    LEDSegment.MainStrip.setFadeAnimation(Lights.red, 0.5);
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

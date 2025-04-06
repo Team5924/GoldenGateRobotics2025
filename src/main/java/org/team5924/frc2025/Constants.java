@@ -126,6 +126,9 @@ public final class Constants {
   public static final boolean ALGAE_BRAKE = true; // Adjust value as needed
   public static final double ALGAE_REDUCTION = 1.0; // Adjust value as needed
 
+  /*Lights */
+  public static final int CANDLE_ID = 41;
+
   /* # Vision # */
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONTL = "limelight-frontl";
   public static String APRIL_TAG_LIMELIGHT_NAME_FRONTR = "limelight-frontr";
