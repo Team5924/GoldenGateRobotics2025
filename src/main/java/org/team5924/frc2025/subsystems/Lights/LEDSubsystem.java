@@ -17,13 +17,18 @@
 package org.team5924.frc2025.subsystems.lights;
 
 import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.CANdleConfiguration;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LEDSubsystem extends SubsystemBase {
+public class  LEDSubsystem extends SubsystemBase {
   private final CANdle candle;
 
   public LEDSubsystem(int canId) {
     candle = new CANdle(canId);
+
+    CANdleConfiguration config = new CANdleConfiguration();
+
   }
 
   public void setColor(int r, int g, int b) {
