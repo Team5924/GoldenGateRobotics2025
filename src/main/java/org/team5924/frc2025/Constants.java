@@ -193,8 +193,8 @@ public final class Constants {
             new Pose2d(blueCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         Pose2d poseDirectionRed = new Pose2d(redCenter, Rotation2d.fromDegrees(180 - (60 * face)));
         double adjustX = Units.inchesToMeters(48.15); // robot x
-        double adjustYLeft = Units.inchesToMeters(6.469 - 3); // robot y left
-        double adjustYRight = Units.inchesToMeters(6.469 + 3.25); // robot y right
+        double adjustYLeft = Units.inchesToMeters(6.469 - 3.25); // robot y left
+        double adjustYRight = Units.inchesToMeters(6.469 + 3.75); // robot y right
 
         var rightBranchPoseShootBlue =
             new Pose2d(
