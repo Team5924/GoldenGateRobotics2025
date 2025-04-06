@@ -28,35 +28,41 @@ import org.team5924.frc2025.Constants;
 
 /** Add your docs here. */
 public class Pathing {
-  public static List<Pose2d> getClosestPose(Pose2d currentPose, boolean isLeftTarget) {
+  public static List<Pose2d> getClosestPose(Pose2d currentPose, boolean isLeftTarget, boolean isL2) {
     // Optional<Alliance> alliance = DriverStation.getAlliance();
-    List<List<Pose2d>> rightAllianceBranchPairs =
+    List<List<List<Pose2d>>> rightAllianceBranchPairs =
         /*(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
         ? Constants.Reef.redBranchRight2d
         : */ Constants.Reef.branchRight2d;
-    List<List<Pose2d>> leftAllianceBranchPairs =
+    List<List<List<Pose2d>>> leftAllianceBranchPairs =
         /*(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red)
         ? Constants.Reef.redBranchLeft2d
         : */ Constants.Reef.branchLeft2d;
 
+    int level = 0;
+    if (isL2){
+      level = 1;
+    }
+
+
     if (isLeftTarget) {
       ArrayList<Pose2d> leftBranchPoses = new ArrayList<>();
       for (var posePair : leftAllianceBranchPairs) {
-        leftBranchPoses.add(posePair.get(1));
+        leftBranchPoses.add(posePair.get(1).get(level));
         // Get 1 because it's the "shooting" pose
       }
 
       Pose2d nearestPose = currentPose.nearest(leftBranchPoses);
-      return leftAllianceBranchPairs.get(leftBranchPoses.indexOf(nearestPose));
+      return leftAllianceBranchPairs.get(leftBranchPoses.indexOf(nearestPose)).get(level);
     } else {
       ArrayList<Pose2d> rightBranchPoses = new ArrayList<>();
       for (var posePair : rightAllianceBranchPairs) {
-        rightBranchPoses.add(posePair.get(1));
+        rightBranchPoses.add(posePair.get(1).get(level));
         // Get 1 because it's the "shooting" pose
       }
 
       Pose2d nearestPose = currentPose.nearest(rightBranchPoses);
-      return rightAllianceBranchPairs.get(rightBranchPoses.indexOf(nearestPose));
+      return rightAllianceBranchPairs.get(rightBranchPoses.indexOf(nearestPose)).get(level);
     }
   }
 

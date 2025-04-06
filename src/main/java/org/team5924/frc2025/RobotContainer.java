@@ -244,12 +244,12 @@ public class RobotContainer {
     driveController
         .leftBumper()
         .whileTrue(
-            new DeferredCommand(() -> DriveCommands.driveToReef(drive, true), Set.of(drive)));
+            new DeferredCommand(() -> DriveCommands.driveToReef(drive, true, operatorController.b().getAsBoolean()), Set.of(drive)));
 
     driveController
         .rightBumper()
         .whileTrue(
-            new DeferredCommand(() -> DriveCommands.driveToReef(drive, false), Set.of(drive)));
+            new DeferredCommand(() -> DriveCommands.driveToReef(drive, false, operatorController.b().getAsBoolean()), Set.of(drive)));
 
     driveController
         .rightTrigger()

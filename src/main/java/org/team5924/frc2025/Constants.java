@@ -175,8 +175,10 @@ public final class Constants {
     public static final List<Pose2d> branchPositions =
         new ArrayList<>(); // Starting at the right branch facing the driver station in clockwise
 
-    public static final List<List<Pose2d>> branchRight2d = new ArrayList<>();
-    public static final List<List<Pose2d>> branchLeft2d = new ArrayList<>();
+    public static final List<List<List<Pose2d>>> branchRight2d = new ArrayList<>();
+    public static final List<List<List<Pose2d>>> branchLeft2d = new ArrayList<>();
+
+    public static final Double[] levelOffset = new Double[2];
 
     static {
       // Initialize faces
@@ -196,87 +198,103 @@ public final class Constants {
         double adjustYLeft = Units.inchesToMeters(6.469 - 3); // robot y left
         double adjustYRight = Units.inchesToMeters(6.469 + 3.25); // robot y right
 
-        var rightBranchPoseShootBlue =
-            new Pose2d(
-                poseDirectionBlue
-                    .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
+        levelOffset[0] = 0.0;
+        levelOffset[1] = 1.0;
 
-        var leftBranchPoseShootBlue =
-            new Pose2d(
-                poseDirectionBlue
-                    .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
+        List<List<Pose2d>> rightBranchBlueLevels = new ArrayList<>();
+        List<List<Pose2d>> rightBranchRedLevels = new ArrayList<>();
+        List<List<Pose2d>> leftBranchBlueLevels = new ArrayList<>();
+        List<List<Pose2d>> leftBranchRedLevels = new ArrayList<>();
 
-        var rightBranchLineupPoseBlue =
-            new Pose2d(
-                poseDirectionBlue
-                    .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
+        for (int level = 0; level < 2; level++) {
+            var rightBranchPoseShootBlue =
+                new Pose2d(
+                    poseDirectionBlue
+                        .transformBy(new Transform2d(adjustX, adjustYRight + levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
-        var leftBranchLineupPoseBlue =
-            new Pose2d(
-                poseDirectionBlue
-                    .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
+            var leftBranchPoseShootBlue =
+                new Pose2d(
+                    poseDirectionBlue
+                        .transformBy(new Transform2d(adjustX, -adjustYLeft - levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
-        var rightBranchPoseShootRed =
-            new Pose2d(
-                poseDirectionRed
-                    .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
+            var rightBranchLineupPoseBlue =
+                new Pose2d(
+                    poseDirectionBlue
+                        .transformBy(new Transform2d(adjustX, adjustYRight + levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
-        var leftBranchPoseShootRed =
-            new Pose2d(
-                poseDirectionRed
-                    .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
+            var leftBranchLineupPoseBlue =
+                new Pose2d(
+                    poseDirectionBlue
+                        .transformBy(new Transform2d(adjustX, -adjustYLeft - levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionBlue.getRotation().getRadians() + Math.PI));
 
-        var rightBranchLineupPoseRed =
-            new Pose2d(
-                poseDirectionRed
-                    .transformBy(new Transform2d(adjustX, adjustYRight, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
+            var rightBranchPoseShootRed =
+                new Pose2d(
+                    poseDirectionRed
+                        .transformBy(new Transform2d(adjustX, adjustYRight + levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
-        var leftBranchLineupPoseRed =
-            new Pose2d(
-                poseDirectionRed
-                    .transformBy(new Transform2d(adjustX, -adjustYLeft, Rotation2d.kZero))
-                    .getTranslation(),
-                new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
+            var leftBranchPoseShootRed =
+                new Pose2d(
+                    poseDirectionRed
+                        .transformBy(new Transform2d(adjustX, -adjustYLeft - levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
-        ArrayList<Pose2d> rightBranchBlue = new ArrayList<>();
-        rightBranchBlue.add(rightBranchLineupPoseBlue);
-        rightBranchBlue.add(rightBranchPoseShootBlue);
-        Logger.recordOutput("ShootPosesRight/" + face, rightBranchPoseShootBlue);
+            var rightBranchLineupPoseRed =
+                new Pose2d(
+                    poseDirectionRed
+                        .transformBy(new Transform2d(adjustX, adjustYRight + levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
-        ArrayList<Pose2d> rightBranchRed = new ArrayList<>();
-        rightBranchRed.add(rightBranchLineupPoseRed);
-        rightBranchRed.add(rightBranchPoseShootRed);
-        Logger.recordOutput("ShootPosesRight/" + face, rightBranchPoseShootRed);
+            var leftBranchLineupPoseRed =
+                new Pose2d(
+                    poseDirectionRed
+                        .transformBy(new Transform2d(adjustX, -adjustYLeft - levelOffset[level], Rotation2d.kZero))
+                        .getTranslation(),
+                    new Rotation2d(poseDirectionRed.getRotation().getRadians() + Math.PI));
 
-        ArrayList<Pose2d> leftBranchBlue = new ArrayList<>();
-        leftBranchBlue.add(leftBranchLineupPoseBlue);
-        leftBranchBlue.add(leftBranchPoseShootBlue);
-        Logger.recordOutput("ShootPosesLeft/" + face, leftBranchPoseShootBlue);
+            ArrayList<Pose2d> rightBranchBlue = new ArrayList<>();
+            rightBranchBlue.add(rightBranchLineupPoseBlue);
+            rightBranchBlue.add(rightBranchPoseShootBlue);
+            Logger.recordOutput("ShootPosesRight/" + face, rightBranchPoseShootBlue);
 
-        ArrayList<Pose2d> leftBranchRed = new ArrayList<>();
-        leftBranchRed.add(leftBranchLineupPoseRed);
-        leftBranchRed.add(leftBranchPoseShootRed);
-        Logger.recordOutput("ShootPosesLeft/" + face, leftBranchPoseShootRed);
+            ArrayList<Pose2d> rightBranchRed = new ArrayList<>();
+            rightBranchRed.add(rightBranchLineupPoseRed);
+            rightBranchRed.add(rightBranchPoseShootRed);
+            Logger.recordOutput("ShootPosesRight/" + face, rightBranchPoseShootRed);
 
-        branchRight2d.add(rightBranchBlue);
-        branchLeft2d.add(leftBranchBlue);
+            ArrayList<Pose2d> leftBranchBlue = new ArrayList<>();
+            leftBranchBlue.add(leftBranchLineupPoseBlue);
+            leftBranchBlue.add(leftBranchPoseShootBlue);
+            Logger.recordOutput("ShootPosesLeft/" + face, leftBranchPoseShootBlue);
 
-        branchRight2d.add(rightBranchRed);
-        branchLeft2d.add(leftBranchRed);
+            ArrayList<Pose2d> leftBranchRed = new ArrayList<>();
+            leftBranchRed.add(leftBranchLineupPoseRed);
+            leftBranchRed.add(leftBranchPoseShootRed);
+            Logger.recordOutput("ShootPosesLeft/" + face, leftBranchPoseShootRed);
+
+            rightBranchBlueLevels.add(rightBranchBlue);
+            rightBranchRedLevels.add(rightBranchRed);
+            leftBranchBlueLevels.add(leftBranchBlue);
+            leftBranchRedLevels.add(leftBranchRed);
+
+
+        }
+        branchRight2d.add(rightBranchBlueLevels);
+        branchLeft2d.add(leftBranchBlueLevels);
+
+        branchRight2d.add(rightBranchRedLevels);
+        branchLeft2d.add(leftBranchRedLevels);
       }
     }
   }

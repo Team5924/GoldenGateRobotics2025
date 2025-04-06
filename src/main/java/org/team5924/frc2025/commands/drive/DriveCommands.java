@@ -165,9 +165,9 @@ public class DriveCommands {
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
 
-  public static Command driveToReef(Drive drive, boolean isTargetLeft) {
+  public static Command driveToReef(Drive drive, boolean isTargetLeft, boolean isL2) {
     AutoBuilder.resetOdom(drive.getPose());
-    List<Pose2d> destinationPoses = Pathing.getClosestPose(drive.getPose(), isTargetLeft);
+    List<Pose2d> destinationPoses = Pathing.getClosestPose(drive.getPose(), isTargetLeft, isL2);
     Logger.recordOutput("Destination Pose", destinationPoses.get(1));
     return AutoBuilder.followPath(Pathing.createPath(drive.getPose(), destinationPoses));
   }
