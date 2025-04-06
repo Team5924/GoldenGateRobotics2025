@@ -154,11 +154,16 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Elevator Height Intake",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+    NamedCommands.registerCommand(
+        "Elevator Height Zero",
+        Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.STOW)));
 
     new EventTrigger("Elevator Height L4 Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
     new EventTrigger("Elevator Height Intake Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
+    new EventTrigger("Elevator Height Zero Trigger")
+        .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.STOW)));
 
     // Set up auto routines
     boolean isCompetition = true;
@@ -327,7 +332,8 @@ public class RobotContainer {
 
     // lights.defaultCommand();
     ledSubsystem.setDefaultCommand(
-        new SetLEDColorCommand(ledSubsystem, 0, 255, 0) // default: green
+        new SetLEDColorCommand(
+            ledSubsystem, 240, 74, 0) // default: golden gate international orange
         );
   }
 
