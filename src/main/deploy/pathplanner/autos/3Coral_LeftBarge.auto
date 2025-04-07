@@ -32,7 +32,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
@@ -48,15 +48,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Run Intake"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -74,7 +68,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.1
           }
         },
         {
@@ -86,7 +80,43 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.333
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3Reef to CS"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral In Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3CS to Reef BB"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Run Shooter"
           }
         }
       ]

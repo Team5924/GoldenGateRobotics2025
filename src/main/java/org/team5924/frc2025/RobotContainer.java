@@ -138,6 +138,9 @@ public class RobotContainer {
         "Coral In Intake",
         Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.STORED_CORAL_IN_INTAKE)));
     NamedCommands.registerCommand(
+        "Stop CoralInAndOut",
+        Commands.runOnce(() -> coralInAndOut.setGoalState(CoralState.NO_CORAL)));
+    NamedCommands.registerCommand(
         "Elevator Height L4",
         Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.L4)));
     NamedCommands.registerCommand(
@@ -156,17 +159,14 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.INTAKE)));
     new EventTrigger("Elevator Height Zero Trigger")
         .onTrue(Commands.runOnce(() -> elevator.setGoalState(Elevator.ElevatorState.STOW)));
-
-    // Set up auto routines
-    boolean isCompetition = true;
+    new EventTrigger("Run Intake Trigger")
+        .onTrue(
+            Commands.runOnce(() -> coralInAndOut.setGoalState(CoralInAndOut.CoralState.INTAKING)));
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     // As an example, this will only show autos that start with "comp" while at
     // competition as defined by the programmer
-    autoChooser =
-        AutoBuilder.buildAutoChooserWithOptionsModifier(
-            (stream) ->
-                isCompetition ? stream.filter(auto -> auto.getName().startsWith("2")) : stream);
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     // Set up SysId routines
     autoChooser.addOption(
