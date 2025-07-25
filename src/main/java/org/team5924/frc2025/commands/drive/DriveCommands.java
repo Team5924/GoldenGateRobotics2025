@@ -73,6 +73,29 @@ public class DriveCommands {
   }
 
   /**
+   * Gets robot-relative speeds from the field-relative input
+   *
+   * @param vx desired x velocity: away from alliance wall
+   * @param vy desired y velocity: your left while standing behind alliance wall
+   * @param omega desired angular velocity
+   * @param rotation current robot's rotation
+   * @return robot-relative speeds, flipped if on red alliance
+   */
+  public static ChassisSpeeds getRobotRelativeSpeeds(
+      double vx, double vy, double omega, Rotation2d rotation) {
+    // Flip movement direction if on red alliance
+    boolean isFlipped =
+        DriverStation.getAlliance().isPresent()
+            && DriverStation.getAlliance().get() == Alliance.Red;
+
+    int invertMultiplier = isFlipped ? -1 : 1;
+
+    // Return transformed robot relative speeds
+    return ChassisSpeeds.fromFieldRelativeSpeeds(
+        vx * invertMultiplier, vy * invertMultiplier, omega, rotation);
+  }
+
+  /**
    * Field relative drive command using two joysticks (controlling linear and angular velocities).
    */
   public static Command joystickDrive(
@@ -93,20 +116,29 @@ public class DriveCommands {
           omega = Math.copySign(omega * omega, omega);
 
           // Convert to field relative speeds & send command
+          // ChassisSpeeds speeds =
+          //     new ChassisSpeeds(
+          //         linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+          //         linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+          //         omega * drive.getMaxAngularSpeedRadPerSec() * ROTATION_SENSITIVITY);
+          // boolean isFlipped =
+          //     DriverStation.getAlliance().isPresent()
+          //         && DriverStation.getAlliance().get() == Alliance.Red;
+          // drive.runVelocity(
+          //     ChassisSpeeds.fromFieldRelativeSpeeds(
+          //         speeds,
+          //         isFlipped
+          //             ? drive.getRotation().plus(new Rotation2d(Math.PI))
+          //             : drive.getRotation()));
+
           ChassisSpeeds speeds =
-              new ChassisSpeeds(
+              getRobotRelativeSpeeds(
                   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                  omega * drive.getMaxAngularSpeedRadPerSec() * ROTATION_SENSITIVITY);
-          boolean isFlipped =
-              DriverStation.getAlliance().isPresent()
-                  && DriverStation.getAlliance().get() == Alliance.Red;
-          drive.runVelocity(
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  speeds,
-                  isFlipped
-                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                      : drive.getRotation()));
+                  omega * drive.getMaxAngularSpeedRadPerSec() * ROTATION_SENSITIVITY,
+                  drive.getRotation());
+
+          drive.runVelocity(speeds);
         },
         drive);
   }
@@ -144,20 +176,27 @@ public class DriveCommands {
                       drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
 
               // Convert to field relative speeds & send command
+              // ChassisSpeeds speeds =
+              //     new ChassisSpeeds(
+              //         linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+              //         linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+              //         omega);
               ChassisSpeeds speeds =
-                  new ChassisSpeeds(
+                  getRobotRelativeSpeeds(
                       linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                       linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                      omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
-              drive.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
+                      omega,
+                      drive.getRotation());
+              // boolean isFlipped =
+              //     DriverStation.getAlliance().isPresent()
+              //         && DriverStation.getAlliance().get() == Alliance.Red;
+              // drive.runVelocity(
+              //     ChassisSpeeds.fromFieldRelativeSpeeds(
+              //         speeds,
+              //         isFlipped
+              //             ? drive.getRotation().plus(new Rotation2d(Math.PI))
+              //             : drive.getRotation()));
+              drive.runVelocity(speeds);
             },
             drive)
 
@@ -349,20 +388,29 @@ public class DriveCommands {
             omega = 0;
           }
 
+          // speeds =
+          //     new ChassisSpeeds(
+          //         linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+          //         linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+          //         omega);
+
           speeds =
-              new ChassisSpeeds(
+              getRobotRelativeSpeeds(
                   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                  omega);
+                  omega,
+                  drive.getRotation());
 
           // Convert to field relative speeds & send command
 
-          drive.runVelocity(
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  speeds,
-                  isFlipped
-                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                      : drive.getRotation()));
+          // drive.runVelocity(
+          //     ChassisSpeeds.fromFieldRelativeSpeeds(
+          //         speeds,
+          //         isFlipped
+          //             ? drive.getRotation().plus(new Rotation2d(Math.PI))
+          //             : drive.getRotation()));
+
+          drive.runVelocity(speeds);
         },
         drive);
   }
@@ -404,20 +452,29 @@ public class DriveCommands {
             omega = 0;
           }
 
+          // speeds =
+          //     new ChassisSpeeds(
+          //         linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+          //         linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+          //         omega);
+
           speeds =
-              new ChassisSpeeds(
+              getRobotRelativeSpeeds(
                   linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                   linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                  omega);
+                  omega,
+                  drive.getRotation());
 
           // Convert to field relative speeds & send command
 
-          drive.runVelocity(
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  speeds,
-                  isFlipped
-                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                      : drive.getRotation()));
+          // drive.runVelocity(
+          //     ChassisSpeeds.fromFieldRelativeSpeeds(
+          //         speeds,
+          //         isFlipped
+          //             ? drive.getRotation().plus(new Rotation2d(Math.PI))
+          //             : drive.getRotation()));
+
+          drive.runVelocity(speeds);
         },
         drive);
   }
